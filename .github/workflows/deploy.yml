@@ -33,15 +33,16 @@ jobs:
         run: uv sync
 
       - name: Export static frontend
+        working-directory: src
         run: uv run reflex export --frontend-only --no-zip --env prod
 
       - name: Copy CNAME to export
-        run: cp CNAME .web/_static/
+        run: cp CNAME src/.web/_static/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .web/_static
+          path: src/.web/_static
 
   deploy:
     needs: build
