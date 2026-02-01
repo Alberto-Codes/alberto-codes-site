@@ -37,12 +37,12 @@ jobs:
         run: uv run reflex export --frontend-only --no-zip --env prod
 
       - name: Copy CNAME to export
-        run: cp CNAME src/.web/_static/
+        run: cp CNAME src/.web/build/client/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: src/.web/_static
+          path: src/.web/build/client
 
   deploy:
     needs: build
