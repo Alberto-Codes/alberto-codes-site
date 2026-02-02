@@ -42,6 +42,7 @@ def layout(page: rx.Component) -> rx.Component:
 
 app = rx.App(
     overlay_component=rx.fragment,
+    enable_state=False,
 )
 app.add_page(
     layout(home_page()),
