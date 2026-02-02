@@ -64,19 +64,7 @@ This is not clever. It's a few lines of code. But it's the difference between pa
 
 When you combine at-least-once delivery with retry policies and a dead-letter queue, message flow looks like this:
 
-```mermaid
-flowchart TD
-    A[Producer enqueues task] --> B[Main Queue]
-    B --> C[Worker picks up task]
-    C --> D{Processing succeeds?}
-    D -- Yes --> E[Worker sends ACK]
-    E --> F[Message deleted from queue]
-    D -- No / crash / timeout --> G[Message becomes visible again]
-    G --> H{Retry limit reached?}
-    H -- No --> B
-    H -- Yes --> I[Dead-Letter Queue]
-    I --> J[Alert / manual review]
-```
+![Redelivery lifecycle: task flows from queue to worker, retries on failure, and lands in a dead-letter queue after the retry limit](/redelivery-lifecycle.svg)
 
 The dead-letter queue (DLQ) is not where messages go to die. It's a **throughput protection mechanism**. Without it, a poison message—a malformed PDF, an input that consistently crashes your OCR service—cycles through the queue forever, consuming worker capacity and blocking healthy tasks behind it. The DLQ catches these after a configured number of retries and moves them aside so the rest of the pipeline keeps flowing. You review them later, fix the root cause, and replay if needed.
 
