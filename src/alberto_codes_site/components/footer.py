@@ -22,7 +22,7 @@ def footer() -> rx.Component:
                 ),
                 rx.link(
                     rx.icon("linkedin", size=18),
-                    href="https://www.linkedin.com/in/alberto-nieto-5937511",
+                    href="https://www.linkedin.com/in/alberto-codes/",
                     is_external=True,
                     color=rx.color("slate", 9),
                 ),

@@ -31,11 +31,7 @@ def navbar() -> rx.Component:
                         size="2",
                         weight="medium",
                         underline="none",
-                        color=rx.cond(
-                            rx.State.router.page.path == href,
-                            rx.color("blue", 9),
-                            rx.color("slate", 11),
-                        ),
+                        color=rx.color("slate", 11),
                         _hover={"color": rx.color("slate", 12)},
                     )
                     for label, href in NAV_LINKS

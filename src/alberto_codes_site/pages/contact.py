@@ -73,7 +73,7 @@ def contact_page() -> rx.Component:
                 contact_link(
                     "linkedin",
                     "LinkedIn",
-                    "https://www.linkedin.com/in/alberto-nieto-5937511",
+                    "https://www.linkedin.com/in/alberto-codes/",
                 ),
                 contact_link(
                     "file-text",
