@@ -80,13 +80,13 @@ flowchart TD
 
 The dead-letter queue (DLQ) is not where messages go to die. It's a **throughput protection mechanism**. Without it, a poison message—a malformed PDF, an input that consistently crashes your OCR service—cycles through the queue forever, consuming worker capacity and blocking healthy tasks behind it. The DLQ catches these after a configured number of retries and moves them aside so the rest of the pipeline keeps flowing. You review them later, fix the root cause, and replay if needed.
 
-Every kitchen has an 86 board. When you're out of an ingredient, you don't keep trying to make the dish and failing—you pull it from the menu and deal with it. A DLQ is your 86 board for tasks that can't be completed right now.
+Every kitchen has an 86 board—the list of items that are cut from service because you're out of an ingredient or a piece of equipment is down. You don't keep trying to plate a dish you can't finish. You pull it and deal with it. A DLQ is your 86 board for tasks that can't be completed right now.
 
-## AI Pipeline Twist: Retries Multiply Cost
+## Why Retries Cost More in AI Pipelines
 
 In a traditional web backend, retrying a database insert is cheap. In an AI pipeline, retries hit your wallet directly.
 
-Consider a document ingestion pipeline: receive PDF, OCR it, split into chunks, generate embeddings, extract structured fields with an LLM. If the extraction step fails after the embeddings are already written and the task retries from the top, you're paying for OCR and embeddings again. At scale, this adds up fast:
+Consider a document ingestion pipeline: receive a PDF, OCR it, chunk it, generate embeddings, then extract structured fields with an LLM. If extraction fails and the task retries from the top, you're paying for OCR and embeddings again. At scale, this adds up:
 
 - **Embedding generation**: a 50-page document might produce 200 chunks at ~500 tokens each. One unnecessary retry means 100,000 extra tokens through your embedding model.
 - **LLM extraction**: a structured extraction call with a long context window can cost $0.05–$0.20 per call. Ten retries across a batch of 1,000 documents is an extra $500–$2,000.
