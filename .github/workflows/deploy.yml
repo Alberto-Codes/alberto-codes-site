@@ -35,7 +35,7 @@ jobs:
       - name: Export static frontend
         working-directory: src
         env:
-          REFLEX_API_URL: ""
+          API_URL: ""
         run: uv run reflex export --frontend-only --no-zip --env prod
 
       - name: Copy CNAME to export
