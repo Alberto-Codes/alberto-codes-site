@@ -80,9 +80,7 @@ def about_page() -> rx.Component:
             rx.text(
                 "I was recently named as a co-inventor on my first patent "
                 "application. I'm a two-time Wells Fargo Top Performer "
-                "award recipient, bilingual in English and Spanish, and an "
-                "active community volunteer through the VITA tax assistance "
-                "program.",
+                "award recipient and bilingual in English and Spanish.",
                 size="3",
                 color=rx.color("slate", 11),
                 line_height="1.8",
