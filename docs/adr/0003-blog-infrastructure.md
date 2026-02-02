@@ -41,6 +41,10 @@ tags:
 
 The body below the frontmatter is standard markdown rendered by `rx.markdown()` with GitHub Flavored Markdown (GFM) enabled.
 
+### Diagrams: Pre-rendered SVGs
+
+Mermaid diagrams cannot be rendered client-side in Reflex's static export because `rx.markdown` does not support Mermaid natively, `rx.script` injects into `<head>` via Helmet (race condition with React rendering), and React's `dangerouslySetInnerHTML` strips `<script>` tags. Instead, diagrams are pre-rendered to SVG files using the Mermaid CLI (`@mermaid-js/mermaid-cli`) and placed in `src/assets/`. Posts reference them with standard markdown image syntax: `![alt text](/diagram-name.svg)`.
+
 ### Routing
 
 - `/blog` — Index page listing all posts as clickable cards, sorted by date descending
@@ -82,6 +86,7 @@ Routes for individual posts are registered dynamically at app startup by scannin
 - Posts are static at build/deploy time — no hot-reload of new posts without server restart
 - No search, pagination, or tag filtering yet (acceptable at current scale, can be added later)
 - Frontmatter parsing is custom and basic — doesn't handle nested YAML (tags as list). Could upgrade to a YAML parser if needed
+- Diagrams require a manual pre-render step (`npx @mermaid-js/mermaid-cli -i input.mmd -o src/assets/output.svg`) before publishing
 - All posts load into memory at startup — fine for dozens of posts, would need rethinking at hundreds
 
 ## References
