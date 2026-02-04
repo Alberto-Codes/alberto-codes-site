@@ -16,16 +16,42 @@ DIATAXIS_COLORS = {
 
 
 def _parse_frontmatter(text: str) -> tuple[dict, str]:
-    """Parse YAML-style frontmatter from a markdown string."""
+    """Parse minimal YAML-style frontmatter from a markdown string.
+
+    Supports:
+    - Top-level `key: value` pairs
+    - Simple lists:
+      ```yaml
+      tags:
+        - a
+        - b
+      ```
+    """
     metadata: dict = {}
     body = text
     if text.startswith("---"):
         parts = text.split("---", 2)
         if len(parts) >= 3:
+            current_list_key: str | None = None
             for line in parts[1].strip().splitlines():
+                if not line.strip():
+                    continue
+
+                if current_list_key is not None and line.lstrip().startswith("- "):
+                    item = line.split("- ", 1)[1].strip()
+                    existing_val = metadata.get(current_list_key, "")
+                    if isinstance(existing_val, str):
+                        metadata[current_list_key] = []
+                    if isinstance(metadata[current_list_key], list):
+                        metadata[current_list_key].append(item)
+                    continue
+
                 if ":" in line and not line.startswith("  "):
                     key, val = line.split(":", 1)
-                    metadata[key.strip()] = val.strip()
+                    key = key.strip()
+                    val = val.strip()
+                    metadata[key] = val
+                    current_list_key = key if val == "" else None
             body = parts[2].strip()
     return metadata, body
 
@@ -230,7 +256,9 @@ def blog_post_page(slug: str) -> rx.Component:
         rx.vstack(
             rx.box(height="4em"),
             rx.heading("Post Not Found", size="7", weight="bold"),
-            rx.text("Sorry, that post doesn't exist.", size="3", color=rx.color("slate", 10)),
+            rx.text(
+                "Sorry, that post doesn't exist.", size="3", color=rx.color("slate", 10)
+            ),
             rx.link("Back to Blog", href="/blog", color=rx.color("blue", 9)),
             spacing="4",
             align="center",
