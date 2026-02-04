@@ -85,7 +85,7 @@ Routes for individual posts are registered dynamically at app startup by scannin
 
 - Posts are static at build/deploy time — no hot-reload of new posts without server restart
 - No search, pagination, or tag filtering yet (acceptable at current scale, can be added later)
-- Frontmatter parsing is custom and basic — doesn't handle nested YAML (tags as list). Could upgrade to a YAML parser if needed
+- Frontmatter parsing is minimal (top-level `key: value` plus simple lists like `tags:`). It is not a full YAML parser
 - Diagrams require a manual pre-render step (`npx @mermaid-js/mermaid-cli -i input.mmd -o src/assets/output.svg`) before publishing
 - All posts load into memory at startup — fine for dozens of posts, would need rethinking at hundreds
 
