@@ -162,6 +162,25 @@ def _render_post(meta: dict, body: str) -> rx.Component:
         rx.box(
             rx.markdown(body, use_gfm=True),
             width="100%",
+            style={
+                "& table": {
+                    "width": "100%",
+                    "border_collapse": "collapse",
+                    "margin": "1.5em 0",
+                },
+                "& th, & td": {
+                    "border": "1px solid var(--gray-6)",
+                    "padding": "0.75em 1em",
+                    "text_align": "left",
+                },
+                "& th": {
+                    "background": "var(--gray-3)",
+                    "font_weight": "600",
+                },
+                "& tr:nth-child(even)": {
+                    "background": "var(--gray-2)",
+                },
+            },
         ),
         spacing="4",
         width="100%",
@@ -229,7 +248,7 @@ def blog_page() -> rx.Component:
             rx.box(height="1em"),
             *[_post_card(m) for m, _ in posts],
             spacing="4",
-            max_width="48em",
+            max_width="64em",
         ),
         size="3",
         padding_y="6",
@@ -246,7 +265,7 @@ def blog_post_page(slug: str) -> rx.Component:
                     rx.box(height="4em"),
                     _render_post(meta, body),
                     spacing="4",
-                    max_width="48em",
+                    max_width="64em",
                 ),
                 size="3",
                 padding_y="6",
