@@ -17,6 +17,20 @@ PROJECTS = [
         "github": "https://github.com/Alberto-Codes/gepa-adk",
     },
     {
+        "title": "docvet",
+        "description": (
+            "CLI tool for comprehensive Python docstring quality vetting. "
+            "Catches stale, incomplete, and broken docstrings that linters "
+            "miss — filling the gap between style checking (ruff) and "
+            "presence checking (interrogate) with 19 rules across "
+            "completeness, accuracy, rendering, and visibility."
+        ),
+        "tags": ["Python", "CLI", "Code Quality", "PyPI", "Open Source"],
+        "link": "https://pypi.org/project/docvet/",
+        "docs": "https://alberto-codes.github.io/docvet/",
+        "github": "https://github.com/Alberto-Codes/docvet",
+    },
+    {
         "title": "AI Agent Framework",
         "description": (
             "Designed and built an enterprise generative AI agent framework "
