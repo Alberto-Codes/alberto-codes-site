@@ -1,0 +1,24 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#3b82f6', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#2563eb', 'secondaryColor': '#64748b', 'secondaryTextColor': '#ffffff', 'secondaryBorderColor': '#475569', 'tertiaryColor': '#f1f5f9', 'tertiaryTextColor': '#1e293b', 'lineColor': '#94a3b8', 'fontSize': '14px'}}}%%
+graph TD
+    subgraph covered["Covered by existing tools"]
+        L1["<b>Layer 1: Presence</b><br/>Does it exist?<br/><i>interrogate</i>"]
+        L2["<b>Layer 2: Style</b><br/>Is it formatted correctly?<br/><i>ruff D rules</i>"]
+    end
+
+    subgraph gap["The gap — covered by docvet"]
+        L3["<b>Layer 3: Completeness</b><br/>All sections documented?<br/><i>docvet enrichment</i>"]
+        L4["<b>Layer 4: Accuracy</b><br/>Matches the current code?<br/><i>docvet freshness</i>"]
+        L5["<b>Layer 5: Rendering</b><br/>Will mkdocs render it?<br/><i>docvet griffe</i>"]
+        L6["<b>Layer 6: Visibility</b><br/>Will mkdocs see it?<br/><i>docvet coverage</i>"]
+    end
+
+    L1 --> L2 --> L3 --> L4 --> L5 --> L6
+
+    style covered fill:#e2e8f0,stroke:#94a3b8,color:#1e293b
+    style gap fill:#dbeafe,stroke:#3b82f6,color:#1e293b
+    style L1 fill:#64748b,stroke:#475569,color:#ffffff
+    style L2 fill:#64748b,stroke:#475569,color:#ffffff
+    style L3 fill:#3b82f6,stroke:#2563eb,color:#ffffff
+    style L4 fill:#3b82f6,stroke:#2563eb,color:#ffffff
+    style L5 fill:#3b82f6,stroke:#2563eb,color:#ffffff
+    style L6 fill:#3b82f6,stroke:#2563eb,color:#ffffff
