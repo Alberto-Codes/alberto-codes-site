@@ -3,18 +3,14 @@
 import reflex as rx
 
 EXPERTISE_TAGS = [
-    "Generative AI",
-    "AI Agents & Frameworks",
-    "Artificial Intelligence",
-    "Data Engineering",
+    "Generative AI & Agents",
     "Python",
-    "Git",
-    "CI/CD",
+    "Data Engineering & Pipelines",
+    "Cloud (GCP, PCF)",
+    "OCR & Document Intelligence",
+    "CI/CD & DevOps",
     "Enterprise Architecture",
-    "Analytics",
     "Technical Leadership",
-    "AI Agent Optimization",
-    "AI Architecture",
 ]
 
 
@@ -46,29 +42,15 @@ def home_page() -> rx.Component:
                 text_align="center",
             ),
             rx.text(
-                "Detail oriented individual who can relate technology to "
-                "business initiatives and use creativity to drive solutions. "
-                "25+ years at Wells Fargo, from customer service to "
-                "Principal Engineer.",
+                "I started as a teller, taught myself to code, and spent "
+                "25 years building my way to Principal Engineer. Now I "
+                "design AI systems, ship open source tools, and bridge "
+                "the gap between business problems and technical solutions.",
                 size="3",
                 color=rx.color("slate", 10),
                 max_width=["100%", "100%", "36em", "36em", "36em"],
                 text_align="center",
             ),
-            rx.hstack(
-                rx.link(
-                    rx.button("View Projects", size="3"),
-                    href="/projects",
-                    underline="none",
-                ),
-                rx.link(
-                    rx.button("Contact Me", variant="outline", size="3"),
-                    href="/contact",
-                    underline="none",
-                ),
-                spacing="4",
-            ),
-            rx.box(height="2em"),
             rx.hstack(
                 rx.hstack(
                     rx.icon("award", size=16, color=rx.color("blue", 9)),
@@ -90,9 +72,28 @@ def home_page() -> rx.Component:
                     spacing="1",
                     align="center",
                 ),
+                rx.hstack(
+                    rx.icon("package", size=16, color=rx.color("blue", 9)),
+                    rx.text("3 PyPI Packages", size="2", color=rx.color("slate", 10)),
+                    spacing="1",
+                    align="center",
+                ),
                 spacing="5",
                 flex_direction=["column", "column", "row", "row", "row"],
                 align="center",
+            ),
+            rx.hstack(
+                rx.link(
+                    rx.button("View Projects", size="3"),
+                    href="/projects",
+                    underline="none",
+                ),
+                rx.link(
+                    rx.button("Contact Me", variant="outline", size="3"),
+                    href="/contact",
+                    underline="none",
+                ),
+                spacing="4",
             ),
             rx.box(height="1em"),
             rx.heading("Areas of Expertise", size="3", weight="medium"),

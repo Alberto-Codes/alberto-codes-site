@@ -6,10 +6,10 @@ PROJECTS = [
     {
         "title": "gepa-adk",
         "description": (
-            "Open-source Python library that evolves AI agent instructions "
-            "automatically. Give it an agent and training examples, and it "
-            "finds better prompts through iterative improvement using "
-            "evolutionary optimization with Google ADK."
+            "Evolves AI agent instructions automatically using genetic "
+            "algorithms. Async-first engine built on Google ADK with "
+            "hexagonal architecture and protocol-based interfaces. "
+            "12 releases, ~4,900 downloads. Apache-2.0."
         ),
         "tags": ["Generative AI", "Google ADK", "Python", "PyPI"],
         "link": "https://pypi.org/project/gepa-adk/",
@@ -17,13 +17,25 @@ PROJECTS = [
         "github": "https://github.com/Alberto-Codes/gepa-adk",
     },
     {
+        "title": "adk-secure-sessions",
+        "description": (
+            "The compliance gateway for Google ADK \u2014 encrypted session "
+            "storage in 5 minutes. Drop-in replacement that encrypts state "
+            "and conversation history at rest using Fernet, closing the "
+            "encryption gap for PHI, PII, and financial data. "
+            "3 dependencies. Apache-2.0."
+        ),
+        "tags": ["Generative AI", "Google ADK", "Security", "Python", "PyPI"],
+        "link": "https://pypi.org/project/adk-secure-sessions/",
+        "github": "https://github.com/Alberto-Codes/adk-secure-sessions",
+    },
+    {
         "title": "docvet",
         "description": (
-            "CLI tool for comprehensive Python docstring quality vetting. "
-            "Catches stale, incomplete, and broken docstrings that linters "
-            "miss — filling the gap between style checking (ruff) and "
-            "presence checking (interrogate) with 19 rules across "
-            "completeness, accuracy, rendering, and visibility."
+            "Python docstring quality vetting that catches what linters miss. "
+            "19 rules across completeness, accuracy, rendering, and "
+            "visibility \u2014 including git-based staleness detection via "
+            "diff and blame. Production/Stable, ~3,300 downloads. MIT."
         ),
         "tags": ["Python", "CLI", "Code Quality", "PyPI", "Open Source"],
         "link": "https://pypi.org/project/docvet/",
@@ -208,6 +220,49 @@ def projects_page() -> rx.Component:
                 *[project_card(p) for p in PROJECTS],
                 columns=rx.breakpoints(initial="1", md="2"),
                 spacing="4",
+                width="100%",
+            ),
+            rx.box(height="1em"),
+            rx.card(
+                rx.hstack(
+                    rx.vstack(
+                        rx.heading(
+                            "Want to collaborate?",
+                            size="4",
+                            weight="bold",
+                        ),
+                        rx.text(
+                            "Check out my GitHub for more projects, or get in touch.",
+                            size="2",
+                            color=rx.color("slate", 11),
+                        ),
+                        spacing="1",
+                    ),
+                    rx.spacer(),
+                    rx.hstack(
+                        rx.link(
+                            rx.button(
+                                rx.icon("github", size=16),
+                                "GitHub",
+                                size="2",
+                                variant="outline",
+                            ),
+                            href="https://github.com/Alberto-Codes",
+                            is_external=True,
+                            underline="none",
+                        ),
+                        rx.link(
+                            rx.button("Contact Me", size="2"),
+                            href="/contact",
+                            underline="none",
+                        ),
+                        spacing="3",
+                    ),
+                    width="100%",
+                    align="center",
+                    flex_direction=["column", "column", "row", "row", "row"],
+                    gap="4",
+                ),
                 width="100%",
             ),
             spacing="4",
