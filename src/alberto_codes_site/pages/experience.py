@@ -9,9 +9,11 @@ ROLES = [
         "period": "Jul 2025 - Present",
         "location": "Chandler, Arizona - Hybrid",
         "bullets": [
-            "Lead generative AI engineering initiatives at enterprise scale",
+            "Lead generative AI engineering initiatives presented to CTO weekly",
+            "Created AI agent framework to automate line-of-business operations",
+            "Built video processing pipeline handling thousands of videos daily",
             "Co-inventor on patent application",
-            "Skills: Artificial Intelligence, Python, and more",
+            "Open source: shipped gepa-adk, docvet, and adk-secure-sessions to PyPI",
         ],
     },
     {
@@ -20,40 +22,49 @@ ROLES = [
         "period": "Jun 2022 - Jul 2025",
         "location": "Chandler, Arizona - Hybrid",
         "bullets": [
-            "Led analytics and AI-driven solutions for enterprise functions",
-            "Skills: Git, Python, and more",
+            "Team's resident expert in GenAI and Agentic AI frameworks "
+            "including Google ADK and Pydantic-AI",
+            "Architected scalable OCR pipeline processing 500K+ documents using Gemini",
+            "Built reusable data pipelines for document ingestion, OCR, and validation",
+            "Designed modular, scalable architecture reused across multiple teams",
+            "Implemented git-based dev workflow with peer reviews and release standards",
         ],
     },
     {
-        "title": "Lead Analytic Consultant (AVP)",
+        "title": "Lead Analytics Consultant (AVP)",
         "company": "Wells Fargo",
-        "period": "Jan 2018 - Jun 2023",
-        "location": "",
+        "period": "Jan 2018 - Jun 2022",
+        "location": "Chandler, Arizona",
         "bullets": [
             "Delivered analytics solutions and CI/CD workflow automation",
-            "Skills: Pivotal Cloud Foundry (PCF), IBM UrbanCode Deploy, and more",
+            "Onboarded applications to Cloud Foundry with Splunk logging "
+            "and security compliance",
+            "Created dynamic databases for automated and manual data ingestion",
         ],
     },
     {
-        "title": "Additional Roles (13 total at Wells Fargo)",
+        "title": "Technology Manager & Systems Engineer (AVP)",
         "company": "Wells Fargo",
-        "period": "2000 - 2018",
-        "location": "",
-        "bullets": [
-            "Progressive career spanning customer service, operations, "
-            "business analysis, and engineering",
-            "Two-time Top Performer award recipient (2014, 2018)",
-            "Built deep domain expertise in financial services technology",
-        ],
-    },
-    {
-        "title": "Customer Service Representative",
-        "company": "Bank of America",
-        "period": "Jun 1999 - Aug 2000",
+        "period": "2006 - 2018",
         "location": "Phoenix, Arizona",
         "bullets": [
-            "Operated cash drawer for various banking transactions",
-            "Assisted with audit procedures",
+            "Led 8-9 technicians supporting end-user technology across four "
+            "admin sites",
+            "Led desktop OS migrations and provided onsite hardware swap support",
+            "Created business intelligence reporting for regulatory compliance",
+            "Two-time Top Performer award recipient (2014, 2018)",
+        ],
+    },
+    {
+        "title": "Operations & Banking (early career)",
+        "company": "Wells Fargo / Bank of America",
+        "period": "1999 - 2006",
+        "location": "Phoenix, Arizona",
+        "bullets": [
+            "Progressed from teller to operations analyst to leadership "
+            "development program in 5 years",
+            "Selected for Wells Fargo Leadership Development Program (2004-2005)",
+            "Presented SharePoint hosting solution to technology executive leadership",
         ],
     },
 ]
@@ -154,8 +165,8 @@ def experience_page() -> rx.Component:
             rx.heading("Experience", size="8", weight="bold"),
             rx.separator(size="4", color_scheme="blue"),
             rx.text(
-                "25+ years in financial services technology "
-                "- from customer service to Principal Engineer.",
+                "From banking operations to enterprise AI "
+                "\u2014 a 25-year career built at Wells Fargo.",
                 size="3",
                 color=rx.color("slate", 10),
             ),

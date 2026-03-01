@@ -1,0 +1,25 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#3b82f6', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#2563eb', 'secondaryColor': '#64748b', 'secondaryTextColor': '#ffffff', 'secondaryBorderColor': '#475569', 'tertiaryColor': '#f1f5f9', 'tertiaryTextColor': '#1e293b', 'lineColor': '#94a3b8', 'fontSize': '14px'}}}%%
+graph TD
+    U["<b>User Message</b><br/>prompts, API keys, PII"]
+    A["<b>ADK Agent</b><br/>processes request"]
+    T["<b>Tool Calls</b><br/>function names + arguments"]
+    R["<b>Function Responses</b><br/>API data, query results"]
+    S["<b>Session Events</b><br/>full operational record"]
+
+    U --> A --> T --> R --> S
+
+    S --> D["<b>DatabaseSessionService</b><br/><i>ADK default</i>"]
+    S --> E["<b>EncryptedSessionService</b><br/><i>adk-secure-sessions</i>"]
+
+    D --> P["<b>Plaintext SQLite</b><br/>fully readable JSON"]
+    E --> C["<b>Encrypted SQLite</b><br/>Fernet-encrypted blobs"]
+
+    style U fill:#64748b,stroke:#475569,color:#ffffff
+    style A fill:#64748b,stroke:#475569,color:#ffffff
+    style T fill:#64748b,stroke:#475569,color:#ffffff
+    style R fill:#64748b,stroke:#475569,color:#ffffff
+    style S fill:#64748b,stroke:#475569,color:#ffffff
+    style D fill:#ef4444,stroke:#dc2626,color:#ffffff
+    style E fill:#3b82f6,stroke:#2563eb,color:#ffffff
+    style P fill:#fca5a5,stroke:#ef4444,color:#1e293b
+    style C fill:#93c5fd,stroke:#3b82f6,color:#1e293b

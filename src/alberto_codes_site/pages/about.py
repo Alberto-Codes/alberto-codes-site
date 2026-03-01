@@ -62,11 +62,22 @@ def about_page() -> rx.Component:
                         line_height="1.8",
                     ),
                     rx.text(
-                        "I'm a detail oriented individual who can relate technology "
-                        "to business initiatives and use creativity to drive "
-                        "solutions. I hold a Bachelor of Science in Accounting "
-                        "Information Systems from DeVry University, and I bring a "
-                        "unique perspective that bridges business and technology.",
+                        "I hold a Bachelor of Science in Accounting Information "
+                        "Systems from DeVry University, which gives me a perspective "
+                        "that bridges business and technology. I was recently named "
+                        "as a co-inventor on my first patent application, I'm a "
+                        "two-time Top Performer award recipient, and I'm bilingual "
+                        "in English and Spanish.",
+                        size="3",
+                        color=rx.color("slate", 11),
+                        line_height="1.8",
+                    ),
+                    rx.text(
+                        "Outside of my enterprise work, I build and publish open "
+                        "source Python tools \u2014 including docvet for docstring "
+                        "quality, adk-secure-sessions for encrypted AI agent "
+                        "storage, and gepa-adk for evolutionary prompt optimization. "
+                        "All three are on PyPI.",
                         size="3",
                         color=rx.color("slate", 11),
                         line_height="1.8",
@@ -76,14 +87,6 @@ def about_page() -> rx.Component:
                 spacing="6",
                 align="start",
                 width="100%",
-            ),
-            rx.text(
-                "I was recently named as a co-inventor on my first patent "
-                "application. I'm a two-time Wells Fargo Top Performer "
-                "award recipient and bilingual in English and Spanish.",
-                size="3",
-                color=rx.color("slate", 11),
-                line_height="1.8",
             ),
             rx.box(height="2em"),
             rx.heading("By the Numbers", size="5", weight="medium"),
