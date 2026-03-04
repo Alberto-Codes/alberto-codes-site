@@ -129,7 +129,7 @@ Once configured, your AI agent can invoke `docvet_check` on any file it's workin
 3. Findings come back as structured JSON — missing Raises sections, stale signatures, undocumented attributes
 4. Agent fixes the docstrings alongside the code change
 
-The feedback loop becomes automatic: the agent checks docstring quality as part of its normal workflow, not as an afterthought.
+The feedback loop becomes automatic — like a line cook who taste-tests every dish before it leaves the pass. The agent checks docstring quality as part of its normal workflow, not as an afterthought.
 
 ---
 
