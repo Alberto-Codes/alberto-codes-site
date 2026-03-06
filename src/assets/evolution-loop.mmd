@@ -1,0 +1,29 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#3b82f6', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#475569', 'secondaryColor': '#64748b', 'secondaryTextColor': '#e2e8f0', 'secondaryBorderColor': '#475569', 'tertiaryColor': '#1e293b', 'tertiaryTextColor': '#e2e8f0', 'lineColor': '#64748b', 'background': '#0f172a', 'mainBkg': '#0f172a', 'clusterBkg': '#1e293b', 'edgeLabelBackground': '#1e293b'}}}%%
+flowchart TB
+    A["<b>Training Examples</b><br/><i>diverse input scenarios</i>"]
+    B["<b>Agent</b><br/><i>runs with current instruction</i>"]
+    C["<b>Critic Agent</b><br/><i>scores each output + feedback</i>"]
+    D["<b>Reflection Agent</b><br/><i>analyzes what went wrong</i>"]
+    E["<b>Mutated Instruction</b><br/><i>proposed improvement</i>"]
+    F{"Score<br/>improved?"}
+    G["<b>Accept</b><br/><i>keep new instruction</i>"]
+    H["<b>Reject</b><br/><i>keep previous best</i>"]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F -->|Yes| G
+    F -->|No| H
+    G --> B
+    H --> B
+
+    style A fill:#334155,stroke:#64748b,color:#e2e8f0
+    style B fill:#1d4ed8,stroke:#3b82f6,color:#e2e8f0
+    style C fill:#7c3aed,stroke:#a78bfa,color:#e2e8f0
+    style D fill:#7c3aed,stroke:#a78bfa,color:#e2e8f0
+    style E fill:#1d4ed8,stroke:#3b82f6,color:#e2e8f0
+    style F fill:#b45309,stroke:#f59e0b,color:#e2e8f0
+    style G fill:#15803d,stroke:#22c55e,color:#e2e8f0
+    style H fill:#b91c1c,stroke:#ef4444,color:#e2e8f0
