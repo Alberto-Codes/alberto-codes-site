@@ -1,4 +1,21 @@
-"""Main app entry point with route definitions and shared layout."""
+"""Main app entry point with route definitions and shared layout.
+
+This module sets up the Reflex application with all routes for the portfolio site,
+including home, blog, projects, experience, about, and contact pages. It provides
+a shared layout wrapper that applies consistent navbar and footer components across all pages.
+
+Examples:
+    The app is initialized and pages are added with the shared layout:
+
+    ```python
+    from alberto_codes_site.alberto_codes_site import app
+    ```
+
+See Also:
+    :py:func:`layout` : Wraps page components with shared navbar and footer
+    :py:func:`navbar` : Navigation bar component
+    :py:func:`footer` : Footer component
+"""
 
 import reflex as rx
 
