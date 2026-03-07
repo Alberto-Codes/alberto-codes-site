@@ -27,7 +27,7 @@ Google's Agent Development Kit gives you `DatabaseSessionService` — a session 
 ```python
 from google.adk.sessions import DatabaseSessionService
 
-session_service = DatabaseSessionService(db_url="sqlite:///sessions.db")
+session_service = DatabaseSessionService(db_url="sqlite+aiosqlite:///sessions.db")
 ```
 
 That `sessions.db` file now contains everything your agent processes. Every user message. Every tool call and its arguments. Every function response. Every piece of state your agent carries between turns. All of it stored as structured data, fully readable, with no encryption layer between the file system and your users' data.
@@ -79,12 +79,11 @@ These aren't edge cases. If your agent processes user data and you're pursuing a
 [adk-secure-sessions](https://github.com/Alberto-Codes/adk-secure-sessions) is an encrypted session storage layer for Google ADK. It's a drop-in replacement — same session interface, same behavior, encrypted storage.
 
 ```python
-from adk_secure_sessions import EncryptedSessionService, FernetBackend, BACKEND_FERNET
+from adk_secure_sessions import EncryptedSessionService, FernetBackend
 
 session_service = EncryptedSessionService(
-    db_path="sessions.db",
+    db_url="sqlite+aiosqlite:///sessions.db",
     backend=FernetBackend("your-secret-key"),
-    backend_id=BACKEND_FERNET
 )
 ```
 
@@ -92,7 +91,7 @@ Your agent code doesn't change. Every call to create, get, list, or delete sessi
 
 The encryption is Fernet — AES-128-CBC with HMAC-SHA256 for authenticated encryption, meaning data is both confidential and tamper-evident. Key derivation uses PBKDF2-HMAC-SHA256 with 480,000 iterations, so your passphrase becomes a strong cryptographic key without managing raw key material.
 
-Three dependencies total: `google-adk`, `cryptography`, and `aiosqlite`. Nothing exotic. Nothing heavy. No C extensions to compile, no system libraries to install.
+Two runtime dependencies: `google-adk` and `cryptography`. Nothing exotic. Nothing heavy. No C extensions to compile, no system libraries to install.
 
 The library extends ADK's `BaseSessionService` directly rather than wrapping `DatabaseSessionService`. That's a deliberate architectural choice — and one that came from a failed first attempt with the decorator pattern. That story, and the generalizable lesson about when composition breaks down, are coming in Part 4 of this series.
 
@@ -109,16 +108,16 @@ What stays the same:
 What changes:
 
 - Session data at rest is encrypted — the file is useless without the key
-- Error messages are precise — `EncryptionError`, `DecryptionError`, `SerializationError`, and `ConfigurationError` tell you exactly what went wrong
+- Error messages are precise — `DecryptionError` and `ConfigurationError` tell you exactly what went wrong
 - You need a passphrase — managed via environment variable, not hardcoded
 
 ```python
 import os
+from adk_secure_sessions import EncryptedSessionService, FernetBackend
 
 session_service = EncryptedSessionService(
-    db_path="sessions.db",
+    db_url="sqlite+aiosqlite:///sessions.db",
     backend=FernetBackend(os.environ["SESSION_KEY"]),
-    backend_id=BACKEND_FERNET
 )
 ```
 
