@@ -1,0 +1,24 @@
+name: release-announcement
+description: 'Draft release announcements across all platforms for any Alberto-Codes project. Use when the user says "create release announcement"'
+
+# Critical variables from config
+config_source: "{project-root}/_bmad/bmm/config.yaml"
+user_name: "{config_source}:user_name"
+communication_language: "{config_source}:communication_language"
+document_output_language: "{config_source}:document_output_language"
+user_skill_level: "{config_source}:user_skill_level"
+date: system-generated  # format: YYYY-MM-DD
+implementation_artifacts: "{config_source}:implementation_artifacts"
+# Workflow components
+installed_path: "{project-root}/_bmad/bmm/workflows/release-announcement"
+instructions: "{installed_path}/instructions.md"
+style_guide: "{installed_path}/release-announcement-style-guide.md"
+# No validation/checklist.md — content generation workflow, not code implementation
+
+# User-provided runtime input
+gh_repo: ""  # User-provided: e.g., "Alberto-Codes/docvet"
+
+# Runtime-resolved during Step 1 of instructions.md
+release_version: ""  # Set at runtime from gh release view tagName
+# SM sets output_file = "{implementation_artifacts}/release-announcement-{tagName}-{date}.md"
+# and uses that variable directly for all write operations in Steps 1.9–7
