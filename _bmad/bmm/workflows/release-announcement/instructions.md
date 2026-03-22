@@ -144,15 +144,16 @@ For each selected type, in sequence:
 
 1. Draft the full blog post with complete frontmatter (`title`, `date`, `type`, `summary`, `tags`)
 2. Invoke party mode using the Blog agent pairing from the Party Mode Agent Selection table in the style guide (varies by Diataxis type)
-3. Derive the slug: lowercase the title → replace spaces with hyphens → strip punctuation except hyphens → prepend publish date as `YYYY-MM-DD`. Example: "Why docvet Needed CLI-First Design" → `2026-03-08-why-docvet-needed-cli-first-design`.
-4. Before writing: check if `src/posts/{date}-{slug}.md` already exists. If it does, ask:
+3. Identify 1–2 concepts in the post that would benefit from a Mermaid diagram (see Diagram Guidelines in the style guide). If candidates exist, generate `.mmd` source files in `src/assets/`, render to SVG via `npx @mermaid-js/mermaid-cli -i <input>.mmd -o <output>.svg -b transparent`, and embed in the post as `![alt text](/<filename>.svg)`. Skip if no concept naturally warrants a visual.
+4. Derive the slug: lowercase the title → replace spaces with hyphens → strip punctuation except hyphens → prepend publish date as `YYYY-MM-DD`. Example: "Why docvet Needed CLI-First Design" → `2026-03-08-why-docvet-needed-cli-first-design`.
+5. Before writing: check if `src/posts/{date}-{slug}.md` already exists. If it does, ask:
 
    > "File already exists — overwrite? (y/n)"
 
    Wait for user response before writing.
 
-5. Write the final post to: `src/posts/{date}-{slug}.md`
-6. Lock the canonical URL: `https://alberto.codes/blog/{date}-{slug}`
+6. Write the final post to: `src/posts/{date}-{slug}.md`
+7. Lock the canonical URL: `https://alberto.codes/blog/{date}-{slug}`
 
 Write all selected blog posts before proceeding to Step 4.
 

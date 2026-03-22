@@ -1,0 +1,15 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#3b82f6', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#2563eb', 'secondaryColor': '#64748b', 'secondaryTextColor': '#ffffff', 'secondaryBorderColor': '#475569', 'tertiaryColor': '#f1f5f9', 'tertiaryTextColor': '#1e293b', 'lineColor': '#94a3b8', 'fontSize': '14px'}}}%%
+graph TD
+    A["<b>Refactor</b><br/>retries → max_retries"] --> B["<b>Call sites updated</b><br/>grep, find-replace, done"]
+    B --> C["<b>Docstring forgotten</b><br/>Args still says retries"]
+    C --> D["<b>AI reads stale docstring</b><br/>Generates code with retries"]
+    D --> E["<b>Wrong suggestion ships</b><br/>TypeError at runtime"]
+
+    C -.->|"docvet catches it here"| F["<b>missing-param-in-docstring</b><br/>max_retries not in Args"]
+
+    style A fill:#64748b,stroke:#475569,color:#ffffff
+    style B fill:#64748b,stroke:#475569,color:#ffffff
+    style C fill:#ef4444,stroke:#dc2626,color:#ffffff
+    style D fill:#ef4444,stroke:#dc2626,color:#ffffff
+    style E fill:#ef4444,stroke:#dc2626,color:#ffffff
+    style F fill:#22c55e,stroke:#16a34a,color:#ffffff

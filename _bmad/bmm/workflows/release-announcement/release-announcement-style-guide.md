@@ -323,12 +323,34 @@ tags:
 | `tutorial` | What You'll Build → Setup → Step-by-step → What You Learned |
 | `reference` | Overview → Comparison Table → Specifications → API Surface |
 
+### Diagram Guidelines
+
+Most blog posts on this site include 1–2 Mermaid diagrams rendered as static SVGs. Diagrams should earn their place — use them for processes, flows, or relationships that are clearer visually than in prose.
+
+**Good candidates:**
+- Lifecycle or flow diagrams (how data/state moves through a system)
+- Before/after or bidirectional relationships
+- Architecture layers or component relationships
+
+**Not good candidates:**
+- Simple lists that are already clear as bullet points
+- Concepts that are purely textual (design philosophy, opinions)
+
+**Technical requirements:**
+- Source: `.mmd` files in `src/assets/`
+- Render: `npx @mermaid-js/mermaid-cli -i <input>.mmd -o <output>.svg -b transparent`
+- Embed: `![descriptive alt text](/<filename>.svg)`
+- Use the site's established Mermaid theme (see existing `.mmd` files in `src/assets/` for the `init` block)
+- Prefer LR (left-right) layout for compact concepts; use TD (top-down) for sequential flows or when LR would be too wide
+- Each diagram should serve a different visual purpose — don't repeat the same diagram type twice
+
 ### Anti-Patterns
 
 - Pasting the raw changelog as the post body
 - No code examples
 - Tutorial that doesn't guarantee success if followed exactly
 - Missing any of the five required frontmatter fields
+- Blog post with no diagram consideration (most posts benefit from at least one)
 
 ---
 

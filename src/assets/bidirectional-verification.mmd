@@ -1,0 +1,10 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#3b82f6', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#2563eb', 'secondaryColor': '#64748b', 'secondaryTextColor': '#ffffff', 'secondaryBorderColor': '#475569', 'tertiaryColor': '#f1f5f9', 'tertiaryTextColor': '#1e293b', 'lineColor': '#94a3b8', 'fontSize': '14px'}}}%%
+graph LR
+    CODE["<b>Code</b><br/>signature, body,<br/>raise, yield, return"]
+    DOC["<b>Docstring</b><br/>Args, Returns,<br/>Raises, Yields"]
+
+    CODE -- "<b>Forward</b><br/>Code does X,<br/>docstring doesn't<br/>mention it" --> DOC
+    DOC -- "<b>Reverse</b><br/>Docstring claims X,<br/>code doesn't<br/>do it" --> CODE
+
+    style CODE fill:#3b82f6,stroke:#2563eb,color:#ffffff
+    style DOC fill:#f59e0b,stroke:#d97706,color:#1e293b
