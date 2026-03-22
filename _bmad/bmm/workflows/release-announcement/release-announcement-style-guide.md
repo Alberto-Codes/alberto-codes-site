@@ -117,6 +117,48 @@ Tweet 4 (CTA): [Link to blog post + 2-3 hashtags]
 
 ---
 
+## Medium
+
+**Audience:** Technical decision-makers, engineering managers, developers browsing casually — not copy-pasting code
+**Length:** 800–1200 words
+**Tone:** Conversational and opinionated — conference hallway conversation, not README. Closer to your LinkedIn voice but with more room to breathe.
+**Publishing:** Manual — paste blog URL into Medium's Import tool (auto-sets canonical URL) or copy-paste with manual canonical link setting
+**Post selection:** Primarily `explanation` type posts. `how-to` only if code-light. Skip `reference` and code-heavy `tutorial` — they lose too much fidelity without syntax highlighting or table support.
+
+### Voice Rules
+
+- Lead with the *why*, not the *what*. Medium readers want insight, not instructions
+- Maximum 1–2 short code snippets (under 5 lines each). Replace longer blocks with plain-language descriptions and link to the blog post for full implementation
+- Replace tables with prose comparisons or bold key/value pairs — Medium has no native table support
+- Food/cooking metaphors: same rule as LinkedIn — use when natural, never force
+- End with a single link to the canonical blog post
+- No hashtags (Medium doesn't use them for discovery the way LinkedIn/X do)
+- Max 5 Medium tags (selected at publish time, not in the draft)
+
+### Fuzzy Template
+
+```
+[Hook — counterintuitive insight or "here's what most people get wrong" framing. 1-2 sentences.]
+
+[Problem — why this matters to someone making a technical decision. 2-3 short paragraphs.]
+
+[Solution narrative — what you built and the key design tradeoff. Show one short code snippet if it illustrates the point. 2-3 paragraphs.]
+
+[Honest tradeoffs — what this doesn't solve, or when not to use it.]
+
+[Forward motion — what's coming next, and link to the full blog post for implementation details.]
+```
+
+### Anti-Patterns
+
+- Code-heavy posts that rely on syntax highlighting to be readable
+- Comparison tables (they won't render)
+- Feature dump bullet lists
+- "Excited to announce" or similar warm-up phrases
+- Pasting the dev.to or blog post verbatim — Medium needs its own voice adaptation
+
+---
+
 ## dev.to
 
 **Audience:** Developers actively learning
@@ -244,11 +286,24 @@ date: YYYY-MM-DD
 type: explanation|how-to|tutorial|reference
 summary: [One-line hook]
 tags:
-  - project-name
+  - project name
   - python
-  - relevant-topic
+  - relevant topic
 ---
 ```
+
+### Title Rules
+
+- Sentence case — capitalize the first word even if it's a package name
+- Blog titles should be conversational, not README headings
+- Package names keep their original casing mid-title (`adk-secure-sessions`) but titles should not start with a lowercase package name
+
+### Tag Formatting Rules
+
+- Multi-word tags use **spaces**, not hyphens: `google adk` not `google-adk`
+- Tags are lowercase
+- Scan existing posts in `src/posts/` before writing — reuse established tags exactly
+- Series posts (multiple posts about the same project) must share a common tag set for discoverability
 
 ### Diataxis Type Selection
 
@@ -284,14 +339,14 @@ tags:
 All platforms tell the same story — distilled, not copy-pasted:
 
 ```
-Blog (canonical) → dev.to (canonical_url points back) → LinkedIn (distilled) → X (punchy) → GitHub Discussion (community)
+Blog (canonical) → dev.to (canonical_url points back) → Medium (narrative adaptation, manual import) → LinkedIn (distilled) → X (punchy) → GitHub Discussion (community)
 ```
 
 ### Canonical URL Construction
 
 1. Blog post slug = `YYYY-MM-DD-{title-in-kebab-case}` (derived from `date` + `title`)
 2. Canonical URL = `https://alberto.codes/blog/{slug}`
-3. This URL is locked at the end of Step 3 and passed to Step 4 (dev.to) for `canonical_url` frontmatter
+3. This URL is locked at the end of Step 3 and passed to Steps 4–5 (dev.to, Medium) for `canonical_url` / canonical link
 
 **Example:** A post titled "Why docvet Needed CLI-First Design" published 2026-03-08 → slug: `2026-03-08-why-docvet-needed-cli-first-design` → canonical: `https://alberto.codes/blog/2026-03-08-why-docvet-needed-cli-first-design`
 
@@ -315,6 +370,7 @@ When invoking party mode per platform, the SM channels the agents listed below �
 | Blog (tutorial) | Dev + Tech Writer | Working examples + progressive disclosure |
 | Blog (reference) | Dev + Architect | Specs + design decisions |
 | dev.to | Dev + Tech Writer | Code depth + accessibility |
+| Medium | PM + Storyteller | Value narrative + engaging prose |
 | LinkedIn | PM + Architect | Value proposition + credibility |
 | X/Twitter | Quick Flow Solo Dev + Storyteller | Punchy + narrative arc |
 | GitHub Discussion | SM + PM | Community voice + roadmap context |

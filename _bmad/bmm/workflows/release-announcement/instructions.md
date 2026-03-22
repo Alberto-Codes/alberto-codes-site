@@ -168,7 +168,23 @@ Draft a dev.to article (800–1200 words) following the dev.to section of the st
 
 ---
 
-## Step 5: LinkedIn Post
+## Step 5: Medium Article
+
+Check the blog post Diataxis type from Step 3. Only generate a Medium draft if the type is `explanation` or a code-light `how-to`. For `reference` or code-heavy posts, skip this step and note: "Skipping Medium — post type relies on syntax highlighting and tables that Medium doesn't support."
+
+If generating:
+
+- Draft an 800–1200 word adaptation following the Medium section of the style guide
+- Adapt code blocks: keep max 1–2 short snippets (under 5 lines), replace longer blocks with plain-language descriptions
+- Replace any tables with prose comparisons or bold key/value pairs
+- Include the canonical blog URL at the end
+- Invoke party mode: PM + Storyteller
+- Write the draft to {output_file} under a `## Medium` section
+- Note to user: "Publish via Medium's Import tool (paste blog URL) or copy-paste and set canonical link manually under story settings."
+
+---
+
+## Step 6: LinkedIn Post
 
 Draft a LinkedIn post (~1300 characters) following the LinkedIn section of the style guide.
 
@@ -177,7 +193,7 @@ Draft a LinkedIn post (~1300 characters) following the LinkedIn section of the s
 
 ---
 
-## Step 6: X/Twitter Thread
+## Step 7: X/Twitter Thread
 
 Draft a thread of 3–5 tweets following the X/Twitter section of the style guide.
 
@@ -186,7 +202,7 @@ Draft a thread of 3–5 tweets following the X/Twitter section of the style guid
 
 ---
 
-## Step 7: GitHub Discussion
+## Step 8: GitHub Discussion
 
 Draft a GitHub Discussion post (150–400 words) following the GitHub Discussion section of the style guide.
 
@@ -196,7 +212,7 @@ Draft a GitHub Discussion post (150–400 words) following the GitHub Discussion
 
 ---
 
-## Step 8: Review & Finalize
+## Step 9: Review & Finalize
 
 Present a complete output summary to the user:
 
