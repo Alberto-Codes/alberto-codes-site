@@ -1,0 +1,27 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#3b82f6', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#2563eb', 'secondaryColor': '#64748b', 'secondaryTextColor': '#ffffff', 'secondaryBorderColor': '#475569', 'tertiaryColor': '#f1f5f9', 'tertiaryTextColor': '#1e293b', 'lineColor': '#94a3b8', 'fontSize': '14px'}}}%%
+flowchart TD
+    REG["Session._register_default_handlers()"]
+
+    REG --> S3E["'creating-client-class.s3'<br/>→ inject_s3_transfer_methods"]
+    REG --> S3B["'creating-resource-class.s3.Bucket'<br/>→ inject_bucket_methods"]
+    REG --> S3O["'creating-resource-class.s3.Object'<br/>→ inject_object_methods"]
+    REG --> DDB["'creating-resource-class.dynamodb'<br/>→ register_high_level_interface"]
+    REG --> DDBT["'creating-resource-class.dynamodb.Table'<br/>→ register_table_methods"]
+    REG --> EC2["'creating-resource-class.ec2.Instance'<br/>→ inject_create_tags / inject_delete_tags"]
+
+    S3E --> S3M["Client gains:<br/>upload_file, download_file,<br/>copy, upload_fileobj,<br/>download_fileobj"]
+    S3B --> S3BM["Bucket gains:<br/>upload_file, download_file,<br/>copy, upload_fileobj,<br/>download_fileobj"]
+    DDB --> DDBM["All DynamoDB resources gain:<br/>auto type serialize/deserialize<br/>via before-call / after-call events"]
+    DDBT --> DDBTM["Table gains:<br/>batch_writer()"]
+
+    style REG fill:#3b82f6,stroke:#2563eb,color:#ffffff
+    style S3E fill:#22c55e,stroke:#16a34a,color:#ffffff
+    style S3B fill:#22c55e,stroke:#16a34a,color:#ffffff
+    style S3O fill:#22c55e,stroke:#16a34a,color:#ffffff
+    style DDB fill:#f59e0b,stroke:#d97706,color:#1e293b
+    style DDBT fill:#f59e0b,stroke:#d97706,color:#1e293b
+    style EC2 fill:#64748b,stroke:#475569,color:#ffffff
+    style S3M fill:#dbeafe,stroke:#3b82f6,color:#1e293b
+    style S3BM fill:#dbeafe,stroke:#3b82f6,color:#1e293b
+    style DDBM fill:#fef3c7,stroke:#f59e0b,color:#1e293b
+    style DDBTM fill:#fef3c7,stroke:#f59e0b,color:#1e293b

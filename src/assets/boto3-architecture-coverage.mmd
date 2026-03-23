@@ -1,0 +1,38 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#3b82f6', 'primaryTextColor': '#ffffff', 'primaryBorderColor': '#2563eb', 'secondaryColor': '#64748b', 'secondaryTextColor': '#ffffff', 'secondaryBorderColor': '#475569', 'tertiaryColor': '#f1f5f9', 'tertiaryTextColor': '#1e293b', 'lineColor': '#94a3b8', 'fontSize': '14px'}}}%%
+graph LR
+    subgraph original["Without docvet (618 lines)"]
+        O1["Resource Factory"]
+        O2["Action Execution"]
+        O3["Collection Pagination"]
+        O4["Session Lifecycle"]
+        O5["Parameter Resolution"]
+    end
+
+    subgraph fixed["With docvet (484 lines)"]
+        F1["Resource Factory"]
+        F2["Action Execution"]
+        F3["Collection Pagination"]
+        F4["Session Lifecycle"]
+        F5["Event System"]
+        F6["CRT Singleton"]
+        F7["DynamoDB Pipeline"]
+        F8["Docs Generation"]
+        F9["Exception Hierarchy"]
+    end
+
+    style original fill:#fef3c7,stroke:#f59e0b,color:#1e293b
+    style fixed fill:#dbeafe,stroke:#3b82f6,color:#1e293b
+    style O1 fill:#64748b,stroke:#475569,color:#ffffff
+    style O2 fill:#64748b,stroke:#475569,color:#ffffff
+    style O3 fill:#64748b,stroke:#475569,color:#ffffff
+    style O4 fill:#64748b,stroke:#475569,color:#ffffff
+    style O5 fill:#64748b,stroke:#475569,color:#ffffff
+    style F1 fill:#3b82f6,stroke:#2563eb,color:#ffffff
+    style F2 fill:#3b82f6,stroke:#2563eb,color:#ffffff
+    style F3 fill:#3b82f6,stroke:#2563eb,color:#ffffff
+    style F4 fill:#3b82f6,stroke:#2563eb,color:#ffffff
+    style F5 fill:#22c55e,stroke:#16a34a,color:#ffffff
+    style F6 fill:#22c55e,stroke:#16a34a,color:#ffffff
+    style F7 fill:#22c55e,stroke:#16a34a,color:#ffffff
+    style F8 fill:#22c55e,stroke:#16a34a,color:#ffffff
+    style F9 fill:#22c55e,stroke:#16a34a,color:#ffffff
