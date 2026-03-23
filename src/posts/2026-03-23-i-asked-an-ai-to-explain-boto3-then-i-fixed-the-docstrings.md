@@ -1,8 +1,8 @@
 ---
-title: We asked an AI to explain boto3. Then we fixed the docstrings.
+title: I asked an AI to explain boto3. Then I fixed the docstrings.
 date: 2026-03-23
 type: explanation
-summary: We cloned the most downloaded Python package twice, fixed the docstrings with docvet, and asked AI to generate architecture documentation from both. The results weren't even close.
+summary: I cloned the most downloaded Python package twice, fixed the docstrings with docvet, and asked AI to generate architecture documentation from both. The results weren't even close.
 tags:
   - docstrings
   - code quality
@@ -15,7 +15,7 @@ tags:
 
 boto3 is the most downloaded package on PyPI — 43 million installs a day. Every AI coding assistant that helps you write AWS code reads its docstrings. But how good are those docstrings, and does it matter?
 
-We ran an experiment. Clone boto3 twice at the same commit (`04dfc51`, v1.42.73). Leave one copy untouched. Run [docvet](https://github.com/Alberto-Codes/docvet) on the other — 336 findings across 39 files, 50.3% docstring coverage — and fix every finding. Then ask a fresh AI agent to generate `ARCHITECTURE.md` from each copy, with no knowledge of what changed.
+I ran an experiment. Clone boto3 twice at the same commit (`04dfc51`, v1.42.73). Leave one copy untouched. Run [docvet](https://github.com/Alberto-Codes/docvet) on the other — 336 findings across 39 files, 50.3% docstring coverage — and fix every finding. Then ask a fresh AI agent to generate `ARCHITECTURE.md` from each copy, with no knowledge of what changed.
 
 Same codebase. Same model. Same prompt.
 
@@ -73,17 +73,17 @@ This aligns with what the research shows. [Macke & Doyle (NAACL 2024)](https://a
 
 ## The pop quiz
 
-We tested this with targeted questions across multiple models. The cleanest example: we asked Sonnet what exceptions `S3Transfer.upload_file()` raises and how to handle them.
+I tested this with targeted questions across multiple models. The cleanest example: I asked Sonnet what exceptions `S3Transfer.upload_file()` raises and how to handle them.
 
 **Without docvet** — the agent reported: *"The docstring says only 'Upload a file to an S3 object' — zero mention of type validation or failure behavior."* It found the right answer (`ValueError` and `S3UploadFailedError`) by reading the method body.
 
 **With docvet** — the agent reported: *"The Raises: section names both S3UploadFailedError and ValueError, which is the right starting point."* Same correct answer, found in the documentation instead of the code.
 
-We saw this pattern across every model we tested — Opus, Sonnet, Haiku, GPT-4o, GPT-4.1. The answers converged. The sources diverged. In our testing, the docvet-fixed sessions consistently finished faster — the agents spent less time searching code for answers the docstrings already provided.
+I saw this pattern across every model I tested — Opus, Sonnet, Haiku, GPT-4o, GPT-4.1. The answers converged. The sources diverged. In my testing, the docvet-fixed sessions consistently finished faster — the agents spent less time searching code for answers the docstrings already provided.
 
 ## What about wrong docstrings?
 
-Our experiment only tested missing documentation — we added docstrings where none existed. But the more dangerous case is stale documentation: a docstring that *used to be* correct but drifted from the code.
+This experiment only tested missing documentation — I added docstrings where none existed. But the more dangerous case is stale documentation: a docstring that *used to be* correct but drifted from the code.
 
 This is where docvet's freshness checks matter. The `stale-signature` rule detects functions whose signatures changed but whose docstrings weren't updated. `stale-body` catches implementation changes without corresponding doc updates. The new `extra-param-in-docstring` and `extra-raises-in-docstring` rules catch docstrings that claim behavior the code no longer exhibits.
 
