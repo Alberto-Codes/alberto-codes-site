@@ -96,9 +96,14 @@ boto3 is maintained by Amazon. It has 50.3% docstring coverage. If the most down
 The fix isn't writing docstrings for the sake of coverage metrics. It's writing docstrings that tell AI agents what they need to know: what a function returns, what it raises, how modules connect, and where to look next. docvet identifies exactly where those gaps are — and with the right configuration, it catches them in private methods and magic methods too.
 
 ```bash
-pip install docvet==1.14.1
+pip install docvet
+# or
+uv add docvet --dev
+
 docvet check --all --verbose
 ```
+
+Full documentation: [alberto-codes.github.io/docvet](https://alberto-codes.github.io/docvet/)
 
 The AI reading your code will find the answers either way. The question is whether it finds them in your documentation or reverse-engineers them from your implementation. One path is faster, broader, and produces better results. docvet makes sure the documentation is there when the AI comes looking.
 

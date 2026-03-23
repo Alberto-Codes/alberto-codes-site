@@ -95,7 +95,9 @@ If you maintain a Python library that other developers (or AI tools) consume, v1
 If you're using docvet in CI already, upgrade and enable the new checks:
 
 ```bash
-pip install docvet==1.14.1
+pip install docvet
+# or
+uv add docvet --dev
 ```
 
 The param agreement checks are on by default. Reverse enrichment checks are on by default. `missing-return-type` and `undocumented-init-params` are opt-in — enable them in `pyproject.toml` when you're ready:
