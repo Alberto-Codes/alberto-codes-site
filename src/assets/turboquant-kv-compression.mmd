@@ -1,0 +1,13 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#3b82f6', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#475569', 'secondaryColor': '#64748b', 'secondaryTextColor': '#e2e8f0', 'secondaryBorderColor': '#475569', 'tertiaryColor': '#1e293b', 'tertiaryTextColor': '#e2e8f0', 'lineColor': '#64748b', 'background': '#0f172a', 'mainBkg': '#0f172a', 'clusterBkg': '#1e293b', 'edgeLabelBackground': '#1e293b'}}}%%
+flowchart TD
+    A["<b>KV Tensor</b><br/><i>FP16, 256 B/token</i>"]
+    B["<b>Normalize + Rotate</b><br/><i>extract ‖x‖ → fp32, Haar-random Π</i>"]
+    C["<b>Quantize + Pack</b><br/><i>Lloyd-Max 4-bit → nibble pack</i>"]
+    D["<b>Stored</b><br/><i>uint8 + fp32 norms<br/>68 B/token → 3.76x</i>"]
+
+    A --> B --> C --> D
+
+    style A fill:#334155,stroke:#64748b,color:#e2e8f0
+    style B fill:#7c3aed,stroke:#a78bfa,color:#e2e8f0
+    style C fill:#1d4ed8,stroke:#3b82f6,color:#e2e8f0
+    style D fill:#15803d,stroke:#22c55e,color:#e2e8f0

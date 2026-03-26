@@ -1,0 +1,22 @@
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#3b82f6', 'primaryTextColor': '#e2e8f0', 'primaryBorderColor': '#475569', 'secondaryColor': '#64748b', 'secondaryTextColor': '#e2e8f0', 'secondaryBorderColor': '#475569', 'tertiaryColor': '#1e293b', 'tertiaryTextColor': '#e2e8f0', 'lineColor': '#64748b', 'background': '#0f172a', 'mainBkg': '#0f172a', 'clusterBkg': '#1e293b', 'edgeLabelBackground': '#1e293b'}}}%%
+flowchart TD
+    A["<b>3-bit budget per coordinate</b>"]
+    B["<b>TurboQuantProd</b><br/><i>2-bit MSE + 1-bit QJL</i>"]
+    C["<b>TurboQuantMSE</b><br/><i>3-bit MSE (full budget)</i>"]
+    D["<b>87% cosine</b><br/><i>QJL invisible to standard attention</i>"]
+    E["<b>95% cosine</b><br/><i>drop-in compatible</i>"]
+    F["<b>Garbled</b><br/><i>'The number 222 is is a number...'</i>"]
+    G["<b>Identical to baseline</b><br/><i>'Four.'</i>"]
+
+    A -->|"split budget"| B
+    A -->|"full budget to MSE"| C
+    B --> D --> F
+    C --> E --> G
+
+    style A fill:#334155,stroke:#64748b,color:#e2e8f0
+    style B fill:#b45309,stroke:#f59e0b,color:#e2e8f0
+    style C fill:#1d4ed8,stroke:#3b82f6,color:#e2e8f0
+    style D fill:#b91c1c,stroke:#ef4444,color:#e2e8f0
+    style E fill:#15803d,stroke:#22c55e,color:#e2e8f0
+    style F fill:#b91c1c,stroke:#ef4444,color:#e2e8f0
+    style G fill:#15803d,stroke:#22c55e,color:#e2e8f0
