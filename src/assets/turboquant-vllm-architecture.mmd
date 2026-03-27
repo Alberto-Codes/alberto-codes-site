@@ -1,0 +1,25 @@
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#3b82f6', 'primaryTextColor': '#f8fafc', 'primaryBorderColor': '#60a5fa', 'lineColor': '#94a3b8', 'secondaryColor': '#8b5cf6', 'tertiaryColor': '#10b981', 'background': '#0f172a', 'mainBkg': '#1e293b', 'nodeBorder': '#475569'}}}%%
+flowchart TD
+    PIP["`**pip install**
+    turboquant-vllm`"]:::input
+    --> EP["`Entry Point
+    vllm.general_plugins`"]
+    --> REG["`TQ4 Backend
+    auto-registered`"]
+    --> SERVE["`**vllm serve**
+    --attention-backend CUSTOM`"]:::input
+
+    SERVE --> COMP["`Compress
+    rotate → quantize → pack`"]:::good
+    COMP --> STORE[("`**uint8 pages**
+    68 B / token`")]:::store
+    STORE --> DECOMP["`Incremental
+    Decompress`"]:::good
+    DECOMP --> FA["`Flash
+    Attention`"]
+    FA --> OUT["`Output
+    Tokens`"]:::input
+
+    classDef input fill:#3b82f6,color:#f8fafc,stroke:#60a5fa
+    classDef good fill:#10b981,color:#f8fafc,stroke:#34d399
+    classDef store fill:#8b5cf6,color:#f8fafc,stroke:#a78bfa
