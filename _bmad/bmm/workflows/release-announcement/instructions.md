@@ -215,7 +215,17 @@ Draft a GitHub Discussion post (150–400 words) following the GitHub Discussion
 
 ---
 
-## Step 9: Review & Finalize
+## Step 9: Reddit Post
+
+Draft a Reddit post (200–500 words) following the Reddit section of the style guide.
+
+- Select the appropriate subreddit using the Subreddit Selection table in the style guide. Default to r/LocalLLaMA for inference/quantization tools.
+- Invoke party mode: Dev + Architect
+- Write the draft to {output_file} under a `## Reddit` section (include both the title and body)
+
+---
+
+## Step 10: Review & Finalize
 
 Present a complete output summary to the user:
 

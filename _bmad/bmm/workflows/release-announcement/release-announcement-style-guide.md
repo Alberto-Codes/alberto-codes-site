@@ -24,9 +24,11 @@ These five principles apply to every platform. All drafts start here.
 
 ### Voice Rules
 
-- Open with a concrete insight or counter-intuitive statement — no warm-up, no "Excited to announce."
+- **First line must be a hook** — a concrete insight, counter-intuitive statement, or provocative observation. NOT a factual warm-up like "Google published X" or "Excited to announce." Study the confirmed real example below: "Duplicates aren't a bug — they're a feature of your queue."
 - Problem-first: establish the pain before the solution
-- Short paragraphs (2–3 sentences max)
+- **Short paragraphs (2–3 sentences max)** — LinkedIn readers scan. Long paragraphs get skipped. If a paragraph has more than 3 sentences, split it.
+- No numbered lists or bullet points — these read as feature dumps. Use prose.
+- No backtick code formatting — LinkedIn doesn't render it. Write package names and commands in plain text.
 - URL-only CTA — just the raw link, no "click here"
 - 4 hashtags maximum, no more
 - Food/cooking metaphor is a personal brand element — use it when it fits naturally, never force it
@@ -74,8 +76,11 @@ Key observations from this example: direct hook as first line, problem establish
 
 ### Anti-Patterns
 
-- Feature dump bullet lists
+- **Numbered or bulleted lists** — always reads as a feature dump on LinkedIn. Use prose.
+- **Backtick code formatting** — doesn't render on LinkedIn, looks broken
+- **Factual opener without a hook** — "Google published X at Y" is a warm-up, not a hook
 - "Excited to announce" or similar warm-up phrases
+- **Long paragraphs (4+ sentences)** — split them
 - Version number in opener
 - 5+ hashtags
 - "Click here" or "Check it out" before the link
@@ -268,6 +273,75 @@ pip install project==X.Y.Z
 
 ---
 
+## Reddit
+
+**Audience:** r/LocalLLaMA and adjacent technical subreddits (developers running their own models, quantization enthusiasts, vLLM users)
+**Length:** 200–500 words (body text)
+**Tone:** Direct, technical, zero marketing-speak. r/LocalLLaMA readers run inference on their own hardware — they want numbers, commands, and honest limitations. Write like you're posting on a forum, not publishing a press release.
+
+### Subreddit Selection
+
+Choose based on what shipped:
+
+| Content | Subreddit | Flair |
+|---|---|---|
+| Inference optimization, quantization, local model serving | r/LocalLLaMA | Resources / Tool |
+| Novel ML technique or research implementation | r/MachineLearning | [Project] |
+| Container/self-hosted deployment focus | r/selfhosted | Self-Hosted Alternatives |
+
+Default to r/LocalLLaMA for turboquant-vllm and similar inference tools. Cross-post only if the release has a genuinely different angle for another subreddit.
+
+### Voice Rules
+
+- **Title:** Descriptive, not clickbait. Include the project name and what's new. r/LocalLLaMA convention: "[Project] v[X.Y] — [what it does]"
+- **Be upfront about authorship.** Open with "I built this" or "my project" — the community respects transparency and penalizes stealth self-promotion
+- **Lead with benchmarks and real numbers** — compression ratios, memory savings, quality metrics. This audience evaluates tools by results, not promises
+- **Include the install/run command early** — they want to try it immediately
+- **Acknowledge limitations honestly** — what GPUs are supported, what models tested, what doesn't work yet. r/LocalLLaMA respects "this doesn't do X yet" far more than silent omission
+- **No marketing adjectives** — no "revolutionary," "groundbreaking," "game-changing." State facts.
+- **Link to blog post and GitHub** at the end, not woven throughout
+- Markdown formatting works on Reddit — code blocks, bold, headers are all fine
+
+### Fuzzy Template
+
+```markdown
+**Title:** [Project] v[X.Y] — [concise description of what's new]
+
+I built [project] — [one-line description]. [Version] adds [headline feature].
+
+**What it does:**
+[2-3 sentences explaining the core value with real numbers]
+
+**What's new in v[X.Y]:**
+- [Feature 1 with concrete impact]
+- [Feature 2 with concrete impact]
+
+**Try it:**
+```
+[install/run command]
+```
+
+**Benchmarks:**
+[Real numbers — compression ratio, memory, quality, hardware tested]
+
+**Limitations:**
+- [Honest limitation 1]
+- [Honest limitation 2]
+
+[Blog post](link) | [GitHub](link) | [Docs](link)
+```
+
+### Anti-Patterns
+
+- **Marketing tone** — "excited to announce," "revolutionary," "game-changing" will get downvoted
+- **Burying the install command** — they want to try it now
+- **No benchmarks** — unsubstantiated claims get challenged immediately
+- **Hiding limitations** — the community will find them and call them out; be upfront
+- **Over-posting** — don't post every patch release; save Reddit for meaningful feature releases
+- **Cross-posting to 5+ subreddits** — reads as spam
+
+---
+
 ## alberto.codes Blog
 
 **Audience:** Professional audience following your work
@@ -366,7 +440,7 @@ Most blog posts on this site include 1–2 Mermaid diagrams rendered as static S
 All platforms tell the same story — distilled, not copy-pasted:
 
 ```
-Blog (canonical) → dev.to (canonical_url points back) → Medium (narrative adaptation, manual import) → LinkedIn (distilled) → X (punchy) → GitHub Discussion (community)
+Blog (canonical) → dev.to (canonical_url points back) → Medium (narrative adaptation, manual import) → LinkedIn (distilled) → X (punchy) → GitHub Discussion (community) → Reddit (technical community)
 ```
 
 ### Canonical URL Construction
@@ -401,6 +475,7 @@ When invoking party mode per platform, the SM channels the agents listed below �
 | LinkedIn | PM + Architect | Value proposition + credibility |
 | X/Twitter | Quick Flow Solo Dev + Storyteller | Punchy + narrative arc |
 | GitHub Discussion | SM + PM | Community voice + roadmap context |
+| Reddit | Dev + Architect | Technical depth + credibility |
 
 ---
 
