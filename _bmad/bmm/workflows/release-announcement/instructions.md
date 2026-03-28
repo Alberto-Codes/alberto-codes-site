@@ -180,8 +180,10 @@ If generating:
 - Replace any tables with prose comparisons or bold key/value pairs
 - Include the canonical blog URL at the end
 - Invoke party mode: PM + Storyteller
-- Write the draft to {output_file} under a `## Medium` section
-- Note to user: "Publish via Medium's Import tool (paste blog URL) or copy-paste and set canonical link manually under story settings."
+- Write the Markdown draft to {output_file} under a `## Medium` section
+- Also generate an HTML version at `{implementation_artifacts}/medium-{slug}.html` using semantic HTML (`h1`, `h2`, `p`, `strong`, `em`, `a`, `code`) — this is the copy-paste-ready file for Medium's rich text editor
+- Generate 1–2 Mermaid diagrams as PNG (not SVG — Medium rejects SVG). Render with: `npx @mermaid-js/mermaid-cli -i <input>.mmd -o <output>.png -b '#0f172a' -s 3`. Save PNGs to `{implementation_artifacts}/`. Add HTML comments in the HTML file marking where each image should be inserted.
+- Note to user: "Open the HTML file in Chrome → Ctrl+A → Ctrl+C → paste into Medium's editor. Upload the PNG diagrams manually at the marked locations. Set canonical link under story settings."
 
 ---
 

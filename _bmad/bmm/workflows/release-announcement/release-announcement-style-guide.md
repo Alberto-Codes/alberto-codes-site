@@ -90,6 +90,7 @@ Key observations from this example: direct hook as first line, problem establish
 
 ### Voice Rules
 
+- **Each tweet MUST be under 280 characters. Target 260 max to leave buffer.** Count every character including newlines, em dashes, and URLs (URLs count as 23 chars via t.co wrapping). Backtick formatting doesn't render on Twitter — use plain text. Verify character count before presenting each tweet.
 - Tweet 1 must stand alone as a complete thought — hook without the thread
 - Bold statement or question that creates curiosity
 - Max 5 tweets — if you need more, the story isn't focused enough
@@ -110,10 +111,12 @@ Tweet 4 (CTA): [Link to blog post + 2-3 hashtags]
 
 ### Anti-Patterns
 
+- **Exceeding 280 characters per tweet** — the #1 recurring issue. Trim ruthlessly.
 - "1/ " opener without an actual hook
 - Threads longer than 5 tweets
 - Links in every tweet
 - Passive voice or hedging ("might", "could possibly")
+- Backtick code formatting (doesn't render on Twitter)
 
 ---
 
@@ -123,6 +126,8 @@ Tweet 4 (CTA): [Link to blog post + 2-3 hashtags]
 **Length:** 800–1200 words
 **Tone:** Conversational and opinionated — conference hallway conversation, not README. Closer to your LinkedIn voice but with more room to breathe.
 **Publishing:** Manual — paste blog URL into Medium's Import tool (auto-sets canonical URL) or copy-paste with manual canonical link setting
+**Output format:** Generate an HTML file (not Markdown) for the Medium draft. Medium's rich text editor accepts copy-paste from a browser tab. Save as `{implementation_artifacts}/medium-{slug}.html` with basic semantic HTML (`h1`, `h2`, `p`, `strong`, `em`, `a`, `code`). The user opens the HTML in Chrome, selects all, and pastes into Medium's editor.
+**Diagrams:** Medium only accepts JPEG, PNG, WEBP, AVIF, and GIF — **not SVG**. Render Mermaid diagrams as PNG at 3x scale with the site's dark background: `npx @mermaid-js/mermaid-cli -i <input>.mmd -o <output>.png -b '#0f172a' -s 3`. Save PNGs to `{implementation_artifacts}/`. The user uploads them manually in Medium's editor between paragraphs. Note suggested placement in the HTML file using HTML comments.
 **Post selection:** Primarily `explanation` type posts. `how-to` only if code-light. Skip `reference` and code-heavy `tutorial` — they lose too much fidelity without syntax highlighting or table support.
 
 ### Voice Rules

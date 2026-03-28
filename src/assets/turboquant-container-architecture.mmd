@@ -1,0 +1,26 @@
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#3b82f6', 'primaryTextColor': '#f8fafc', 'primaryBorderColor': '#60a5fa', 'lineColor': '#94a3b8', 'secondaryColor': '#8b5cf6', 'tertiaryColor': '#10b981', 'background': '#0f172a', 'mainBkg': '#1e293b', 'nodeBorder': '#475569'}}}%%
+flowchart TD
+    CMD["`**podman run**
+    --attention-backend CUSTOM
+    --model allenai/Molmo2-8B`"]:::input
+
+    subgraph IMG [" Container Image "]
+        direction TB
+        VLLM["`**vllm-openai:v0.18.0**
+        CUDA / ROCm runtime`"]
+        PLUGIN["`**turboquant-vllm**
+        pip install from PyPI`"]
+        EP["`**tq4_backend**
+        vllm.general_plugins
+        entry point`"]:::good
+    end
+
+    CMD --> IMG
+    VLLM --> PLUGIN --> EP
+    EP --> API["`**localhost:8000**
+    OpenAI-compatible API
+    KV cache 3.76x compressed`"]:::store
+
+    classDef input fill:#3b82f6,color:#f8fafc,stroke:#60a5fa
+    classDef good fill:#10b981,color:#f8fafc,stroke:#34d399
+    classDef store fill:#8b5cf6,color:#f8fafc,stroke:#a78bfa
