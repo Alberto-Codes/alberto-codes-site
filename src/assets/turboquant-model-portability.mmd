@@ -1,0 +1,33 @@
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#3b82f6', 'primaryTextColor': '#f8fafc', 'primaryBorderColor': '#60a5fa', 'lineColor': '#94a3b8', 'secondaryColor': '#8b5cf6', 'tertiaryColor': '#10b981', 'background': '#0f172a', 'mainBkg': '#1e293b', 'nodeBorder': '#475569'}}}%%
+flowchart TD
+    MODEL["`**Model Config**
+    head_dim, attention type`"]:::input
+    --> DIM{head_dim}
+
+    DIM -->|"64 / 96"| PAD["`Pad to pow2
+    + boundary mask`"]:::warn
+    DIM -->|"128"| DIRECT["`Direct
+    kernel launch`"]:::good
+    DIM -->|"256"| TUNE["`BLOCK_M=32
+    autotune`"]:::warn
+
+    PAD --> KERNEL
+    DIRECT --> KERNEL
+    TUNE --> KERNEL
+
+    MODEL --> ATT{attention type}
+    ATT -->|"global"| COMPRESS["`TQ4
+    compress`"]:::store
+    ATT -->|"sliding window"| BYPASS["`SWA bypass
+    no compression`"]:::bypass
+
+    COMPRESS --> KERNEL["`**Fused Kernel**
+    decompress + attend`"]:::good
+    BYPASS --> NATIVE["`**Native vLLM**
+    windowed cache`"]
+
+    classDef input fill:#3b82f6,color:#f8fafc,stroke:#60a5fa
+    classDef store fill:#8b5cf6,color:#f8fafc,stroke:#a78bfa
+    classDef good fill:#10b981,color:#f8fafc,stroke:#34d399
+    classDef warn fill:#f59e0b,color:#1e293b,stroke:#fbbf24
+    classDef bypass fill:#475569,color:#f8fafc,stroke:#64748b

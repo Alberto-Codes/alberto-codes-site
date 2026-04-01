@@ -1,0 +1,28 @@
+%%{init: {'theme': 'dark', 'themeVariables': {'primaryColor': '#3b82f6', 'primaryTextColor': '#f8fafc', 'primaryBorderColor': '#60a5fa', 'lineColor': '#94a3b8', 'secondaryColor': '#8b5cf6', 'tertiaryColor': '#10b981', 'background': '#0f172a', 'mainBkg': '#1e293b', 'nodeBorder': '#475569'}}}%%
+flowchart LR
+    subgraph before["v1.1 — Separate Passes"]
+        direction LR
+        PT1[("`**Page Table**
+        TQ4 blocks`")]:::store
+        -->|"read"| HBM1["`**HBM**
+        decompress
+        write FP16`"]:::warn
+        -->|"read again"| ATT1["`**Attention**
+        Q @ K^T`"]:::input
+    end
+
+    subgraph after["v1.2 — Fused Kernel"]
+        direction LR
+        PT2[("`**Page Table**
+        TQ4 blocks`")]:::store
+        -->|"read once"| SRAM["`**SRAM**
+        decompress
+        + attend`"]:::good
+    end
+
+    before ~~~ after
+
+    classDef input fill:#3b82f6,color:#f8fafc,stroke:#60a5fa
+    classDef store fill:#8b5cf6,color:#f8fafc,stroke:#a78bfa
+    classDef good fill:#10b981,color:#f8fafc,stroke:#34d399
+    classDef warn fill:#f59e0b,color:#1e293b,stroke:#fbbf24
