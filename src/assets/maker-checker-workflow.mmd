@@ -1,0 +1,11 @@
+flowchart TB
+    A["Gordon\n(created_by)"] -->|"Writes the\nspecial"| B["Proposed\n(approved_by: NULL)"]
+    B -->|"Different\nperson"| C["Marco Pierre White\n(approved_by)"]
+    C -->|"Tastes and\napproves"| D["On the board\n(is_current: TRUE)"]
+    C -->|"Rejects"| E["Back to kitchen\n(status: rejected)"]
+
+    style A fill:#eee,stroke:#999
+    style C fill:#eee,stroke:#999
+    style B fill:#fff3cd,stroke:#ffc107
+    style D fill:#d4edda,stroke:#28a745
+    style E fill:#f8d7da,stroke:#dc3545
