@@ -57,7 +57,13 @@ The tool is called [vramfit](https://github.com/Alberto-Codes/vramfit). It crush
 
 ![Four steps. Scan produces a per-layer price list, plan turns it into a recipe under a memory ceiling, validate checks the real damage against the prediction and sends failures back to the solver, and pack builds the file.](/vramfit-pipeline.svg)
 
-The output isn't a preset. It's a recipe fitted to one model and one card — change the budget and you get a different answer, because the arithmetic changes.
+The output isn't a preset. It's a recipe fitted to one model and one card — and the "one card" part is where this actually differs from everything else.
+
+Because your card's size is not your budget. A 24 GiB card doesn't give you 24 GiB for weights: the model also needs room for the conversation it's holding, and reserving 16k of context left me **20.47 GiB**. That remainder is the number the solver targets, to the byte.
+
+![A 24 GiB card split into 20.47 GiB for weights and 3.53 GiB reserved for 16k of context. The remainder is what the solver targets, and a different card or a longer context moves the line.](/vramfit-budget.svg)
+
+Change any of it and the answer changes. A 16 GiB card, or the same card serving twice the context, is a different ceiling and therefore a different recipe — not the same recipe squeezed. With presets you browse a list of fixed sizes and take whichever one happens to fit under your number, wearing whatever gap is left over. Here the number goes in the front.
 
 At the same file size, the measured recipe drifts **less** from the original — a 2.9% smaller gap, which sounds tiny but sits far outside the measurement noise. It also beats the three i-quants that fit the same budget, and ties the baseline on five capability benchmarks, so the closer fit costs nothing the benchmarks can see.
 

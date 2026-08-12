@@ -48,6 +48,24 @@ minus what the KV cache will need at the context length you plan to serve.
 card → 20.47 GiB weight budget arithmetic from the acceptance target, since
 that is the one with a public receipt.
 
+**The centrepiece this post owes the reader — run it for real.** The
+explanation post asserts that a different ceiling produces a different
+recipe and stops there, because only the 24 GiB budget has measured
+receipts. This post is where that gets demonstrated instead of claimed.
+
+Plan the *same* sensitivity map at three budgets — a 24 GiB card, a 16 GiB
+card, and the 24 GiB card serving 32k of context instead of 16k — and show
+the three recipes side by side. Points to bring out:
+
+- How many group assignments actually differ between them.
+- Whether the solver's *shape* changes or only its level.
+- What the preset user's alternative is at each ceiling: which stock quant
+  they would have to pick, and how many bytes they leave on the table.
+
+Planning is cheap — no scan, no pack, no GPU hours. Three solves against one
+map. **Do not draw this from imagination; it is exactly the claim the
+explanation post declined to make without data.**
+
 ## 2. Scan
 
 Quantize one layer group at a time, measure how far the output distribution
