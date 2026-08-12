@@ -119,9 +119,15 @@ Weigh the ingredients. Write down the voyage.
 
 The baseline beats me on one metric — how often the top word matches the original — by half a point, and that has never flipped. I let KL carry the ranking anyway, because the top word is a one-bit summary that ignores how wrong the model is when it misses, while KL weights the whole shape. If you always decode greedily, take that half point seriously. If you sample, take the KL.
 
-And one control is missing. When both models got the same four facts wrong, the natural reading is that the mistakes come from the original rather than from either compression. Natural isn't measured. The 93 GB original never answered those fifteen questions, because it doesn't fit the card and needs its own night on a slower lane. It's [tracked in the open](https://github.com/Alberto-Codes/vramfit/issues/143), and if the original gets them *right*, that's more interesting than the result I have: both compressions damaged recall the same way.
+And one control was missing when I first published this. When both models got the same four facts wrong, the natural reading is that the mistakes come from the original rather than from either compression. Natural isn't measured. The 93 GB original had never answered those fifteen questions, because it doesn't fit the card. I said so here, [tracked it in the open](https://github.com/Alberto-Codes/vramfit/issues/143), and said that if the original got them *right*, that would be more interesting than the result I had.
 
-I'd rather publish the gap named than the story clean.
+**It got them wrong.** I ran it the same night. **93 GB** still doesn't fit **24 GB**, so most of the model ran on the CPU — about one word every three or four seconds, thirty-five minutes for fifteen answers. It missed the same four facts. It wrote the same function with the same bug, under the same comment promising it had avoided that exact bug. The mistakes come from the original. Neither compression caused them.
+
+The original scored **20 out of 25** — one point above both copies. Each compression gave up exactly one further point, and they turned out to be the two points that already separated the copies from each other: one flubbed a size parser, the other expanded an acronym wrong. The original got both right.
+
+One point is not nothing, and I won't round it to zero. Compression may have cost each copy that point. Fifteen questions, asked once, cannot tell you whether it did — one point out of twenty-five sits inside what the choice of questions alone can move. That's the same weakness that made the 19-19 tie a weak result, and it cuts the same way in both directions. The conversation can't see the difference. The measurement can.
+
+I'd rather publish the gap named than the story clean. Naming it is also what made it cheap to close.
 
 ## Where it lives
 
@@ -130,4 +136,4 @@ I'd rather publish the gap named than the story clean.
 - **The measurements:** the [sensitivity-map dataset](https://huggingface.co/datasets/Alberto-Codes/Llama-3_3-Nemotron-Super-49B-v1_5-sensitivity-maps) — the per-layer price list the recipe was solved from.
 - **The full ledger:** [all seventeen data points](https://github.com/Alberto-Codes/vramfit/blob/main/docs/explanation/evaluating-packed-models.md), every number and every loss.
 
-Coming next: how to fit a model to the card you actually have, why some layers break and others don't, and that missing control. It's also the second time I've come at quantization from the measurement end — the [first was TurboQuant on a vision model](/blog/2026-03-26-i-ran-turboquant-on-a-vision-model-the-first-output-was-garbage), where the first output was garbage for a reason no benchmark would have told me.
+Coming next: how to fit a model to the card you actually have, and why some layers break and others don't. It's also the second time I've come at quantization from the measurement end — the [first was TurboQuant on a vision model](/blog/2026-03-26-i-ran-turboquant-on-a-vision-model-the-first-output-was-garbage), where the first output was garbage for a reason no benchmark would have told me.
