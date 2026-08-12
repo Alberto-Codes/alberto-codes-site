@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" width="760" height="420" role="img" aria-label="Three bit allocations across 82 layer groups. The preset is flat 3-bit. My first attempt was highly varied with 38 groups at 2-bit and lost. The winner is almost flat 3-bit like the preset, with one group at 8-bit, plus a protection inside 47 layers that the preset does not have.">
+  <defs>
+    <pattern id="hatch" width="5" height="5" patternTransform="rotate(45)" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="0" x2="0" y2="5" stroke="#22d3ee" stroke-width="2.4"/>
+    </pattern>
+  </defs>
+
+  <text x="24" y="28" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15" font-weight="700" fill="#94a3b8">What the recipes actually looked like</text>
+  <text x="24" y="48" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#64748b">Bits assigned across the model's 82 layer groups. Taller is more precision kept.</text>
+
+  <!-- ROW 1: the preset -->
+  <text x="24" y="82" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#cbd5e1">The preset</text>
+  <text x="24" y="98" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#64748b">flat 3-bit</text>
+  <g transform="translate(190,60)">
+    <rect x="0" y="24" width="492" height="24" fill="#64748b" opacity="0.55"/>
+    <text x="500" y="41" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11.5" fill="#94a3b8">— baseline</text>
+  </g>
+
+  <!-- ROW 2: first attempt, varied, LOST -->
+  <text x="24" y="160" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#cbd5e1">My first attempt</text>
+  <text x="24" y="176" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#64748b">3 groups at 8-bit,</text>
+  <text x="24" y="190" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#64748b">6 at 4, 35 at 3,</text>
+  <text x="24" y="204" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#f87171" font-weight="600">38 at 2</text>
+  <g transform="translate(190,138)">
+    <!-- 82 bars, 6px each: heights encode 8/4/3/2 bit -->
+    <g fill="#60a5fa">
+      <rect x="0" y="0" width="5" height="60" /><rect x="6" y="0" width="5" height="60"/><rect x="12" y="0" width="5" height="60"/>
+    </g>
+    <g fill="#a78bfa">
+      <rect x="42" y="30" width="5" height="30"/><rect x="90" y="30" width="5" height="30"/><rect x="156" y="30" width="5" height="30"/>
+      <rect x="264" y="30" width="5" height="30"/><rect x="330" y="30" width="5" height="30"/><rect x="426" y="30" width="5" height="30"/>
+    </g>
+    <g fill="#94a3b8">
+      <rect x="18" y="38" width="5" height="22"/><rect x="24" y="38" width="5" height="22"/><rect x="30" y="38" width="5" height="22"/>
+      <rect x="36" y="38" width="5" height="22"/><rect x="48" y="38" width="5" height="22"/><rect x="60" y="38" width="5" height="22"/>
+      <rect x="72" y="38" width="5" height="22"/><rect x="84" y="38" width="5" height="22"/><rect x="102" y="38" width="5" height="22"/>
+      <rect x="114" y="38" width="5" height="22"/><rect x="126" y="38" width="5" height="22"/><rect x="138" y="38" width="5" height="22"/>
+      <rect x="150" y="38" width="5" height="22"/><rect x="168" y="38" width="5" height="22"/><rect x="180" y="38" width="5" height="22"/>
+      <rect x="192" y="38" width="5" height="22"/><rect x="210" y="38" width="5" height="22"/><rect x="222" y="38" width="5" height="22"/>
+      <rect x="240" y="38" width="5" height="22"/><rect x="252" y="38" width="5" height="22"/><rect x="276" y="38" width="5" height="22"/>
+      <rect x="294" y="38" width="5" height="22"/><rect x="312" y="38" width="5" height="22"/><rect x="336" y="38" width="5" height="22"/>
+      <rect x="354" y="38" width="5" height="22"/><rect x="372" y="38" width="5" height="22"/><rect x="390" y="38" width="5" height="22"/>
+      <rect x="408" y="38" width="5" height="22"/><rect x="432" y="38" width="5" height="22"/><rect x="444" y="38" width="5" height="22"/>
+      <rect x="456" y="38" width="5" height="22"/><rect x="468" y="38" width="5" height="22"/><rect x="480" y="38" width="5" height="22"/>
+      <rect x="342" y="38" width="5" height="22"/><rect x="366" y="38" width="5" height="22"/>
+    </g>
+    <g fill="#f87171" opacity="0.85">
+      <rect x="54" y="48" width="5" height="12"/><rect x="66" y="48" width="5" height="12"/><rect x="78" y="48" width="5" height="12"/>
+      <rect x="96" y="48" width="5" height="12"/><rect x="108" y="48" width="5" height="12"/><rect x="120" y="48" width="5" height="12"/>
+      <rect x="132" y="48" width="5" height="12"/><rect x="144" y="48" width="5" height="12"/><rect x="162" y="48" width="5" height="12"/>
+      <rect x="174" y="48" width="5" height="12"/><rect x="186" y="48" width="5" height="12"/><rect x="198" y="48" width="5" height="12"/>
+      <rect x="204" y="48" width="5" height="12"/><rect x="216" y="48" width="5" height="12"/><rect x="228" y="48" width="5" height="12"/>
+      <rect x="234" y="48" width="5" height="12"/><rect x="246" y="48" width="5" height="12"/><rect x="258" y="48" width="5" height="12"/>
+      <rect x="270" y="48" width="5" height="12"/><rect x="282" y="48" width="5" height="12"/><rect x="288" y="48" width="5" height="12"/>
+      <rect x="300" y="48" width="5" height="12"/><rect x="306" y="48" width="5" height="12"/><rect x="318" y="48" width="5" height="12"/>
+      <rect x="324" y="48" width="5" height="12"/><rect x="348" y="48" width="5" height="12"/><rect x="360" y="48" width="5" height="12"/>
+      <rect x="378" y="48" width="5" height="12"/><rect x="384" y="48" width="5" height="12"/><rect x="396" y="48" width="5" height="12"/>
+      <rect x="402" y="48" width="5" height="12"/><rect x="414" y="48" width="5" height="12"/><rect x="420" y="48" width="5" height="12"/>
+      <rect x="438" y="48" width="5" height="12"/><rect x="450" y="48" width="5" height="12"/><rect x="462" y="48" width="5" height="12"/>
+      <rect x="474" y="48" width="5" height="12"/><rect x="486" y="48" width="5" height="12"/>
+    </g>
+    <text x="500" y="41" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700" fill="#f87171">LOST</text>
+  </g>
+
+  <!-- ROW 3: the winner -->
+  <text x="24" y="262" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="700" fill="#cbd5e1">The winner</text>
+  <text x="24" y="278" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#64748b">1 group at 8-bit,</text>
+  <text x="24" y="292" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#64748b">81 at 3 — plus a</text>
+  <text x="24" y="306" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#22d3ee" font-weight="600">protection inside</text>
+  <text x="24" y="320" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#22d3ee" font-weight="600">47 of the layers</text>
+  <g transform="translate(190,240)">
+    <rect x="0" y="0" width="5" height="60" fill="#60a5fa"/>
+    <rect x="6" y="38" width="486" height="22" fill="#94a3b8"/>
+    <rect x="60" y="30" width="300" height="8" fill="url(#hatch)"/>
+    <text x="500" y="41" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="700" fill="#4ade80">WON</text>
+  </g>
+
+  <!-- legend -->
+  <g font-family="ui-sans-serif, system-ui, sans-serif" font-size="11.5">
+    <rect x="190" y="342" width="11" height="11" fill="#60a5fa"/><text x="207" y="352" fill="#94a3b8">8-bit</text>
+    <rect x="256" y="342" width="11" height="11" fill="#a78bfa"/><text x="273" y="352" fill="#94a3b8">4-bit</text>
+    <rect x="322" y="342" width="11" height="11" fill="#94a3b8"/><text x="339" y="352" fill="#94a3b8">3-bit</text>
+    <rect x="388" y="342" width="11" height="11" fill="#f87171"/><text x="405" y="352" fill="#94a3b8">2-bit</text>
+    <rect x="454" y="342" width="11" height="11" fill="url(#hatch)"/><text x="471" y="352" fill="#94a3b8">one tensor kept higher, inside the layer</text>
+  </g>
+
+  <text x="24" y="390" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#64748b">The recipe that looks clever is the one that lost.</text>
+</svg>

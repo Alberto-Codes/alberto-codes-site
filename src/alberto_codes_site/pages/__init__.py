@@ -20,3 +20,4 @@ from .contact import contact_page as contact_page
 from .experience import experience_page as experience_page
 from .home import home_page as home_page
 from .projects import projects_page as projects_page
+from .publications import publications_page as publications_page

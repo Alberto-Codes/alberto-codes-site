@@ -68,7 +68,9 @@ We will adopt the Diataxis framework to categorize and structure all blog conten
 ### Blog Implementation Guidelines
 
 - Each post should be **tagged with its Diataxis type** (tutorial, how-to, explanation, reference) so readers can filter by what they need
-- Posts should be **1000-1500 words** for most types, longer for in-depth tutorials
+- Posts should be **1000-1500 words** for most types, longer for in-depth
+  tutorials and for evidence-backed explanations (see the 2026-08-11
+  amendment)
 - Use clear **H2/H3 headings** for scannability
 - **Cross-link** between types (e.g., a how-to guide links to the relevant tutorial and reference)
 - Start with tutorials and explanations — these are the most natural for someone new to writing and the most valuable for building an audience
@@ -91,6 +93,37 @@ We will adopt the Diataxis framework to categorize and structure all blog conten
 - Requires discipline to keep post types distinct (e.g., not turning a how-to into a tutorial)
 - Reference posts are less engaging to write but important for completeness
 - Adds categorization overhead to each post
+
+## Amendment 2026-08-11: length for evidence-backed explanations
+
+The 1000-1500 band was set on 2026-02-01, before this blog published a post
+that carried a public evidence trail. It was calibrated on posts that explain
+one idea. It does not fit a post that explains an idea *and* publishes the
+record behind it.
+
+**Explanation posts that carry an evidence trail may run 2000-2500 words.**
+The band still governs everything else.
+
+Two conditions apply, because the extra length has to be earned:
+
+1. **Every added word carries a claim someone could check.** Length bought by
+   restatement or hedging gets cut. If a paragraph does not add a fact, a
+   limitation, or a step in the argument, it is padding regardless of the
+   total.
+2. **Scannability scales with length.** Past 1500 words a post needs enough
+   headings and figures that a reader can find the argument without reading
+   every sentence. Word count is a proxy for reader effort; entry points are
+   what actually reduce it.
+
+Prompted by "I couldn't tell my quantized model from the baseline"
+(2026-08-11) — 2163 words, 9 headings, 4 figures. A word-economy pass took it
+from 2361 to 2163. Cutting to 1500 would have meant dropping the loss ledger,
+the per-card budget, or the transparency argument, each of which carries a
+claim the post exists to make.
+
+Open question: whether the 2000-2500 ceiling is right, or is itself an
+unvalidated heuristic of the kind this blog argues against. Revisit once
+there is real completion data.
 
 ## References
 
