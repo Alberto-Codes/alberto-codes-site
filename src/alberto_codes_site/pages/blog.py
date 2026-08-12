@@ -63,10 +63,16 @@ def _reading_time(text: str) -> int:
 
 
 def _load_posts() -> list[tuple[dict, str]]:
-    """Load all markdown posts sorted by date descending."""
+    """Load all markdown posts sorted by date descending.
+
+    Files named `draft-*.md` are work in progress and never render. Rename a
+    draft to `YYYY-MM-DD-slug.md` to publish it.
+    """
     posts = []
     if POSTS_DIR.exists():
         for f in sorted(POSTS_DIR.glob("*.md"), reverse=True):
+            if f.name.startswith("draft-"):
+                continue
             meta, body = _parse_frontmatter(f.read_text())
             meta.setdefault("slug", f.stem)
             meta["reading_time"] = _reading_time(body)

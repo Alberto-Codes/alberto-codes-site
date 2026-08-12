@@ -28,6 +28,7 @@ from alberto_codes_site.pages import (
     experience_page,
     home_page,
     projects_page,
+    publications_page,
 )
 from alberto_codes_site.pages.blog import _load_posts
 
@@ -95,6 +96,16 @@ app.add_page(
     description=(
         "Technical projects including gepa-adk, an open-source AI agent "
         "optimization library, and enterprise AI/ML initiatives."
+    ),
+)
+app.add_page(
+    layout(publications_page()),
+    route="/publications",
+    title="Publications | Alberto Nieto",
+    description=(
+        "Published artifacts with their attribution and evidence, including "
+        "a mixed-precision quantization of Nemotron Super 49B fitted to a "
+        "24 GiB GPU."
     ),
 )
 app.add_page(

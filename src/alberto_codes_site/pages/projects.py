@@ -4,6 +4,32 @@ import reflex as rx
 
 PROJECTS = [
     {
+        "title": "vramfit",
+        "description": (
+            "Fits large open models onto one GPU by measuring which layers "
+            "survive being crushed. Scans per-layer quantization damage, "
+            "solves a mixed-precision recipe against a hard VRAM budget, "
+            "then packs it. Nemotron Super 49B (92.9 GiB at f16) serving on "
+            "a 24 GiB RTX 4090, beating the size-matched community quant on "
+            "full-window KL divergence at 7.8σ with five task-benchmark "
+            "ties. Seventeen recorded data points, losses included. MIT."
+        ),
+        "tags": [
+            "Generative AI",
+            "Quantization",
+            "LLM",
+            "Python",
+            "PyPI",
+            "Open Source",
+        ],
+        "link": "https://pypi.org/project/vramfit/",
+        "github": "https://github.com/Alberto-Codes/vramfit",
+        "model": (
+            "https://huggingface.co/Alberto-Codes/"
+            "Llama-3_3-Nemotron-Super-49B-v1_5-fit24gib-GGUF"
+        ),
+    },
+    {
         "title": "gepa-adk",
         "description": (
             "Evolves AI agent instructions automatically using genetic "
@@ -84,13 +110,17 @@ PROJECTS = [
 ]
 
 
-def _project_links(link: str, docs: str, github: str) -> list[rx.Component]:
+def _project_links(
+    link: str, docs: str, github: str, model: str = ""
+) -> list[rx.Component]:
     """Build a list of link components for a project card.
 
     Args:
         link: URL to the project (e.g. PyPI). Empty string to omit.
         docs: URL to the documentation site. Empty string to omit.
         github: URL to the GitHub repository. Empty string to omit.
+        model: URL to a published model or dataset on Hugging Face. Empty
+            string to omit.
 
     Returns:
         A list containing an hstack of links, or an empty list.
@@ -150,6 +180,21 @@ def _project_links(link: str, docs: str, github: str) -> list[rx.Component]:
                 underline="hover",
             )
         )
+    if model:
+        links.append(
+            rx.link(
+                rx.hstack(
+                    rx.icon("box", size=14),
+                    rx.text("Hugging Face", size="2"),
+                    spacing="1",
+                    align="center",
+                ),
+                href=model,
+                is_external=True,
+                color=rx.color("blue", 9),
+                underline="hover",
+            )
+        )
     if links:
         return [rx.hstack(*links, spacing="4")]
     return []
@@ -159,7 +204,8 @@ def project_card(project: dict) -> rx.Component:
     """Render a project card with title, description, and tags.
 
     Args:
-        project: Dict with "title", "description", "tags", optional "link"/"docs"/"github".
+        project: Dict with "title", "description", "tags", and optional
+            "link"/"docs"/"github"/"model".
 
     Returns:
         A card component displaying the project.
@@ -194,6 +240,7 @@ def project_card(project: dict) -> rx.Component:
                     project.get("link", ""),
                     project.get("docs", ""),
                     project.get("github", ""),
+                    project.get("model", ""),
                 )
             ),
             spacing="3",

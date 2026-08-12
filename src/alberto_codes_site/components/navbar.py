@@ -7,6 +7,7 @@ NAV_LINKS = [
     ("About", "/about"),
     ("Experience", "/experience"),
     ("Projects", "/projects"),
+    ("Publications", "/publications"),
     ("Blog", "/blog"),
     ("Contact", "/contact"),
 ]

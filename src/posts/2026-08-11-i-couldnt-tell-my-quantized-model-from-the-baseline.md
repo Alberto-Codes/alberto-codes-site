@@ -2,99 +2,116 @@
 title: I couldn't tell my quantized model from the baseline. The instruments could.
 date: 2026-08-11
 type: explanation
-summary: I built vramfit to fit Nemotron Super 49B on a 24 GiB RTX 4090 with measured damage instead of heuristics. It lost the head-to-head five times before it won. Then a conversational probe tied 19-19 against the baseline — which is the best argument for measuring I have.
+summary: I shrank a 93 GB model onto a 24 GB card by measuring which layers survive being crushed, instead of guessing. Then I couldn't tell the result from the standard quant by talking to it — which turns out to be the whole point.
 tags:
   - python
   - ai
   - quantization
   - llm
   - evaluation
+  - vramfit
   - open source
 ---
 
-## Fifteen questions, 19 to 19
+I asked two compressed copies of the same model fifteen questions each. Same questions, same settings, no randomness.
 
-I put two quantized copies of the same 49-billion-parameter model side by side and asked them the same fifteen questions.
+They scored **19 out of 25. Both of them.** And they didn't just tie — they *agreed*. Both got the same four facts wrong. Both wrote the same function with the same bug in it. One of those two files was mine, built by measuring the model layer by layer. The other was the standard off-the-shelf quantization that thousands of people download.
 
-One was mine: a mixed-precision recipe, measured layer by layer, solved against a hard 24 GiB budget. The other was the size-matched baseline everyone actually downloads — bartowski's Q3_K_S, a heuristic quant with far more users than mine will ever have.
+If you chatted with both, you would find nothing, and you would conclude my work bought nothing.
 
-I scored 25 points across factual recall, acronym expansion, and code executed against a fixed test suite. Greedy decoding throughout — temperature 0, top-k 1, seed 1234 — so nothing below is sampling luck.
+It bought something. You just can't get at it by chatting — and understanding why is worth more than the result itself.
 
-**Nineteen to nineteen.**
+## The problem, if you've never met it
 
-They did not merely tie. They *agreed*. Both dropped the same four factual fields: three release years, each one year early, plus Qwen2.5's developer, where both named the model family instead of Alibaba. On the coding task both wrote `merge_intervals` with the same shallow copy and then mutated the caller's inner lists through it. Same defect, reached by the same reasoning.
+Large language models are big. Nemotron Super 49B — the one I care about — is about **93 GB** at full precision. A very good consumer graphics card, an RTX 4090, has **24 GB** of memory. The model has to fit entirely in there to run well.
 
-The two points that separated them went one each way. The baseline expanded RoPE as "Relative Position Encoding." Mine wrote `dict_keys + dict_keys` in a size parser, a Python 2 habit that raises `TypeError` on contact.
+So you compress it. The weights are billions of numbers stored at 16 bits each; store them at 4 bits, or 3, and the file shrinks. This is called quantization, and it's why you can run useful models at home at all.
 
-So if you download both and chat with them, you will find nothing. You will conclude the measured recipe bought nothing.
+The catch: crushing the numbers damages the model, and **not all parts damage equally.** Some layers shrug off being cut to 2 bits. Others — attention projections, the first and last blocks — fall apart below 6.
 
-You would be wrong — and that is the most useful result this project has produced.
+Here's the part that surprised me when I started. Essentially every quantized model you can download picks precision by **preset** — a fixed rule, the same one, applied to every model regardless of what's inside it.
 
-## You cannot taste a quantization
+Those presets are your abuelita's recipe. A handful of this, cook it till it looks right. They genuinely work, they're the product of real craft and years of taste, and the reasons they work were never written down. Nobody checks whether the rule is right *for the specific model in front of them*, because the rule has always been good enough.
 
-Two cooks send out the same dish. At the table it tastes the same, and a diner with fifteen bites has no way to say otherwise. Send both to a lab against the original recipe and one is measurably closer — different fat ratio, different reduction, closer to the thing it was copied from. The diner isn't wrong about the taste. The diner is measuring the wrong thing.
+What I wanted was the America's Test Kitchen version. Same dish, but weighed in grams, tested in kitchens that aren't hers, with the steps that actually matter separated from the ones that don't. Not a better rule. **No rule at all** — measure this model, solve for this budget, write down what you find.
 
-That is exactly the gap here.
+## What compression actually takes away
 
-| Instrument | Mine | Baseline Q3_K_S |
+To see why chatting can't find the difference, you need one idea about how these models work. It's the only technical thing in this post, and it's worth the two minutes.
+
+**A language model doesn't produce a word. It produces a probability distribution over every possible next word.** Tens of thousands of candidates, each with a score. "The capital of France is ___" might come out as *Paris* 94%, *the* 2%, *a* 1%, and a long tail of everything else. Only then does something pick one.
+
+![Two probability curves over possible next words. Both peak on the same top word, so greedy decoding picks identically from either. Behind the peak the curves separate — that difference is what KL divergence measures.](/vramfit-distribution-shoulders.svg)
+
+Now the trap becomes obvious. When I ran my fifteen questions, I used greedy decoding — always take the single highest-scoring word. That reads **only the tip of the peak.** Two copies of a model can agree on the top word essentially every time while the shape behind it has drifted noticeably.
+
+Conversation samples the peak. Damage lives in the shoulders.
+
+The instrument that sees the shoulders is **KL divergence** — a standard measure of how much two probability shapes differ. Point it at the original 93 GB model and a compressed copy, run it across hundreds of pages of text, and you get a single honest number: how far did this copy drift from what it was made from?
+
+That is the number I optimize. Not vibes, and not a preset.
+
+## Measure, then solve
+
+The tool is called [vramfit](https://github.com/Alberto-Codes/vramfit), and it does three things.
+
+**Scan.** Crush one layer group at a time and measure how far the output shape moves. The result is a sensitivity map — a per-layer price list for this specific model, showing exactly which parts are fragile and which are cheap.
+
+**Plan.** Now it's a budget problem, and a solver handles it. Given the price list and a hard memory ceiling, spend bits where the scan says they matter, and crush where it says they don't.
+
+**Pack.** Apply the recipe, then check the artifact before trusting it.
+
+The output isn't a preset. It's a recipe fitted to one model and one card. Give it a different budget and you get a different answer, because the arithmetic changes.
+
+Against the standard quantization at the same file size, the measured recipe drifts **less** from the original — a 2.9% smaller gap, which sounds tiny but sits far outside the measurement noise. On five standard capability benchmarks the two are statistically tied, so the closer fit costs nothing. It's the first result in the project's lane where a measured recipe beats a preset on the deciding metric.
+
+There's a sharper payoff than a better average, though. An earlier candidate of mine passed every check and looked clean — until a page-by-page comparison found a single page out of 564 where it fell off a cliff, diverging **fifty times** worse than the baseline on that one text. One page, and nothing had flagged it. The published artifact is the first with no such page anywhere.
+
+That's the foolproof part, and it's the real return on weighing your ingredients. Not a better score — a **known shape.** You cannot find a cliff by chatting with a model, and you cannot find it in an average either.
+
+## The part nobody publishes
+
+Here's what I actually think the edge is, and it isn't the 2.9%.
+
+Before that recipe won, **it lost five times.**
+
+| Full-loop attempt | Date | Result |
 |---|---|---|
-| File size (budget: fits a 24 GiB card) | 20.36 GiB | 20.45 GiB |
-| Perplexity, full WikiText-2 (564 chunks) | 8.517 ± 0.063 | 8.532 ± 0.064 |
-| **Mean KL divergence vs the f16 original, 564 chunks** | **0.2873** | 0.2959 |
-| Chunks where it holds the lower KL | **369 of 564 (65 %)** | — |
-| Top-token agreement | 82.9 % | **83.4 %** |
-| Fifteen-question probe | 19 / 25 | 19 / 25 |
+| First real attempt | 2026-07-29 | **Lost** — badly |
+| Rematch, handicap removed | 2026-07-29 | **Lost again**, by less, for a different reason |
+| Better-converged measurements | 2026-07-31 | **Lost** |
+| More honest price list | 2026-08-02 | **Lost** |
+| Most honest price list yet | 2026-08-06 | **Lost by the most yet** |
+| Ban the most aggressive setting | 2026-08-06 | Tie on one metric, behind on the other |
+| Pipeline builds its own winner | 2026-08-09 | **Won** |
 
-The KL divergence line is the one that matters, and it is a 7.8σ paired result. It asks a question no conversation can: across 564 chunks of held-out text, how closely does the quantized model's entire output distribution track the 92.9 GiB f16 original it was compressed from?
+Read that table as a diagnosis, not a confession. Each loss eliminated a suspect. The first proved most of my deficit came from a weighting file the competition used and I didn't — not from my recipe at all. The second proved that damage doesn't simply add up: crushing two layers together can hurt far more than crushing each alone, which broke an assumption sitting at the center of my solver. The fifth killed my favorite theory outright — better measurements produced the *worst* model of the five, because the frame I measured in and the frame I shipped in disagreed.
 
-Fifteen questions sample that distribution fifteen times. A 7.8σ separation over half a million tokens is not something a spot check can see — not because the spot check is sloppy, but because it is measuring taste while the claim is about fidelity.
+In 1807 a Norwegian trading family shipped casks of aquavit to the East Indies and failed to sell any of it. The barrels sailed home unsold, and when the Lysholms tasted the returned spirit it was better than what they'd sent — months in oak on a rolling deck, two equator crossings of heat and humidity. The voyage had been doing something nobody designed it to do. [Linie Aquavit](https://www.norwegianamerican.com/snaps-visa-norways-equatorial-aquavit/) has crossed the equator and back in every bottle since.
 
-There is a second question worth asking, and I ran it separately: does the compressed model still *do things*. Five task benchmarks — MMLU, GSM8K, HellaSwag, Winogrande, ARC-Challenge — came back five statistical ties against the baseline, none past 0.8σ. Equal capability, closer distribution, in a smaller file. That is the claim, and none of it is reachable by reading answers and forming an impression.
+Every one of those five losses was me finding a voyage. A weighting file, the way damage compounds, and eventually the real culprit — none of them were written down anywhere, and the preset had been quietly getting them right for years. The difference between an accident and a technique is whether somebody wrote it down.
 
-## The part I'd rather not publish
+The win, when it came, wasn't a cleverer solve. It was tracking down why one specific kind of layer in my files was fitted ten times worse than in the competition's. I suspected my settings, then my toolchain version. Both innocent. The real cause was upstream and subtle, in how the compression maths behaves when the weighting file has extreme values. Not my bug — but mine to find.
 
-Here is the ledger the project actually ran, on the acceptance target — Nemotron Super 49B, 92.9 GiB at full precision, onto a 24 GiB RTX 4090.
+Every one of those losses is public, dated, and numbered, with its receipts. Seventeen data points. Architecture decision records for the choices, an issue trail for the arguments, provenance and evaluation sidecars on the published files.
 
-| Attempt | Date | Result vs the baseline |
-|---|---|---|
-| First full loop | 2026-07-29 | **Lost** by 1.39 perplexity |
-| Importance-matrix rematch | 2026-07-29 | **Lost again**, by less, for a different reason |
-| Converged sensitivity map | 2026-07-31 | **Lost** — 0.62 behind |
-| Honestly-priced map | 2026-08-02 | **Lost** |
-| Assisted-priced map | 2026-08-06 | **Lost by the most yet** |
-| 2-bit banned outright | 2026-08-06 | Tie |
-| Pipeline packs its own winner | 2026-08-09 | **Won — 7.8σ** |
+I don't think that's normal, and I think it should be. The going standard for a published quantized model is a checksum, a file size, and sometimes a single quality number. A checksum proves the file is the file. It proves nothing about whether the file is any good — and it tells you nothing about the four artifacts that didn't make it.
 
-Five losses. The fifth was the worst artifact of the whole run, produced by the most carefully measured map I had. That one stung.
+Weigh the ingredients. Write down the voyage.
 
-I am publishing the ledger because it is the only reason to believe the win. A project that shows you one green number has told you nothing about how many red ones it discarded to get there. Every loss above is on the public evidence page with its receipts, its date, and what it eliminated.
+## What I'm still not claiming
 
-And they eliminated a lot:
+The baseline beats me on one metric — how often the top word matches the original — by half a point, and that has never flipped. I let KL carry the ranking anyway, because the top word is a one-bit summary that ignores how wrong the model is when it misses, while KL weights the whole shape. If you always decode greedily, take that half point seriously. If you sample, take the KL.
 
-- **Loss one located the real gap.** I packed my own uniform Q3_K_S from the same base with no importance matrix. It landed within 352 bytes of the baseline's size and still trailed it by 1.12 perplexity. The importance matrix — not my recipe — accounted for roughly 81 % of the deficit. Against same-conditions competition the measured mix was 0.26 behind, not 1.39.
-- **Loss two proved damage doesn't simply add.** The solver predicted 0.0940 damage for a recipe; measured, it came in at 1.1234 — super-additive by 11.9×. Two days later a converged map produced a recipe with the *same* predicted total that measured sub-additive by 1.6×. Which layers you push to 2 bits decides whether their damage compounds. That result now gates every pack: a super-additive validation means solve again, not pack.
-- **Loss five killed my favorite hypothesis.** Better price data was supposed to produce a better recipe. It produced the worst one on record. Honest inputs do not guarantee honest outputs when the frame you measure in and the frame you ship in disagree.
-- **The win came from a bug in my own pack path, not a better solve.** The baseline fit one class of attention tensor ten times cleaner than anything I quantized — same tensor, same type, same base model, same importance matrix. I suspected quantizer flags, then toolchain vintage. Both were innocent: the relevant source was byte-identical across a year of releases. The actual cause was importance-matrix rows with extreme dynamic range across columns. Fixing that, and letting the pipeline apply the fix itself with no hand-edited flags, produced the artifact that won.
+And one control is missing. When both models got the same four facts wrong, the natural reading is that the mistakes come from the original model rather than from either compression. Natural isn't measured. The 93 GB original never answered those fifteen questions, because it doesn't fit the card and needs its own night on a slower lane. It's [tracked in the open](https://github.com/Alberto-Codes/vramfit/issues/143), and if the original gets them *right*, the result is more interesting than the one I have: both compressions damaged recall the same way.
 
-Five losses bought four facts. That is a reasonable exchange rate, and it is why the harness exists.
-
-## What I'm not claiming
-
-The baseline still wins top-token agreement by half a point, and that has never flipped.
-
-The probe categories were chosen adversarially — each one is a place an earlier, unrecorded pass had suggested the baseline led. That lead did not survive greedy decoding. The selection cuts both ways: the tie says nothing about categories nobody probed.
-
-And there is a control I have not run. When both models drop the same four fields and write the same bug, the natural reading is that the mistakes come from the base model rather than from either compression. Natural is not measured. The f16 original never answered those fifteen questions, because at 92.9 GiB it does not fit the card and needs its own night on a CPU lane. Until that runs, the reading stays a reading. It is [tracked in the open](https://github.com/Alberto-Codes/vramfit/issues/143), and if the f16 gets those fields *right*, the result is more interesting than the one I have: both quantizations damaged recall the same way.
-
-I would rather ship the gap named than ship the story clean.
+I'd rather publish the gap named than the story clean.
 
 ## Where it lives
 
-- **The tool:** [vramfit on GitHub](https://github.com/Alberto-Codes/vramfit) — scan, plan, validate, pack. MIT.
-- **The model:** [Llama-3_3-Nemotron-Super-49B-v1_5-fit24gib-GGUF](https://huggingface.co/Alberto-Codes/Llama-3_3-Nemotron-Super-49B-v1_5-fit24gib-GGUF), with the evaluation numbers as a machine-readable sidecar.
-- **The measurements:** the [sensitivity-map dataset](https://huggingface.co/datasets/Alberto-Codes/Llama-3_3-Nemotron-Super-49B-v1_5-sensitivity-maps) — the per-layer damage figures the recipe was solved from.
-- **The full ledger:** [seventeen data points](https://github.com/Alberto-Codes/vramfit/blob/main/docs/explanation/evaluating-packed-models.md), 2026-07-28 through 2026-08-11, wins and losses in order.
+- **The tool:** [vramfit](https://github.com/Alberto-Codes/vramfit) — scan, plan, pack. MIT.
+- **The model:** [the packed 49B](https://huggingface.co/Alberto-Codes/Llama-3_3-Nemotron-Super-49B-v1_5-fit24gib-GGUF) — a quantization of [NVIDIA's Nemotron Super 49B v1_5](https://huggingface.co/nvidia/Llama-3_3-Nemotron-Super-49B-v1_5), under the NVIDIA Open Model License. Built with Llama.
+- **The measurements:** the [sensitivity-map dataset](https://huggingface.co/datasets/Alberto-Codes/Llama-3_3-Nemotron-Super-49B-v1_5-sensitivity-maps) — the per-layer price list the recipe was solved from.
+- **The full ledger:** [all seventeen data points](https://github.com/Alberto-Codes/vramfit/blob/main/docs/explanation/evaluating-packed-models.md), every number and every loss.
 
-The ecosystem's habit is to ship a quantized model with a checksum and a vibe. A checksum proves the file is the file. It proves nothing about whether the file is any good. I think a publication should carry both — provenance *and* evidence — and the fifteen-question tie is the cleanest demonstration I have of why the second one has to be measured rather than felt.
-
-Next: the missing f16 control, then the same loop on a Qwen-class model, which only ships if it wins a head-to-head of its own.
+Coming next: how to fit a model to the card you actually have, why some layers break and others don't, and the missing control above. This is also the second time I've come at quantization from the measurement end — the [first was TurboQuant on a vision model](/blog/2026-03-26-i-ran-turboquant-on-a-vision-model-the-first-output-was-garbage), where the first output was garbage for a reason no benchmark would have told me.
