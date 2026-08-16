@@ -1,0 +1,19 @@
+flowchart TD
+    S["One scan\n37 hours, 328 cells"] --> P["Price list\nwhat each layer group\ncosts at each precision"]
+
+    P --> A["24 GiB card, 16k context\nbudget 20.47 GiB"]
+    P --> C["24 GiB card, 32k context\nbudget 17.41 GiB"]
+    P --> B["16 GiB card, 16k context\nbudget 12.47 GiB"]
+
+    A --> A2["Recipe 20.46 GiB\ndamage 0.1215\n56x2 13x3 8x4 5x8"]
+    C --> C2["Recipe 17.13 GiB\ndamage 0.2212\n21 of 82 assignments changed\nembedding 8-bit to 3-bit"]
+    B --> B2["No recipe exists\nsmallest possible 15.31 GiB\n2.85 GiB over budget"]
+
+    style S fill:#e9ecef,stroke:#868e96,color:#212529
+    style P fill:#e9ecef,stroke:#868e96,color:#212529
+    style A fill:#f1f3f5,stroke:#adb5bd,color:#212529
+    style B fill:#f1f3f5,stroke:#adb5bd,color:#212529
+    style C fill:#f1f3f5,stroke:#adb5bd,color:#212529
+    style A2 fill:#d4edda,stroke:#28a745,color:#212529
+    style C2 fill:#fff3cd,stroke:#ffc107,color:#212529
+    style B2 fill:#f8d7da,stroke:#dc3545,color:#212529
