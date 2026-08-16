@@ -44,7 +44,17 @@ decision 2 routes here.
 - [ ] Flip `published: true` after the preview reads correctly
 - [ ] Record the live URL below
 
-**Published at:** _(pending)_ **on** _(pending)_
+**Published at:** https://dev.to/albertocodes/fit-a-model-to-the-gpu-you-actually-have-3h4d
+**on** 2026-08-15
+
+Verified after publish: `<link rel="canonical">` points at the alberto.codes
+URL, and the "Originally published at" line renders. The inline diagram was
+rehosted to dev.to's own S3 at publish time rather than left pointing at
+alberto.codes, per the ADR-0004 decision 5 note. A cover image was uploaded
+separately, which the v2 editor requires.
+
+This cut is frozen. If the canonical post changes materially, annotate or
+delete — do not edit it to match.
 
 ---
 

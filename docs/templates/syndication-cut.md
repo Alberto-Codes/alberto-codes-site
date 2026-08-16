@@ -62,13 +62,32 @@ rendering machine may lack, and a fixed height clips the bottom row.
 
 - <section> — <reason>
 
+### Entering it on dev.to (v2 editor)
+
+The v2 editor does **not** parse front matter. Pasting the whole file leaves
+YAML sitting as literal text at the top. Use the front-matter block below as
+a checklist and fill each field by hand:
+
+- [ ] **Title** — its own input, above the tags
+- [ ] **Body** — paste everything *after* the front matter block
+- [ ] **Tags** — type each one followed by a comma so it commits as a chip.
+      Do not set the field's value in one go; the widget offers the whole
+      comma-separated string as a single combined tag, and it looks right
+- [ ] **Canonical URL** — behind **Advanced Options**. A `🔗 Canonical` badge
+      appears in the footer when it registers
+- [ ] **Cover image** — upload only, there is no URL field. Use the PNG from
+      `src/assets/`
+- [ ] **Preview** and read it before doing anything else
+
+**There is no draft flag in v2.** `published: false` protects nothing here —
+**Publish** publishes immediately. **Save Draft** is the only park button,
+and until you click one of them nothing is saved server-side.
+
 **Post-publish steps:**
 
-- [ ] dev.to: confirm `canonical_url` rendered — the page shows a
-      "Originally published at" line under the title
+- [ ] Confirm the "Originally published at" line renders under the title
 - [ ] Medium: set the canonical URL in story settings. There is no front
       matter for it and it is the step most often missed
-- [ ] Flip `published: true` (dev.to) once the preview reads correctly
 - [ ] Record the live URL below
 
 **Published at:** <url>  **on** <date>

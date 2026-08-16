@@ -89,11 +89,26 @@ The boto3 Medium cut stays where it is. It is grandfathered, not a pattern.
 ### 5. Images are rasterized to PNG and served from alberto.codes
 
 No platform accepts SVG in an article body. Every diagram is rendered to PNG
-at 3× and hotlinked from `https://alberto.codes/<name>.png` rather than
-uploaded to the platform. Hotlinking keeps one copy of each asset, so a fixed
-diagram fixes everywhere at once — the one exception to the freeze in
-decision 3, and an acceptable one because an image cannot drift into
-contradicting prose the way text can.
+at 3× and written into the cut as `https://alberto.codes/<name>.png`. The URL
+must resolve at publish time, so the PNG has to be committed and deployed
+before the cut is pasted anywhere.
+
+**Do not expect that URL to stay live in the published copy.** Measured on
+dev.to 2026-08-15: at publish it fetched the image and rehosted it under
+`dev-to-uploads.s3.amazonaws.com`, keeping the alt text and dropping the
+alberto.codes URL from the page entirely. The published post has its own copy.
+Fixing the PNG here will not change it.
+
+So images freeze exactly like text does, which makes decision 3 simpler
+rather than harder — a cut is a snapshot, images included. Re-publishing is
+the only way to update one, and that is rarely worth it.
+
+**Cover images are the exception, and they get uploaded.** A cover is
+platform chrome, not article content — it appears in the feed and the social
+card, never in the body. dev.to's v2 editor offers no URL field for it at
+all, so hotlinking is not available even in principle. Upload the same PNG
+that lives in `src/assets/`. A cover that drifts from the canonical post
+costs nothing, because no argument rests on it.
 
 PNGs are committed beside their SVG source in `src/assets/`.
 
@@ -120,6 +135,34 @@ Background is `#0f172a` to match the site, which also means the image carries
 its own background and reads correctly in both light and dark mode on the
 destination platform.
 
+## Amendment, 2026-08-15: dev.to ships a v2 editor with no front matter
+
+The decisions above were written assuming dev.to's markdown editor, where a
+cut pastes as one block and `canonical_url`, `tags`, and `cover_image` parse
+from YAML front matter. The account's editor is **v2**, which has none of
+that. Publishing the first cut found this, and the correction is recorded
+here rather than by rewriting the decisions.
+
+What changes:
+
+- **Front matter is not parsed.** Pasted as-is it renders as literal text at
+  the top of the post. The cut's front matter block becomes a reference for
+  filling fields by hand, not something to paste.
+- **Each value has its own UI field.** Title and body are separate inputs.
+  Tags are a chip widget that commits an entry on a typed comma — setting the
+  field's value wholesale offers all four as one combined tag, which is
+  wrong. Canonical URL lives behind **Advanced Options**, and a `🔗 Canonical`
+  badge in the footer confirms it registered.
+- **`published: false` protects nothing.** There is no draft flag in v2.
+  **Publish** publishes immediately. **Save Draft** is the only way to park a
+  post, and until one of them is clicked nothing exists server-side — closing
+  the tab loses the work.
+- **Cover images upload only**, per the amended decision 5.
+
+The cut file keeps its front matter block regardless. It is the record of
+what the field values should be, it stays correct for Medium and for any
+platform that does parse it, and a v2 session reads it as a checklist.
+
 ## Consequences
 
 ### Positive
@@ -128,9 +171,12 @@ destination platform.
 - Platform choice is decided once, not per post.
 - Freezing removes an unbounded maintenance obligation. A syndicated copy is
   a snapshot, and says so.
-- Hotlinked images mean one asset to fix, and no per-platform upload step.
+- One rasterized PNG per diagram serves every destination, with no
+  per-platform upload step for inline images.
 - The rasterizing procedure is recorded, including the failure that produced
   a silently blank diagram.
+- Images freeze with the text rather than drifting from it, because the
+  platform rehosts them. The freeze in decision 3 needs no exception.
 
 ### Negative
 
@@ -141,6 +187,12 @@ destination platform.
   equivalent, so it can be forgotten. The checklist carries it.
 - Rasterizing needs a browser on the machine doing the render, which is a
   heavier dependency than `mmdc` alone.
+- dev.to's v2 editor has no draft flag, so the safety the cut's
+  `published: false` was meant to provide does not exist. A misplaced click
+  publishes. The checklist compensates; the editor does not.
+- Field-by-field entry is slower and easier to get wrong than one paste. The
+  tag widget in particular fails silently by accepting a combined tag that
+  looks plausible.
 - Two representations of every diagram (SVG for the site, PNG for
   syndication) must be regenerated together when a diagram changes.
 
