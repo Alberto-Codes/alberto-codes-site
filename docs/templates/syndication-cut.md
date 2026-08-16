@@ -13,6 +13,9 @@ publishing. Only the article body gets pasted into the platform.
 ## Before you write
 
 - [ ] Canonical post is published and live at its final URL
+- [ ] **This post is not already on another platform.** ADR-0004 decision 0:
+      one piece, one platform. If it is somewhere else, stop — the answer is
+      a different post for this audience, or nothing
 - [ ] Platform matches the post's Diataxis type (ADR-0004 decision 2):
       how-to and tutorial to dev.to, explanation to Medium
 - [ ] Every diagram rasterized to PNG and **deployed**, so the hotlink

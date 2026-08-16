@@ -1,4 +1,4 @@
-# ADR-0004: Syndicating Posts to Third-Party Platforms
+# ADR-0004: Which Platform Carries Which Post
 
 ## Status
 
@@ -11,9 +11,12 @@ Accepted
 ## Context
 
 Two posts published on 2026-08-15 raised a question the site has never
-answered: when a post goes out to dev.to, Medium, or Hashnode as well as
-alberto.codes, what exactly goes out, and what is the relationship between
-the two copies?
+answered: what goes on dev.to, what goes on Medium, and what stays here?
+
+The reflex answer — all of it, everywhere — is the one to reject. It is the
+ad campaign that buys every channel and runs the same spot on each. The real
+question is which audience each platform holds and which piece of writing
+that audience came for.
 
 There was no policy. There was one precedent —
 `_bmad-output/implementation-artifacts/medium-boto3-deep-dive.md`, a
@@ -33,10 +36,44 @@ The risks worth designing against:
 - **Platform mismatch.** A 2,246-word command-by-command walkthrough and a
   1,469-word argument piece do not belong on the same platform, and deciding
   per-post invites deciding badly.
+- **Broadcasting.** The reflex when a post is finished is to push it
+  everywhere. That is the campaign that runs one creative on every channel.
+  It competes with itself in search, and it tells anyone following on two
+  platforms that one of them is redundant.
 - **Assets.** No major platform accepts SVG in article bodies. Every diagram
   on this site is an SVG.
 
 ## Decision
+
+### 0. One piece, one platform. Distribution is not duplication.
+
+This governs every decision below it.
+
+A platform is a niche with an audience that came there for a reason.
+dev.to readers arrive wanting something to run. Medium readers arrive
+wanting an argument. r/LocalLLaMA arrives wanting the artifact and the
+numbers. Pushing one piece through all of them is the campaign that runs
+identical creative on every channel — it reads as broadcast, it competes
+with itself in search, and it teaches the audience that following you on
+two platforms is redundant.
+
+So the default is: **each platform gets the piece that belongs on it, and
+nothing else goes there.** The how-to lives on dev.to. The explanation
+lives on Medium. alberto.codes carries everything, because the site is the
+record rather than a channel.
+
+Syndicating the same piece twice is the exception. It needs a reason
+beyond reach — a genuinely different audience that will not encounter the
+other copy. Absent that reason, the answer is not a second cut of the same
+post. It is a different post, or nothing.
+
+**The anti-pattern to watch for is a surface checklist**: one item of
+content and a list of platforms to push it through. Whenever that shape
+appears in an issue, the fix is to ask what each surface should carry,
+not how to adapt one thing to all of them.
+
+The decisions below apply to the exception. They are the mechanics for
+when a piece does travel, not an argument that it should.
 
 ### 1. alberto.codes is always canonical
 
@@ -58,8 +95,13 @@ the platform:
 | explanation | Medium | Argument-driven, narrative, no commands. Medium's readership rewards that shape and punishes terminal output. |
 | reference | neither | Reference material belongs with the thing it documents. |
 
-This is a default, not a law. Overriding it is fine; deciding it fresh each
-time is what this row exists to prevent.
+Read this as an assignment, not a permission. A post goes to **its** row and
+does not visit the others. The table's job is to stop the same piece from
+appearing in two places, as much as to pick where it appears once.
+
+This is a default, not a law. Overriding it is fine. Deciding it fresh each
+time, or ignoring it because a checklist says otherwise, is what it exists to
+prevent.
 
 ### 3. A cut is a rewrite, and it is frozen
 
