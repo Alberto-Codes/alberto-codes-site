@@ -1,0 +1,14 @@
+flowchart TD
+    E["<b>ESPAGNOLE</b> &nbsp;·&nbsp; entry 22, line 1392 &nbsp;·&nbsp; the only one the source calls a mother"]
+    H["<b>half-glaze</b> &nbsp;·&nbsp; a reduction of Espagnole, which the book never actually says"]
+    B["<b>SAUCE BORDELAISE</b> &nbsp;·&nbsp; entry 32, line 1680 &nbsp;·&nbsp; opening says 'half-glaze', never 'Espagnole' &nbsp;·&nbsp; <b>parent: null</b>"]
+    M["<b>MARROW SAUCE</b> &nbsp;·&nbsp; entry 45, line 1895 &nbsp;·&nbsp; 'only a variety of the Bordelaise' &nbsp;·&nbsp; <b>parent: null</b>"]
+
+    E -. "assumed, not stated" .-> H
+    H -. "assumed, not stated" .-> B
+    B == "stated outright, still unresolved" ==> M
+
+    classDef stated fill:#1f2020,stroke:#7fb069,stroke-width:2px,color:#ccc;
+    classDef unstated fill:#1f2020,stroke:#c96f4a,stroke-width:2px,stroke-dasharray: 5 3,color:#ccc;
+    class E stated;
+    class H,B,M unstated;

@@ -186,6 +186,23 @@ def _render_post(meta: dict, body: str) -> rx.Component:
                 "& tr:nth-child(even)": {
                     "background": "var(--gray-2)",
                 },
+                "& blockquote": {
+                    "border_left": "3px solid var(--blue-8)",
+                    "background": "var(--gray-2)",
+                    "padding": "0.75em 1.25em",
+                    "margin": "1.5em 0",
+                    "border_radius": "0 4px 4px 0",
+                },
+                "& blockquote p": {
+                    "color": "var(--gray-11)",
+                    "font_style": "italic",
+                },
+                "& blockquote > :first-child": {
+                    "margin_top": "0",
+                },
+                "& blockquote > :last-child": {
+                    "margin_bottom": "0",
+                },
             },
         ),
         spacing="4",
