@@ -260,9 +260,15 @@ chapters, and named his own mothers — and even then it found ice cream. A book
 that does none of that gives a parser nothing to read, and the first move there
 is a different one.
 
-The repo is [Alberto-Codes/saucier](https://github.com/Alberto-Codes/saucier);
-the parse takes about a second. If you find an entry the parser should have
-linked — or another ice cream — there is
+The repo is [Alberto-Codes/saucier](https://github.com/Alberto-Codes/saucier)
+and the parse takes about a second. The
+[documentation site](https://alberto-codes.github.io/saucier/) carries the
+tutorial, the data model, the glossary, and the seven decision records — the
+API reference on it is generated from the docstrings, so it cannot drift from
+the code.
+
+If you find an entry the parser should have linked — or another ice cream —
+there is
 [an issue template for exactly that](https://github.com/Alberto-Codes/saucier/issues/new?template=extraction.yml).
 It asks for the entry number and the source lines, because a claim about this
 project should be checkable the same way the project's own claims are.

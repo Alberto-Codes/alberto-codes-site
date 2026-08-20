@@ -4,6 +4,29 @@ import reflex as rx
 
 PROJECTS = [
     {
+        "title": "saucier",
+        "description": (
+            "Reads a 1907 cookbook and returns a catalogue of sauces, every "
+            "claim traceable to the line it came from. 124 preparations, 29 "
+            "linked to a mother, 95 that state no base at all — the measured "
+            "bar anything cleverer has to beat. Deterministic extraction "
+            "behind four layers with no runtime dependencies, so a model can "
+            "be added later without touching the provenance guarantees. "
+            "Corpus committed, so a clone runs offline. First tag in a "
+            "series. MIT."
+        ),
+        "tags": [
+            "Python",
+            "PyPI",
+            "Architecture",
+            "CLI",
+            "Open Source",
+        ],
+        "link": "https://pypi.org/project/saucier/",
+        "docs": "https://alberto-codes.github.io/saucier/",
+        "github": "https://github.com/Alberto-Codes/saucier",
+    },
+    {
         "title": "vramfit",
         "description": (
             "Fits large open models onto one GPU by measuring which layers "
