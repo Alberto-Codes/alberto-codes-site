@@ -21,11 +21,13 @@ Not as a stunt, and not as an argument against models — later posts hand the
 same book to one and find out what it does better. Just as a question worth
 answering first, because it costs an afternoon.
 
-So: no model, no API key, no GPU, no network. `git clone`, `uv sync`,
-`uv run saucier parse`, and you are standing where I am standing. Every post
-in this series adds one ingredient and everything runs at every tag — a sauce
-should taste like something at every stage of its reduction, and this is the
-earliest stage there is.
+So: no model, no API key, no GPU, no network. `git clone`,
+`git checkout v0.1.0`, `uv sync`, `uv run saucier parse`, and you are
+standing where I am standing. Every post in this series adds one ingredient
+and everything runs at every tag — a sauce should taste like something at
+every stage of its reduction, and this is the earliest stage there is. The
+checkout matters: `main` keeps moving, and the numbers in this post are the
+numbers at `v0.1.0`.
 
 The useful part of it is not what the parser got right. It is what it got
 wrong, how badly, and what caught it — because the thing that caught it is the
