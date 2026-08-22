@@ -2,13 +2,13 @@
 title: The 2-bit label was 4.5 bits inside. My 16 GiB card could tell.
 date: 2026-08-22
 type: explanation
-summary: llama.cpp's aggressive quant types are silently locked out of 93% of Nemotron 3.5 Lightning, so the shelf's smallest "2-bit" build is a 17.54 GiB file that doesn't fit a 16 GiB card. Measuring the model stack by stack produced a 15.76 GiB pack that serves fully on-card — and beats that build on both ruled damage metrics while 1.78 GiB smaller.
+summary: The smallest 2-bit-labeled build of Nemotron 3.5 Lightning is 17.54 GiB — it doesn't fit a 16 GiB card, and its label names 12 of 417 tensors. I measured the model stack by stack instead, and got a 15.76 GiB pack that serves fully on-card at 16k context and beats the shelf's build on both damage metrics, while 1.78 GiB smaller.
 tags:
   - python
   - ai
   - quantization
   - llm
-  - moe
+  - evaluation
   - vramfit
   - open source
 ---
@@ -21,13 +21,13 @@ That's not sloppiness, and it's not anyone's dishonesty. The label is doing the 
 
 ## A label is not a recipe
 
-[Last time](/blog/2026-08-11-i-couldnt-tell-my-quantized-model-from-the-baseline), the villain was the preset — a fixed rule that never measures the model in front of it. This time the preset doesn't even get to run. llama.cpp's compact quant types work on rows whose width 256 divides, and this model's routed-expert tensors are 2688 and 1856 columns wide. 256 divides neither. So the quantizer falls back, silently, and rewrites every one of those tensors to `IQ4_NL` at **4.5 bits per weight**.
+[Last time](/blog/2026-08-11-i-couldnt-tell-my-quantized-model-from-the-baseline), the villain was the preset — a fixed rule that never measures the model in front of it. (That post also builds quantization from first principles; if "GGUF" and "2-bit" are new words, start there.) This time the preset doesn't even get to run. llama.cpp's compact quant types work on rows whose width 256 divides, and this model's routed-expert tensors are 2688 and 1856 columns wide. 256 divides neither. So the quantizer falls back, silently, and rewrites every one of those tensors to `IQ4_NL` at **4.5 bits per weight**.
 
-Here's why that's not a footnote. This model stores each layer's 128 routed experts as a single tensor — an *expert stack* — and its **46 expert stacks hold 93% of the parameters**. The fallback quietly rewrites all 46. Ask for the most aggressive 2-bit build and you get 4.5-bit experts wearing a 2-bit name tag.
+This model stores the 128 routed experts of one projection in one layer as a single tensor — an *expert stack*. Twenty-three MoE layers, an up and a down projection each: 46 stacks, and those **46 stacks hold 93% of the parameters**. The fallback quietly rewrites all 46. Ask for the most aggressive 2-bit build and you get 4.5-bit experts wearing a 2-bit name tag.
 
-![A bar representing the shelf's smallest build by parameter share. 93% of it is the 46 expert stacks, silently rewritten to IQ4_NL at 4.5 bits per weight. The 12 tensors of 417 that are actually IQ2_XXS live in the remaining 7%. The result is a 2-bit-class label on a 17.54 GiB file.](/vramfit-label-vs-file.svg)
+![A bar of Nemotron 3.5 Lightning by parameter share. 93% of it is the 46 expert stacks, and the shelf's build silently rewrites every one to IQ4_NL at 4.5 bits per weight. The IQ2_XXS label names 12 of the build's 417 tensors, and not one expert stack is among them. The result is a 2-bit-class label on a 17.54 GiB file.](/vramfit-label-vs-file.svg)
 
-It's your abuelita's recipe again, one town over: the jar says what the jar has always said, and the kitchen has been quietly substituting an ingredient for years because the real one doesn't fit the pan. The dish still works. But if your table only seats 16 GiB, the label will not warn you — the smallest thing on the shelf simply doesn't fit, and going *further down* the shelf's ladder can't help, because the ladder's lower rungs are all made of the same locked-out types.
+It's your abuelita's recipe again, one town over: the jar says what the jar has always said, and the kitchen has been quietly substituting an ingredient for years because the real one doesn't fit the pan. The dish still works. But if your table only seats 16 GiB, the label will not warn you — the smallest thing on the shelf simply doesn't fit, and the shelf's lower-labeled rungs are made of the same locked-out types, so they land at essentially the same size.
 
 The person who published that build, [bartowski](https://huggingface.co/bartowski/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF), did nothing wrong — the fallback belongs to the quantizer, and it runs without asking. This post exists because the way past it is the same move as last time: stop reading labels, start measuring.
 
@@ -43,15 +43,15 @@ The dense weights — attention, Mamba-2, shared experts, embeddings, the output
 
 The solver walks the map greedily by damage per byte saved, under the budget. What came out:
 
-- **11 expert stacks at 2.25 bits per weight** (`Q2_0`) — all of them `down_proj` stacks, in layers 22, 24, 27, 29, 31, 34, 43, 45, 47, 49, and 51. These are the stacks the map priced cheapest, and they land spread across the depth rather than clustered.
+- **11 expert stacks at 2.25 bits per weight** (`Q2_0`) — all of them `down_proj` stacks, the ones the map priced cheapest, landing spread across the depth from layer 22 on rather than clustered. The figure marks each one; the recipe records them exactly.
 - **The other 35 stacks at `Q4_0`** — 4.5 bits, same real rate as the shelf's fallback.
 - **118 dense groups at `Q8_0`**, and 46 groups passed through at F16 — the Mamba-2 convolutions and router gates, classes llama.cpp's quantizer never touches.
 
 ![Two recipes for the same 46 expert stacks. The shelf's build spends 4.5 bits on all 46 via the fallback and carries an MTP block, landing at 17.54 GiB. This pack keeps 35 stacks at Q4_0 and demotes 11 down_proj stacks to Q2_0 at 2.25 bits, spread across the depth, landing at 15.76 GiB.](/vramfit-16gib-recipe.svg)
 
-`Q2_0` is the reason this recipe is possible at all: a plain block format — one scale per block, no super-block, no 256-wide requirement — that llama.cpp merged on 2026-07-07. It gives the solver a real 2.25-bit rung on tensors the compact types refuse. (It also means the file needs llama.cpp build b10326 or later; an older build refuses it.)
+`Q2_0` is the reason this recipe is possible at all: a plain block format — one scale per block, no super-block, no 256-wide requirement — that llama.cpp merged on 2026-07-07. It gives the solver a real 2.25-bit rung on tensors the compact types refuse. (It also means the file needs a llama.cpp build that carries that merge — a build older than it refuses the file. The serve test ran b10326.)
 
-The recipe isn't a magic constant, and the pack isn't a vibe. The published recipe records the full solve — the budget bytes, the nine pins, the 11-step demotion trace — so the solve replays from the artifact, and the pack rebuilds this file's bytes on one machine from the base checkpoint. Across machines the byte count can differ by tens of bytes (the GGUF metadata stores the imatrix path); the recipe, not the checksum, is the identity.
+The recipe isn't a magic constant. It records the full solve — the budget bytes, the nine pins, the 11-step demotion trace — so the solve replays from the artifact, and the pack rebuilds this file's bytes on one machine from the base checkpoint. Across machines the byte count can differ by tens of bytes (the GGUF metadata stores the imatrix path); the recipe, not the checksum, is the identity.
 
 ## fit16gib is a contract, not a boast
 
@@ -59,36 +59,41 @@ The name on the repo says `fit16gib`, and I want to be precise about what that c
 
 ![A 16 GiB card splits into a 15.776 GiB weight budget and a 0.224 GiB runtime reserve for KV cache, recurrent state, and compute. The packed file lands at 15.760 GiB, 16.09 MiB under the budget. The margin holds to 8 parallel sequences.](/vramfit-16gib-budget.svg)
 
-The claim is: this file loads **fully offloaded** on a 16 GiB card, holds **16k of context**, and generates. It's a measured serve result under a stated configuration, not a promise about every runtime. The serve test held an RTX 4090 to 16,383 MiB visible with a hard ballast cap, loaded the file on llama.cpp b10326 (Vulkan) with every layer offloaded — 53 of 53, with 15,774.00 MiB of weights on the device — and `llama-server` answered a completion request from inside that envelope, device buffers totaling 16,157.88 MiB of the 16,383 visible. The published build cannot take this test: its 17.54 GiB of weights exceed the card before the first buffer allocates.
+The claim is: this file loads **fully offloaded** on a 16 GiB card, holds **16k of context**, and generates. It's a measured serve result under a stated configuration, not a promise about every runtime.
+
+The test: a hard ballast cap held an RTX 4090 to 16,383 MiB visible, and llama.cpp b10326 (Vulkan) loaded the file with every layer offloaded — 53 of 53, 15,774.00 MiB of weights on the device, with the 357.00 MiB token embedding host-mapped, as llama.cpp always keeps it. `llama-server` answered a completion request from inside that envelope: 16,157.88 MiB of device buffers against the 16,383 visible. The buffers total more than the 0.224 GiB reserve because the server ran four slots and recurrent state grows per sequence — which is exactly the growth the margin exists to absorb. The published build cannot take this test: its 17.54 GiB of weights exceed the card before the first buffer allocates.
+
+And if that 0.224 GiB reserve looks suspiciously small beside the multi-GiB context reserve of [publication #1](/blog/2026-08-11-i-couldnt-tell-my-quantized-model-from-the-baseline): this model is a Mamba-2 hybrid with six attention layers, so 16k of KV cache is 96.00 MiB. The reserve is measured buffers rounded up, not a guessed overhead.
 
 The contract's edges, stated plainly:
 
-- The budget's margin absorbs recurrent-state growth to **8 parallel sequences**. Above 8, the claim is off.
+- The margin absorbs recurrent-state growth to **8 parallel sequences**. Above 8, the claim is off.
+- The test's 16,383 MiB is a ballast-capped 4090, not your card. A 16 GiB card driving a display, a different backend, or a runtime with different buffer sizes moves the envelope — the claim is the stated configuration, and the card states it.
 - **No tokens-per-second figure appears here or on the card.** The serve ran on a VRAM-capped 4090, and a decode number from that method would read 1.4 to 3.5 times higher than real 16 GiB silicon delivers. Publishing it would be publishing a flattering lie.
 - A 16 GiB owner can already run *bigger* builds today by spilling part of the weights to CPU and accepting slower decode. That is a real alternative, and the project has not measured its speed cost. This pack is the option that keeps every weight on the card; whether the trade favors it on your workload is genuinely unsettled.
 
 ## The scoreboard
 
-Both damage metrics were ruled before the measurement ran — read together, from one instrument, no picking a winner after the fact. Held-out WikiText-2, 594 chunks, against the f16 base:
+Both damage metrics were ruled before the measurement ran, read together from one instrument: the **perplexity ratio** (how much worse than the f16 original the pack predicts held-out text) and **mean KL divergence** (how far its output probabilities drift from the original's). Held-out WikiText-2, 594 chunks — my 15.76 GiB pack against the shelf's 17.54 GiB build:
 
-| Model | File size | PPL / f16 ↓ | Mean KLD ↓ | Same top ↑ |
-|---|---|---|---|---|
-| **This pack** | **15.76 GiB** | **1.161096** | **0.204318** | **83.13%** |
-| `IQ2_XXS` (the shelf) | 17.54 GiB | 1.320914 | 0.370257 | 76.09% |
+| Model | PPL / f16 ↓ | Mean KLD ↓ | Same top ↑ |
+|---|---|---|---|
+| **This pack** | 1.1611 | 0.2043 | 83.13% |
+| `IQ2_XXS` (the shelf) | 1.3209 | 0.3703 | 76.09% |
 
-Both metrics at once: a perplexity ratio 0.16 lower and **44.8% lower mean KL divergence**, at **1.78 GiB fewer bytes**. Last time the win was 2.9% on one metric at matched size. This one isn't close.
+Both ruled metrics at once: a perplexity ratio 0.16 lower and **44.8% lower mean KL divergence**, at **1.78 GiB fewer bytes**. Top-token agreement rides along uninvited — it wasn't ruled, and in publication #1 it was the metric that beat *me* — so it reports here, but it doesn't rank. Last time the win was 2.9% on one metric at matched size. This one isn't close.
 
-Then the task slice — five benchmarks fixed before any run, full evaluation splits, both models on the same lane. A delta inside the combined standard error reports as a tie:
+Then the task slice — five benchmarks fixed before any run, full evaluation splits, both models on the same lane. A delta inside the combined standard error reports as a tie; Winogrande clears that bar by a whisker:
 
 | Task | This pack | The shelf's build | Verdict |
 |---|---|---|---|
 | MMLU (5-shot) | 0.7651 | 0.6848 | **ahead, +8.0 points at 16.1σ** |
 | HellaSwag (10-shot) | 0.8038 | 0.7652 | ahead (6.7σ) |
 | GSM8K (5-shot) | 0.7839 | 0.7627 | ahead (1.3σ) |
-| Winogrande (5-shot) | 0.7443 | 0.7261 | ahead (1.04σ) |
+| Winogrande (5-shot) | 0.7443 | 0.7261 | ahead (1.04σ, barely) |
 | ARC-Challenge (25-shot) | 0.6630 | 0.6715 | tie (0.4σ) |
 
-Four leads and a tie, from the smaller file. The one nominal deficit prints with its error bar, because the going standard — publish the checksum, skip the losing numbers — is the thing being argued against.
+Four leads and a tie, from the smaller file. The one nominal deficit prints with its error bar.
 
 One cell I won't fill: the shelf build's bits-per-parameter. Mine is 4.287; its bytes include a block mine omits (next section), so the division would run over different weights. An empty cell is more honest than a wrong one.
 
@@ -104,7 +109,7 @@ Which raises the attribution question the second scan exists to answer: is the w
 
 One more claim earned its keep before publication: that *where* the 11 cheap stacks land matters, and the map knows where.
 
-The same campaign packed and measured **nine placements of the identical width mix** — the map-ranked one, a spread-position probe, three blind draws, a spread-matched control, a measured-map arm, a class-wise arm, and one deliberately inverted to sit on the stacks the map prices dearest. Same 11-at-2.25, 35-at-4.5 spend, nine different answers to "which eleven." The map-ranked placement measured the least damage of the nine; the worst arm measured **2.7 times** as much.
+The same campaign packed and measured **nine placements of the identical width mix** — the map-ranked one, a spread-map probe, three blind draws, a spread-matched control, a measured-map arm, a class-wise arm, and one deliberately inverted to sit on the stacks the map prices dearest. Same 11-at-2.25, 35-at-4.5 spend, nine different answers to "which eleven." The map-ranked placement measured the least damage of the nine; the worst arm measured **2.7 times** as much.
 
 Same bytes, same widths, 2.7× spread in damage. Allocation decides — and the map ranked it correctly before any of the nine files existed.
 
@@ -112,7 +117,7 @@ Same bytes, same widths, 2.7× spread in damage. Allocation decides — and the 
 
 **This pack is missing a block the shelf's build has.** The base checkpoint ships multi-token-prediction layers; my conversion dropped them (`--no-mtp`), so speculative decoding off that block is unavailable from this file. The comparator carries its MTP block at Q4_0 — which is also part of why it's bigger. If MTP-based speculation matters to your serving stack, that's a real difference, not a detail.
 
-**No speed claim survives this post.** Not mine — the capped-4090 method inflates it. Not the CPU-offload alternative's — nobody measured it. The honest sentence is: this is the fastest *fully-on-card* option I can prove exists at 16 GiB and 16k context, and how much that's worth over offloading is an open question I've chosen to leave open in public rather than settle with a number I don't have.
+**No speed claim survives this post.** Not mine — the capped-4090 method inflates it. Not the CPU-offload alternative's — nobody measured it. The honest sentence is: this is the only *fully-on-card* option I can prove exists at 16 GiB and 16k context, and how much that's worth over offloading is an open question I've chosen to leave open in public rather than settle with a number I don't have.
 
 **Don't take the damage numbers on tour.** The sensitivity values are one scan's measurements in one frame. They rank stacks within this map, and that's all they do — comparing them across scans, calibration sets, or models is meaningless, and the dataset card says so in bold. Rank packed models by measured quality at a fixed model and budget, never by raw damage.
 
@@ -122,6 +127,7 @@ Same bytes, same widths, 2.7× spread in damage. Allocation decides — and the 
 
 - **The model:** [NVIDIA-Nemotron-3.5-Lightning-30B-A3B-fit16gib-GGUF](https://huggingface.co/Alberto-Codes/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-fit16gib-GGUF) — a quantization of [NVIDIA's Nemotron 3.5 Lightning 30B-A3B](https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16), under OpenMDW 1.1. The card carries the recipe, the serve log, the eval sidecars, and the reproduce commands.
 - **The measurements:** [the sensitivity-map dataset](https://huggingface.co/datasets/Alberto-Codes/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-sensitivity-maps) — both scans, run logs beside them. Solve your own card's budget against it.
+- **The how-to:** [fit a model to the GPU you actually have](/blog/2026-08-15-fit-a-model-to-the-gpu-you-actually-have) — the command-by-command version, for your own card and model.
 - **The tool:** [vramfit](https://github.com/Alberto-Codes/vramfit) — scan, plan, validate, pack. MIT.
 
-Ten days ago I [argued](/blog/2026-08-15-a-different-ceiling-is-a-different-recipe) that a different ceiling is a different recipe, on paper. This is the claim off the paper: a new model, a smaller card, a locked-out quant family — and the recipe that came back looks nothing like last time's, because the model is nothing like last time's. The method's the same size it always was. Measure, then solve.
+A week ago I [argued](/blog/2026-08-15-a-different-ceiling-is-a-different-recipe) that a different ceiling is a different recipe, on paper — and that for the 49B at 16 GiB, the honest answer was no dish at all. That model still doesn't fit a 16 GiB card. This is a different model, solved for that smaller ceiling from the start: a locked-out quant family, a stack-keyed map, and a recipe that looks nothing like last time's, because the model is nothing like last time's. The method didn't change. Measure, then solve.

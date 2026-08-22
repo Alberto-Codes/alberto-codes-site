@@ -16,10 +16,10 @@
 
   <text x="64" y="181" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" fill="#94a3b8">down_proj</text>
   <g fill="#1e40af" fill-opacity="0.45" stroke="#60a5fa" stroke-width="1">
-    <rect x="70" y="164" width="25" height="25" rx="3"/><rect x="99" y="164" width="25" height="25" rx="3"/><rect x="128" y="164" width="25" height="25" rx="3"/><rect x="157" y="164" width="25" height="25" rx="3"/><rect x="186" y="164" width="25" height="25" rx="3"/><rect x="215" y="164" width="25" height="25" rx="3"/><rect x="244" y="164" width="25" height="25" rx="3"/><rect x="273" y="164" width="25" height="25" rx="3"/><rect x="302" y="164" width="25" height="25" rx="3"/><rect x="505" y="164" width="25" height="25" rx="3"/><rect x="534" y="164" width="25" height="25" rx="3"/><rect x="708" y="164" width="25" height="25" rx="3"/>
+    <rect x="70" y="164" width="25" height="25" rx="3"/><rect x="99" y="164" width="25" height="25" rx="3"/><rect x="128" y="164" width="25" height="25" rx="3"/><rect x="157" y="164" width="25" height="25" rx="3"/><rect x="186" y="164" width="25" height="25" rx="3"/><rect x="215" y="164" width="25" height="25" rx="3"/><rect x="244" y="164" width="25" height="25" rx="3"/><rect x="273" y="164" width="25" height="25" rx="3"/><rect x="302" y="164" width="25" height="25" rx="3"/><rect x="505" y="164" width="25" height="25" rx="3"/><rect x="534" y="164" width="25" height="25" rx="3"/><rect x="563" y="164" width="25" height="25" rx="3"/>
   </g>
   <g fill="#78350f" fill-opacity="0.6" stroke="#f59e0b" stroke-width="1.4">
-    <rect x="331" y="164" width="25" height="25" rx="3"/><rect x="360" y="164" width="25" height="25" rx="3"/><rect x="389" y="164" width="25" height="25" rx="3"/><rect x="418" y="164" width="25" height="25" rx="3"/><rect x="447" y="164" width="25" height="25" rx="3"/><rect x="476" y="164" width="25" height="25" rx="3"/><rect x="563" y="164" width="25" height="25" rx="3"/><rect x="592" y="164" width="25" height="25" rx="3"/><rect x="621" y="164" width="25" height="25" rx="3"/><rect x="650" y="164" width="25" height="25" rx="3"/><rect x="679" y="164" width="25" height="25" rx="3"/>
+    <rect x="331" y="164" width="25" height="25" rx="3"/><rect x="360" y="164" width="25" height="25" rx="3"/><rect x="389" y="164" width="25" height="25" rx="3"/><rect x="418" y="164" width="25" height="25" rx="3"/><rect x="447" y="164" width="25" height="25" rx="3"/><rect x="476" y="164" width="25" height="25" rx="3"/><rect x="592" y="164" width="25" height="25" rx="3"/><rect x="621" y="164" width="25" height="25" rx="3"/><rect x="650" y="164" width="25" height="25" rx="3"/><rect x="679" y="164" width="25" height="25" rx="3"/><rect x="708" y="164" width="25" height="25" rx="3"/>
   </g>
 
   <!-- layer ticks -->
@@ -27,7 +27,7 @@
   <text x="198" y="206" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#64748b">10</text>
   <text x="343" y="206" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#64748b">22</text>
   <text x="488" y="206" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#64748b">34</text>
-  <text x="575" y="206" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#64748b">43</text>
+  <text x="604" y="206" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#64748b">43</text>
   <text x="720" y="206" text-anchor="middle" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#64748b">51</text>
   <text x="24" y="206" font-family="ui-sans-serif, system-ui, sans-serif" font-size="10.5" fill="#64748b">layer</text>
 
@@ -35,9 +35,10 @@
   <rect x="24" y="228" width="14" height="14" rx="2" fill="#1e40af" fill-opacity="0.45" stroke="#60a5fa" stroke-width="1"/>
   <text x="44" y="239" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11.5" fill="#cbd5e1">35 stacks at Q4_0 &#8212; 4.5 bits/weight</text>
   <rect x="268" y="228" width="14" height="14" rx="2" fill="#78350f" fill-opacity="0.6" stroke="#f59e0b" stroke-width="1.4"/>
-  <text x="288" y="239" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11.5" fill="#cbd5e1">11 down_proj stacks at Q2_0 &#8212; 2.25 bits/weight, the stacks the map prices cheapest, spread across the depth</text>
+  <text x="288" y="239" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11.5" fill="#cbd5e1">11 down_proj stacks at Q2_0 &#8212; 2.25 bits/weight,</text>
+  <text x="288" y="256" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11.5" fill="#cbd5e1">the stacks the map prices cheapest, spread across the depth</text>
 
-  <text x="24" y="278" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#94a3b8">Dense weights &#8212; attention, Mamba-2, shared experts, embeddings, output head &#8212; are 7% of the parameters and</text>
-  <text x="24" y="296" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#94a3b8">sit pinned at 8-bit. Convolutions and router gates pass through at F16, untouched by the quantizer.</text>
-  <text x="24" y="320" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#64748b">The whole file: 15.76 GiB, 4.287 bits per parameter. The routed experts are 93% of the parameters, so these two rows are the budget.</text>
+  <text x="24" y="282" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#94a3b8">Dense weights &#8212; attention, Mamba-2, shared experts, embeddings, output head &#8212; are 7% of the</text>
+  <text x="24" y="300" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#94a3b8">parameters and sit pinned at 8-bit. Convolutions and router gates pass through at F16.</text>
+  <text x="24" y="322" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" fill="#64748b">The whole file: 15.76 GiB, 4.287 bits per parameter. The experts hold 93% of it, so these two rows are the budget.</text>
 </svg>
