@@ -1,2 +1,0 @@
-The smallest "2-bit" GGUF of Nemotron 3.5 Lightning is 17.54 GiB. Its label names 12 of 417 tensors; 93% is silently 4.5-bit. I measured it instead: 15.76 GiB, serves fully on a 16 GiB card, beats it on both damage metrics.
-https://alberto.codes/blog/2026-08-22-the-2-bit-label-was-4-5-bits-inside
