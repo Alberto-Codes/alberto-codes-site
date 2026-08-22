@@ -1,0 +1,19 @@
+The smallest 2-bit model on the shelf is 17.54 GiB. The most common gaming GPU now holds 16.
+
+July's Steam hardware survey made it official: for the first time ever, 16 GB is the most common VRAM size on the platform. So that became the target out of curiosity — could NVIDIA's new Nemotron 3.5 Lightning, a 30-billion-parameter mixture-of-experts model, serve entirely from the card most people actually have? The most aggressive quantization anyone had published is labeled IQ2_XXS, 2-bit class, the bottom rung of the ladder. It is 17.54 GiB. It does not fit.
+
+The label isn't lying so much as naming 12 of the file's 417 tensors. llama.cpp's compact quant types only work on tensor rows divisible by 256, and this model's expert tensors are 2688 and 1856 columns wide. So the quantizer falls back, silently, and rewrites all 46 expert stacks — 93 percent of the parameters — to 4.5 bits per weight. Ask for the most aggressive 2-bit build and you get 4.5-bit experts wearing a 2-bit name tag. Nobody did anything wrong here. The fallback belongs to the tool, and it runs without asking.
+
+So instead of reading labels, I measured. vramfit, a tool I've been building in the open out of curiosity about what quantization actually breaks, crushed each of the 46 expert stacks alone at each candidate width and recorded how far the model's output distribution drifted. Then it solved that price list against the real budget: eleven stacks earned 2.25 bits, thirty-five kept 4.5, and the dense seven percent of the model got pinned at 8-bit, because generosity there is nearly free.
+
+The result is 15.76 GiB. It loads fully offloaded inside a 16 GiB envelope, holds 16k of context, and answers requests from inside it. On held-out text it beats the 17.54 GiB build on both damage metrics that were ruled before the run — a perplexity ratio of 1.161 against 1.321, and 44.8 percent lower KL divergence — plus four leads and a tie on five benchmarks fixed in advance, with MMLU ahead by 8 points at 16 sigma. While being 1.78 GiB smaller.
+
+Both packs consumed the same importance matrix, and the assistance ran against mine: 74 percent of my bytes quantized with its help, versus 92 percent of theirs.
+
+What I'm not claiming: any speed number. My own card is a 24 GiB 4090, so the serve test held it to a 16 GiB envelope with a hard cap — honest for fit, flattering for speed, which is exactly why no tokens-per-second figure appears anywhere. And the fit is a stated contract — 16k context, up to eight parallel sequences — not a promise about every runtime.
+
+The full story, with the recipe and the losing numbers printed:
+
+https://alberto.codes/blog/2026-08-22-the-2-bit-label-was-4-5-bits-inside
+
+#AI #LLM #Quantization #OpenSource #Python

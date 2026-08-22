@@ -1,0 +1,34 @@
+TITLE:
+Nemotron 3.5 Lightning 30B-A3B fully offloaded on 16 GiB - 15.76 GiB mixed-precision GGUF that beats the 17.54 GiB IQ2_XXS on both PPL and KLD
+
+BODY (paste everything below this line, in Markdown Mode):
+With 16 GB just becoming the most common VRAM size in the Steam survey for the first time, I wanted this model serving entirely inside 16 GiB, no CPU spill.
+
+The smallest published GGUF of this model is labeled IQ2_XXS but lands at 17.54 GiB. The label names 12 of the build's 417 tensors: llama.cpp's k-quants and i-quants need row widths divisible by 256, this model's expert tensors are 2688 and 1856 columns, so the quantizer silently falls back to `IQ4_NL` (4.5 bpw) on all 46 expert stacks, which hold 93% of the parameters. Every "2-bit-class" build of this model is mostly 4.5-bit, and none of them fit a 16 GiB card.
+
+So I measured a per-stack sensitivity map (each of the 46 expert stacks quantized alone at each candidate width, KL divergence against the bf16 base) and solved the allocation against the actual budget: 11 `down_proj` stacks at `Q2_0` (2.25 bpw), 35 stacks at `Q4_0`, every dense class pinned at `Q8_0`, convs/gates passthrough F16. Result: **15.76 GiB, 4.287 bits/param**.
+
+Held-out WikiText-2, 594 chunks, same instrument (llama.cpp b10362, same-pod f16 logits), both metrics ruled before the run:
+
+* This pack (15.76 GiB): PPL/f16 1.1611, mean KLD 0.2043, same-top 83.13%
+* IQ2_XXS, bartowski (17.54 GiB): PPL/f16 1.3209, mean KLD 0.3703, same-top 76.09%
+
+Task slice (five tasks fixed before any run, full splits, same lane): four leads, one tie. MMLU +8.0 points at 16.1 sigma, ARC-Challenge a tie at 0.4 sigma.
+
+Both packs consumed the **same imatrix** (bartowski's, linked at a pinned revision with credit - his build losing here is the silent fallback, not his craft). The assistance asymmetry ran against my pack: 74.44% of bytes assisted vs 91.53%.
+
+Serve validation, not just file size: a hard-capped 4090 (16,383 MiB visible), llama.cpp b10326 Vulkan, `-ngl 99`, 16k context, 53/53 layers offloaded, llama-server answering from inside the envelope. The margin holds to 8 parallel sequences.
+
+Caveats, stated up front:
+
+* **Needs a llama.cpp build with `Q2_0`** (merged 2026-07-07); older builds refuse the file.
+* **No MTP block** - converted with `--no-mtp`, so no `draft-mtp` speculative decoding from this file. The IQ2_XXS carries its MTP block at Q4_0, which is part of its size.
+* **No tokens/sec numbers** - the capped-4090 method would read 1.4-3.5x higher than real 16 GiB silicon, so I'm not publishing one.
+* You can already run bigger builds on 16 GiB with partial CPU offload at an unmeasured speed cost. This is the fully-on-card option; that trade is genuinely open.
+
+Everything is published beside the weights - recipe with the full solve trace, serve log, eval sidecars, and the sensitivity maps with run logs (solve your own card's budget against them with `vramfit plan`, no GPU needed):
+
+* Model: https://huggingface.co/Alberto-Codes/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-fit16gib-GGUF
+* Sensitivity maps: https://huggingface.co/datasets/Alberto-Codes/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-sensitivity-maps
+* Tool (MIT): https://github.com/Alberto-Codes/vramfit
+* Writeup: https://alberto.codes/blog/2026-08-22-the-2-bit-label-was-4-5-bits-inside

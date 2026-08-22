@@ -1,0 +1,6 @@
+The smallest "2-bit" GGUF of Nemotron 3.5 Lightning is 17.54 GiB — too big for a 16 GiB card, and the label only names 12 of its 417 tensors. llama.cpp silently rewrites the expert stacks holding 93% of the parameters to 4.5 bits, because 256 doesn't divide their rows.
+
+So I measured the model stack by stack and solved the budget: 15.76 GiB, serves fully offloaded at 16k context, and beats the bigger build on both damage metrics.
+
+#LLM #quantization #opensource
+https://alberto.codes/blog/2026-08-22-the-2-bit-label-was-4-5-bits-inside
