@@ -4,6 +4,56 @@ import reflex as rx
 
 PUBLICATIONS = [
     {
+        "title": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-fit16gib-GGUF",
+        "kind": "Quantized model",
+        "date": "2026-08-22",
+        "summary": (
+            "A 30-billion-parameter mixture-of-experts model solved to serve "
+            "entirely on a 16 GiB card at 16k context. llama.cpp's compact "
+            "quant types are locked out of the expert stacks that hold 93% "
+            "of the parameters, so the shelf's smallest build is 17.54 GiB; "
+            "this 15.76 GiB pack beats it on both ruled damage metrics and "
+            "holds four leads and a tie on the fixed task slice."
+        ),
+        "base_model": "nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+        "base_model_url": (
+            "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16"
+        ),
+        "relation": "quantized",
+        "license": "OpenMDW 1.1",
+        "contribution": (
+            "The stack-keyed sensitivity maps, the mixed-precision recipe, "
+            "the pack, the serve validation, and the evaluation record. The "
+            "weights are NVIDIA's; the importance matrix is bartowski's, "
+            "linked at a pinned revision with credit."
+        ),
+        "links": [
+            (
+                "Hugging Face",
+                "box",
+                "https://huggingface.co/Alberto-Codes/"
+                "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-fit16gib-GGUF",
+            ),
+            (
+                "Sensitivity maps",
+                "database",
+                "https://huggingface.co/datasets/Alberto-Codes/"
+                "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-sensitivity-maps",
+            ),
+            (
+                "Evidence",
+                "flask-conical",
+                "https://github.com/Alberto-Codes/vramfit/blob/main/docs/"
+                "explanation/evaluating-packed-models.md",
+            ),
+            (
+                "Writeup",
+                "book-open",
+                "/blog/2026-08-22-the-2-bit-label-was-4-5-bits-inside",
+            ),
+        ],
+    },
+    {
         "title": "Llama-3_3-Nemotron-Super-49B-v1_5-fit24gib-GGUF",
         "kind": "Quantized model",
         "date": "2026-08-11",
