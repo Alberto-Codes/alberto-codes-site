@@ -4,6 +4,55 @@ import reflex as rx
 
 PUBLICATIONS = [
     {
+        "title": "gemma-4-31B-it-fit24gib-GGUF",
+        "kind": "Quantized model",
+        "date": "2026-08-29",
+        "summary": (
+            "Google's own 4-bit build of Gemma 4 31B already fits a 24 GiB "
+            "card at 16.44 GiB, so fit was never the claim. This 14.92 GiB "
+            "pack ties it on four held-out benchmarks and wins one, and the "
+            "freed bytes buy served context: 86,016 tokens of text against "
+            "65,536, and 73,728 against 49,152 with an image aboard, behind "
+            "a measured vision bound and a converted projector sidecar."
+        ),
+        "base_model": "google/gemma-4-31B-it-qat-q4_0-unquantized",
+        "base_model_url": (
+            "https://huggingface.co/google/gemma-4-31B-it-qat-q4_0-unquantized"
+        ),
+        "relation": "quantized",
+        "license": "Apache 2.0 · Gemma 4 license note",
+        "contribution": (
+            "The per-layer sensitivity map, the two-arm solve, the pack, the "
+            "projector conversion, the serve ladders, the vision and real-GUI "
+            "campaigns, and the evaluation record. The weights and the "
+            "projector are Google's."
+        ),
+        "links": [
+            (
+                "Hugging Face",
+                "box",
+                "https://huggingface.co/Alberto-Codes/gemma-4-31B-it-fit24gib-GGUF",
+            ),
+            (
+                "Evidence",
+                "flask-conical",
+                "https://github.com/Alberto-Codes/vramfit/blob/v0.4.0/publication/"
+                "gemma-4-31b-fit24gib/card-ledger.md",
+            ),
+            (
+                "Policy",
+                "scale",
+                "https://github.com/Alberto-Codes/vramfit/blob/v0.4.0/docs/adr/"
+                "0030-vision-budget-sidecar.md",
+            ),
+            (
+                "Writeup",
+                "book-open",
+                "/blog/2026-09-02-googles-4-bit-gemma-already-fit-my-card",
+            ),
+        ],
+    },
+    {
         "title": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-fit16gib-GGUF",
         "kind": "Quantized model",
         "date": "2026-08-22",
