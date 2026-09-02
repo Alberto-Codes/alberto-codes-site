@@ -1,8 +1,8 @@
 ---
-title: Google's 4-bit Gemma already fit my card. I wanted the context it left on the table.
+title: Google's 4-bit Gemma already fit my 24 GiB card. I wanted the 20,000 tokens it left on the table.
 date: 2026-09-02
 type: explanation
-summary: The official Q4_0 build of Gemma 4 31B is 16.44 GiB and fits a 24 GiB card with room to spare, so "it fits" was never the claim. I measured the decoder layer by layer, solved a 14.92 GiB pack that ties Google's build on four held-out benchmarks and wins one, and let the freed bytes buy context — 86,016 served tokens against 65,536, and 73,728 against 49,152 with an image aboard.
+summary: The official Q4_0 build of Gemma 4 31B is 16.44 GiB and fits a 24 GiB card with room to spare, so "it fits" was never the claim. The budget is. I measured the decoder layer by layer, solved a 14.92 GiB pack that ties Google's build on four held-out benchmarks and wins one, and let the freed bytes buy context — 86,016 served tokens against 65,536, and 73,728 against 49,152 with an image aboard.
 tags:
   - python
   - ai
@@ -16,11 +16,11 @@ tags:
 
 [Gemma 4 31B](https://huggingface.co/google/gemma-4-31B-it) ships with something the last two models didn't have: an official quantization. Google publishes a [quantization-aware-trained Q4_0 GGUF](https://huggingface.co/google/gemma-4-31B-it-qat-q4_0-gguf), trained toward 4-bit deployment on purpose, at **16.44 GiB**. On a 24 GiB card it loads with seven and a half gigabytes to spare.
 
-So for the first time in this series, "it fits" isn't a claim anyone needs to make. The question is what those spare gigabytes are worth — and on this model, they're worth more than usual.
+So for the first time in this series, "it fits" isn't a claim anyone needs to make. The question is what those spare gigabytes are worth — and on this model, they're worth more than usual. If you've been splitting a long transcript into pieces to fit a 24 GiB card, this one is for you. The only way to price the answer was to climb a ladder of context sizes until the card said no.
 
 ## What a gigabyte of weights buys here
 
-Everything a card holds past the weights goes to the KV cache, the per-token memory that grows with context. Gemma 4 31B's decoder has **60 layers, and 50 of them are sliding-window**: each one sees the last 1,024 tokens and no more, so once a sequence passes that window its cache stops growing. Only the **10 global layers** keep growing with context.
+Everything a card holds past the weights goes to the KV cache, the per-token memory that grows with context. Gemma 4 31B's decoder has **60 layers, and 50 of them are sliding-window**: each one sees the last 1,024 tokens and no more, so once a sequence passes that window its cache stops growing. Only the **10 global layers** keep growing with context — on a runtime that honors the sliding window, as llama.cpp does. One that allocates full-context cache for every layer would price this model six times higher, and the trade below would vanish.
 
 That makes the price of context small and flat. Measured at the runtime — llama.cpp b10362, not the config file — a token of context costs **81,920 bytes** once the windows saturate, plus a fixed 1,200 MiB pool per sequence for the fifty windowed layers. (The config's arithmetic says half that per token, because Gemma stores one tensor for both keys and values; the runtime allocates both anyway, and the runtime is what runs.) A gigabyte of weights freed is about **13,100 tokens** of context bought.
 
@@ -51,7 +51,7 @@ The solver walked the map greedily by damage per byte saved, under the 15 GiB we
 
 The packed decoder is **14.92 GiB**, 86.08 MiB under budget, with the recipe's 81-step trace beside it. Google's build is one preset applied uniformly; this one buys forty-five protected layers by spending fifteen cheap ones, and still lands a gigabyte and a half lighter.
 
-Images need a second file: the *projector*, the encoder that turns pixels into tokens the decoder can read. It ships beside the decoder as a sidecar, and it gets priced below.
+Images need a second file: the *projector*, the encoder that turns pixels into tokens the decoder can read. It ships beside the decoder as a sidecar, priced below.
 
 ## The metric that pointed backwards
 
@@ -63,27 +63,27 @@ The 13 GiB arm, kv11, was the aggressive point, and on the lingua-franca metric 
 | **kv9 (15 GiB, shipped)** | 14.92 GiB | 1.0681 | 0.0446 | 92.04% |
 | Google's QAT Q4_0 | 16.44 GiB | 1.1043 | **0.0420** | **92.32%** |
 
-Read the columns against each other. Perplexity ratio ranks the three packs in one order; every fidelity metric ranks them in the *opposite* order. kv11 has the best perplexity ratio and **3.2 times the divergence** of Google's build. A perplexity-only scoreboard would have shipped the wrong file.
+Perplexity ratio ranks the three packs in one order; every fidelity metric ranks them in the *opposite* order. kv11 has the best perplexity ratio and **3.2 times the divergence** of Google's build. A perplexity-only scoreboard would have shipped the wrong file. I don't know why perplexity pointed backwards on this model, and this post doesn't pretend to.
 
 ![Three packs, two rankings. Perplexity ratio orders kv11, kv9, then QAT. Mean KL divergence orders QAT, kv9, then kv11. The two orderings are exactly reversed, and the held-out benchmarks below break the tie.](/vramfit-24gib-two-arms.svg)
 
-The held-out benchmarks arbitrated, and they sided with divergence. Five tasks fixed before any run, full evaluation splits, every arm on the same lane. A delta inside the combined standard error is a tie:
+The held-out benchmarks sided with divergence. Five tasks fixed before any run, full evaluation splits, every arm on the same lane. A delta inside the combined standard error is a tie:
 
 | Task | kv9 (shipped) | Google's QAT Q4_0 | Verdict |
 |---|---|---|---|
-| MMLU (5-shot) | **71.36** | 70.20 | **win, +1.15 against a combined σ of 0.53** |
+| MMLU (5-shot) | **71.36** | 70.20 | **win (+1.15, σ 0.53)** |
 | GSM8K (5-shot) | 92.34 | 92.42 | tie |
-| HellaSwag (10-shot) | 58.71 | 59.34 | tie (−0.63 against 0.69) |
+| HellaSwag (10-shot) | 58.71 | 59.34 | tie (−0.63, σ 0.69) |
 | Winogrande (5-shot) | 68.27 | 68.03 | tie |
 | ARC-Challenge (25-shot) | 61.77 | 61.09 | tie |
 
 Four ties and a win, from the lighter file. kv11 took the same slice and lost HellaSwag outright, **−2.33 points against a combined σ of 0.69**, with four ties around it. Its divergence showed up on exactly one task, which is one more than the shipping bar allows. kv11 would have served the most context of the three, and it stays [on the record](https://github.com/Alberto-Codes/vramfit/issues/423) as the arm that measured too much damage to publish.
 
-Two honest asymmetries travel with the first table. Google's build holds a slightly better mean KL divergence and top-token agreement than the shipped pack; the two text metrics disagree at the margin, and the benchmarks are what settle it. And that table is measured on the pack's own calibration frame — the same corpus its importance matrix consumed — which leans the in-frame numbers toward my pack. The held-out slice is the check on that.
+Two honest asymmetries travel with the first table. Google's build holds a slightly better mean KL divergence and top-token agreement than the shipped pack, and the benchmarks are what settle that disagreement. And that table is measured on the pack's own calibration frame — the same corpus its importance matrix consumed — which leans the in-frame numbers toward my pack. The held-out slice is the check on that.
 
 ## What the bytes bought, served
 
-Computed capacity is arithmetic. Served capacity is a ladder: load the file at a context size, step up 4,096 tokens, repeat until the load fails. Both packs ran the ladder on the same RTX 4090, the same day, under the same idle desktop, llama.cpp b10362 Vulkan, one sequence:
+Computed capacity is arithmetic. Served capacity is the ladder: load the file at a context size, step up 4,096 tokens, repeat until the load fails. Both packs ran the ladder on the same RTX 4090, the same day, llama.cpp b10362 Vulkan, one sequence:
 
 | Serving shape | This pack | Google's QAT Q4_0 | Gain |
 |---|---|---|---|
@@ -94,16 +94,16 @@ The image row moves two variables at once — my decoder *and* my converted proj
 
 `fit24gib` is a contract, not a boast, and the boundary has edges:
 
-- **It moves with the frame.** The 2026-08-28 ladder found 81,920 for text; three days later, in a different frame, the same file passed 86,016. The boundary moves with the box's idle VRAM share. Both are real, and the card names both.
+- **It moves with the frame** — in this project's vocabulary, the exact conditions a number was measured under: the box, the build, the day, the idle VRAM. The 2026-08-28 ladder found 81,920 for text; three days later, in a different frame, the same file passed 86,016. The boundary moves with the box's idle VRAM share. Both are real, and the card names both.
 - **Pass `-np 1`.** The server defaults to four slots, which adds about 2,400 MiB of sliding-window cache on this geometry and fails loads that fit at one.
 - **Keep about 200 MiB free when serving images**, and cap the encode batch at one image. The image-encode buffer allocates at request time, and this server build crashes on that failure instead of refusing.
-- **The ladder is a fit bar, not a speed bar.** The boundary check decoded five tokens. Throughput at 86,016 tokens is unmeasured.
+- **The ladder is a fit bar, not a speed bar.** The boundary check decoded five tokens.
 
 Throughput at the boundary is unmeasured, but throughput at a working context is not, and it's the number I refused to print last time. Both quantized arms ran the same 20-task subset at 8,192 tokens of context on the 4090, the target card: **47.8 tokens per second for this pack against 43.3** for Google's. On an H100 the order flipped, with Google's build 15% ahead. Twenty generations, one slot, my pack's answers averaging 20 tokens to Google's 48 — a measured number on the card the claim is about, with its caveats attached.
 
 ## The vision claim had to be earned separately
 
-The map measured text. A multimodal card that says nothing about images would be leaving the most likely use unpriced, and a card that infers image quality from text damage would be guessing. So the campaign measured it: a BF16 reference decoder generated greedily over ten held-out 768×768 images, and each quantized arm was teacher-forced along the reference's sequence, reading a truncated top-20 KL divergence at the server boundary (the server caps its probability list at 20, so this is not a full-vocabulary number). Positions that carry image content are scored apart from the chat-frame policy tokens that dominate the average.
+The map measured text, and a card that infers image quality from text damage would be guessing. So the campaign measured it: a BF16 reference decoder generated greedily over ten held-out 768×768 images, and each quantized arm was teacher-forced along the reference's sequence, reading a truncated top-20 KL divergence at the server boundary (the server caps its probability list at 20). Positions that carry image content are scored apart from the chat-frame policy tokens that dominate the average.
 
 Content-class results, 120 positions:
 
@@ -132,8 +132,8 @@ Then a second campaign put the bound somewhere real: **1,349 GUI screenshots** a
 ## Where it lives
 
 - **The model:** [gemma-4-31B-it-fit24gib-GGUF](https://huggingface.co/Alberto-Codes/gemma-4-31B-it-fit24gib-GGUF) — two files, one artifact. The decoder serves text alone; add the projector sidecar for images. The card carries the recipe, the serve ladders, the eval sidecars, both campaign records, and the reproduce commands. Apache 2.0, under the Gemma 4 license note.
-- **The tool:** [vramfit v0.4.0](https://github.com/Alberto-Codes/vramfit/releases/tag/v0.4.0) — what this campaign forced: per-layer KV geometry in the model shape, KV priced at the runtime's measured allocation, a `capacity` readout that turns a packed recipe back into tokens, the projector sidecar and vision line in `pack` and `budget`, and the framed-calibration script. MIT.
-- **The policy:** [ADR-0030](https://github.com/Alberto-Codes/vramfit/blob/v0.4.0/docs/adr/0030-vision-budget-sidecar.md) — how a vision tower enters the budget, and what a text-measured map may and may not claim.
+- **The tool:** [vramfit v0.4.0](https://github.com/Alberto-Codes/vramfit/releases/tag/v0.4.0) — what this campaign forced: per-layer KV geometry priced at the runtime's measured allocation, a `capacity` readout that turns a packed recipe back into tokens, the projector sidecar and vision line, and the framed-calibration script. MIT.
+- **The policy:** [ADR-0030](https://github.com/Alberto-Codes/vramfit/blob/v0.4.0/docs/adr/0030-vision-budget-sidecar.md) — how a vision tower enters the budget, and what a text-measured map may claim.
 - **The how-to:** [fit a model to the GPU you actually have](/blog/2026-08-15-fit-a-model-to-the-gpu-you-actually-have) — the command-by-command version.
 
 Last time the villain was a label that hid a fallback. This time there was no villain. Google's build is good, it fits, and it's the first comparator in this series I'd happily run. The only thing wrong with it was the seven and a half gigabytes it wasn't using — and the only way to find out what they were worth was to measure, solve, and serve the ladder until it failed.
