@@ -32,10 +32,12 @@ PROJECTS = [
             "Fits large open models onto one GPU by measuring which layers "
             "survive being crushed. Scans per-layer quantization damage, "
             "solves a mixed-precision recipe against a hard VRAM budget, "
-            "then packs it. Nemotron Super 49B (92.9 GiB at f16) serving on "
-            "a 24 GiB RTX 4090, beating the size-matched community quant on "
-            "full-window KL divergence at 7.8σ with five task-benchmark "
-            "ties. Seventeen recorded data points, losses included. MIT."
+            "then packs it. Three published packs, each measured against "
+            "its baseline with the losing numbers printed: Nemotron Super "
+            "49B on a 24 GiB card, Nemotron 3.5 Lightning 30B-A3B entirely "
+            "on a 16 GiB card, and Gemma 4 31B solved for 86k tokens of "
+            "context beside Google's own 4-bit build. Nineteen recorded "
+            "data points, losses included. MIT."
         ),
         "tags": [
             "Generative AI",
@@ -47,10 +49,7 @@ PROJECTS = [
         ],
         "link": "https://pypi.org/project/vramfit/",
         "github": "https://github.com/Alberto-Codes/vramfit",
-        "model": (
-            "https://huggingface.co/Alberto-Codes/"
-            "Llama-3_3-Nemotron-Super-49B-v1_5-fit24gib-GGUF"
-        ),
+        "model": "https://huggingface.co/Alberto-Codes",
     },
     {
         "title": "gepa-adk",
