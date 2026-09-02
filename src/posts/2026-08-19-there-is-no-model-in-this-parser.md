@@ -2,7 +2,7 @@
 title: There is no model in this parser. It still told me ice cream was a sauce.
 date: 2026-08-19
 type: explanation
-summary: Post one of the saucier series reads a 1907 cookbook with a regular expression — 124 sauces, 29 lineages, 95 that name no base. The first version of that census said 166 and 64, and forty of those were soups, jam, and a vanilla ice cream. Determinism did not catch that. Line numbers did.
+summary: Post one of the saucier series reads a century-old cookbook with a regular expression — 124 sauces, 29 lineages, 95 that name no base. The first version of that census said 166 and 64, and forty of those were soups, jam, and a vanilla ice cream. Determinism did not catch that. Line numbers did.
 tags:
   - ai
   - python
@@ -14,7 +14,7 @@ tags:
 
 Here is something I wanted to know. It is 2026, every conversation that starts
 with "I have a pile of documents" ends with which model to point at them, and I
-had a cookbook from 1907 sitting on my disk. How much of it can a regular
+had a century-old cookbook sitting on my disk. How much of it can a regular
 expression read?
 
 Not as a stunt, and not as an argument against models — later posts hand the
@@ -67,6 +67,13 @@ sauces      124
 derived     29 linked to a mother
 unresolved  95 state no base in their prose
 ```
+
+*Correction, 2026-09-01: that `escoffier-1907` is the identifier this release
+printed, and it was wrong. The file is the New and Revised Edition of January
+1909, which says so on its own title page. The counts, entries and line
+numbers here are unaffected and still reproduce at `v0.1.0`.
+[Post three](/blog/2026-09-01-i-added-a-second-copy-of-the-same-book) is the
+correction.*
 
 29 of 124 is a coverage number that would embarrass most extraction demos. Hold
 that thought.

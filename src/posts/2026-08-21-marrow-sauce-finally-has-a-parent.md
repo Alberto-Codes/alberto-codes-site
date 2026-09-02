@@ -32,6 +32,13 @@ derived     50 linked to a stated parent
 unresolved  74 state no base in their prose
 ```
 
+*Correction, 2026-09-01: that `escoffier-1907` is the identifier this release
+printed, and it was wrong. The file is the New and Revised Edition of January
+1909, and its own title page says so. Everything else here is unaffected and
+still reproduces at `v0.2.0`.
+[Post three](/blog/2026-09-01-i-added-a-second-copy-of-the-same-book) is the
+correction.*
+
 Twenty-nine became fifty. Still no model, no API key, no network — a regular
 expression got better at reading, nothing more. And the number I want to show
 you first is not the 24 derivations it added. It is the three it took away.

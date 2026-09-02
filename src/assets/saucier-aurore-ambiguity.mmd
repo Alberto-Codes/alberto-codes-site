@@ -1,0 +1,26 @@
+flowchart TD
+    subgraph T["escoffier-1909 &nbsp;·&nbsp; transcription &nbsp;·&nbsp; entry 60, line 2095"]
+        T1["'Into one-half pint of boiling <b>velouté</b> put the same quantity of very red <b>tomato</b> purée'"]
+        T2["<b>two candidates stated</b> &nbsp;·&nbsp; velouté and tomato"]
+        T3["<b>parent: unresolved</b> &nbsp;·&nbsp; the source named two and chose neither"]
+        T1 --> T2 --> T3
+    end
+
+    subgraph O["escoffier-1907 &nbsp;·&nbsp; ocr &nbsp;·&nbsp; entry 60, line 2503"]
+        O1["'Into one-half pint of boiling <b>velout^</b> put the same quantity of very red <b>tomato</b> pur^e'"]
+        O2["<b>one candidate stated</b> &nbsp;·&nbsp; velouté is unreadable, tomato survives"]
+        O3["<b>parent: tomato</b> &nbsp;·&nbsp; unambiguous, well formed, provenanced, wrong"]
+        O1 --> O2 --> O3
+    end
+
+    L["The scan did not add noise to this record. It removed the ambiguity that was the reason for the honest answer, and nothing downstream can tell."]
+
+    T3 --- L
+    O3 --- L
+
+    classDef good fill:#1f2020,stroke:#7fb069,stroke-width:2px,color:#ccc;
+    classDef bad fill:#1f2020,stroke:#c96f4a,stroke-width:2px,color:#ccc;
+    classDef note fill:#1f2020,stroke:#8a8f98,stroke-width:2px,color:#ccc;
+    class T1,T2,T3 good;
+    class O1,O2,O3 bad;
+    class L note;
