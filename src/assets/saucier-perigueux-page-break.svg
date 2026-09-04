@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 900 470" style="max-width: 900px; background-color: transparent; font-family: 'trebuchet ms', verdana, arial, sans-serif; font-size: 14px;" role="img" aria-labelledby="t d">
+  <title id="t">Périgueux, and the page break between two names</title>
+  <desc id="d">Two panels of the same paragraph, entry 47, Périgueux Sauce. Left, escoffier-1909, the text: heading at line 1920, then one unbroken paragraph in which half-glaze at line 1923 and Madeira Sauce at line 1926 are both highlighted; the resolver reads two catalogued names and the verdict is parent unresolved, stated half-glaze, madeira-sauce. Right, escoffier-1907, the scan: heading at line 2314, half-glaze at line 2317 highlighted, then a blank line 2319 and the running page header 30 GUIDE TO MODERN COOKERY at line 2321, and only beyond them Madeira Sauce at line 2324, greyed out. The resolver reads the opening paragraph only, which ends at the blank line, so it sees one name and the verdict is parent half-glaze. Caption: the scan's paragraph ends at the blank line on 2319; the resolver never reads line 2324.</desc>
+  <style>
+    .page { fill: #1f2020; stroke: #cccccc; stroke-width: 1.5px; }
+    .ok { fill: #1f2020; stroke: #7fb069; stroke-width: 2px; }
+    .bad { fill: #1f2020; stroke: #c96f4a; stroke-width: 2px; stroke-dasharray: 5 3; }
+    .read { fill: #7fb069; fill-opacity: 0.10; stroke: none; }
+    text { fill: #cccccc; text-anchor: start; }
+    .c { text-anchor: middle; }
+    .n { text-anchor: end; fill: #777777; font-size: 11px; }
+    .mono { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 11px; }
+    .h { font-size: 15px; font-weight: bold; }
+    .h.o { fill: #c96f4a; }
+    .h.g { fill: #7fb069; }
+    .s { font-size: 12px; fill: #aaaaaa; }
+    .g { fill: #7fb069; font-weight: bold; }
+    .o { fill: #c96f4a; font-weight: bold; }
+    .dim { fill: #666666; }
+    .hdr { fill: #999999; font-style: italic; }
+    .div { stroke: #555; stroke-width: 1px; stroke-dasharray: 3 4; }
+    .cut { stroke: #c96f4a; stroke-width: 2px; stroke-dasharray: 6 4; }
+  </style>
+
+  <line class="div" x1="450" y1="20" x2="450" y2="440"/>
+
+  <!-- LEFT: 1909 text -->
+  <text class="h g c" x="240" y="34">escoffier-1909, the text</text>
+  <text class="s c" x="240" y="52">entry 47, one paragraph</text>
+
+  <rect class="page" x="60" y="66" width="360" height="150" rx="2"/>
+  <rect class="read" x="61" y="96" width="358" height="119"/>
+  <text class="n" x="52" y="86">1920</text>
+  <text class="mono" x="70" y="86">47—PÉRIGUEUX SAUCE</text>
+  <text class="n" x="52" y="118">1922</text>
+  <text class="mono" x="70" y="118">Prepare a “Sauce Madère” as explained in No. 44, and ...</text>
+  <text class="n" x="52" y="136">1923</text>
+  <text class="mono" x="70" y="136"><tspan class="g">half-glaze</tspan>, to be reduced, half its volume of ...</text>
+  <text class="n" x="52" y="154">1924</text>
+  <text class="mono dim" x="70" y="154">and keep it a little denser than usual. Finish ...</text>
+  <text class="n" x="52" y="172">1925</text>
+  <text class="mono dim" x="70" y="172">one-sixth pint of truffle essence and three oz. ...</text>
+  <text class="n" x="52" y="190">1926</text>
+  <text class="mono" x="70" y="190">per quart of <tspan class="g">Madeira Sauce</tspan>. It is used for ...</text>
+  <text class="mono dim" x="70" y="208">(the paragraph continues, unbroken)</text>
+
+  <text class="s c" x="240" y="244">the resolver reads the opening paragraph</text>
+  <text class="s c" x="240" y="260">and finds two catalogued names</text>
+
+  <rect class="ok" x="60" y="278" width="360" height="70" rx="2"/>
+  <text class="mono" x="72" y="300">parent  (unresolved)</text>
+  <text class="mono" x="72" y="318">stated  half-glaze, madeira-sauce</text>
+  <text class="s" x="72" y="338">it may refuse; it may not rank</text>
+
+  <!-- RIGHT: 1907 scan -->
+  <text class="h o c" x="675" y="34">escoffier-1907, the scan</text>
+  <text class="s c" x="675" y="52">entry 47, the same paragraph, a page turns</text>
+
+  <rect class="page" x="490" y="66" width="380" height="200" rx="2"/>
+  <rect class="read" x="491" y="96" width="378" height="62"/>
+  <text class="n" x="482" y="86">2314</text>
+  <text class="mono" x="500" y="86">47— PERIQUEUX  SAUCE</text>
+  <text class="n" x="482" y="118">2316</text>
+  <text class="mono" x="500" y="118">Prepare  a  "  Sauce  Mad^re  "  as  ...</text>
+  <text class="n" x="482" y="136">2317</text>
+  <text class="mono" x="500" y="136">to  the  <tspan class="g">half-glaze</tspan>,  to  be  reduced,  ...</text>
+  <text class="n" x="482" y="154">2318</text>
+  <text class="mono" x="500" y="154">veal  stock, ...  Finish  this</text>
+  <text class="n" x="482" y="172">2319</text>
+  <line class="cut" x1="496" y1="163" x2="864" y2="163"/>
+  <text class="s o" x="500" y="180" style="font-weight: normal;">blank line: the opening paragraph ends here</text>
+  <text class="n" x="482" y="196">2321</text>
+  <text class="mono hdr" x="500" y="196">30  GUIDE  TO  MODERN  COOKERY</text>
+  <text class="n" x="482" y="222">2323</text>
+  <text class="mono dim" x="500" y="222">sauce  by  adding  one-sixth  pint  of ...</text>
+  <text class="n" x="482" y="240">2324</text>
+  <text class="mono dim" x="500" y="240">of  chopped  truffles  per  quart  of  <tspan style="font-weight:bold">Madeira  Sauce</tspan>. ...</text>
+
+  <text class="s c" x="675" y="290">the resolver reads the opening paragraph</text>
+  <text class="s c" x="675" y="306">and finds one catalogued name</text>
+
+  <rect class="bad" x="490" y="324" width="380" height="52" rx="2"/>
+  <text class="mono" x="502" y="346">parent  half-glaze</text>
+  <text class="s" x="502" y="366">unambiguous, provenanced, and wrong</text>
+
+  <text class="s c" x="450" y="445">the scan's paragraph ends at the blank line on 2319. the resolver never reads line 2324.</text>
+</svg>

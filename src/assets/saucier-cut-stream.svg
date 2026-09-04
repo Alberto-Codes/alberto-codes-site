@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 840 440" style="max-width: 840px; background-color: transparent; font-family: 'trebuchet ms', verdana, arial, sans-serif; font-size: 14px;" role="img" aria-labelledby="t d">
+  <title id="t">A stream cut at a line boundary</title>
+  <desc id="d">A column of 293 numbered lines. Line 1 is the catalogue record for escoffier-1909, stating 151 preparations; line 2 is the catalogue record for escoffier-1907, stating 140. Lines 3 to 292 are preparation records, drawn solid green. Line 293, STRAWBERRY SAUCE of the scan at line 41807, is drawn in dashed orange and struck through, labelled deleted. A note beside the green lines reads: every remaining line is valid JSON. An arrow from line 2 to the reader's verdict reads: line 2: catalogue 'escoffier-1907' states 140 preparations, the stream carries 139, exit 2. Caption: syntax cannot see a missing line; the record that promised a count can.</desc>
+  <defs>
+    <marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c96f4a"/></marker>
+  </defs>
+  <style>
+    .rec { fill: #1f2020; stroke: #7fb069; stroke-width: 1.5px; }
+    .cat { fill: #1f2020; stroke: #cccccc; stroke-width: 1.5px; }
+    .gone { fill: none; stroke: #c96f4a; stroke-width: 2px; stroke-dasharray: 5 3; }
+    .verdict { fill: #1f2020; stroke: #c96f4a; stroke-width: 2px; }
+    .eo { stroke: #c96f4a; stroke-width: 2px; fill: none; }
+    .strike { stroke: #c96f4a; stroke-width: 2px; }
+    text { fill: #cccccc; text-anchor: middle; }
+    .l { text-anchor: start; }
+    .n { text-anchor: end; fill: #888888; font-size: 12px; }
+    .h { font-size: 15px; font-weight: bold; }
+    .h.o { fill: #c96f4a; }
+    .h.g { fill: #7fb069; }
+    .s { font-size: 12px; fill: #aaaaaa; }
+    .mono { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 11px; }
+    .o { fill: #c96f4a; }
+    .g { fill: #7fb069; }
+    .div { stroke: #555; stroke-width: 1px; stroke-dasharray: 3 4; }
+  </style>
+
+  <text class="h" x="264" y="34">the export, 293 lines, minus the last one</text>
+  <text class="s" x="264" y="52">saucier export | head -n -1</text>
+
+  <!-- line 1: catalogue 1909 -->
+  <text class="n" x="52" y="93">1</text>
+  <rect class="cat" x="62" y="76" width="404" height="26" rx="2"/>
+  <text class="l mono" x="70" y="94">catalogue  escoffier-1909  "preparations":151</text>
+
+  <!-- line 2: catalogue 1907 -->
+  <text class="n" x="52" y="125">2</text>
+  <rect class="cat" x="62" y="108" width="404" height="26" rx="2"/>
+  <text class="l mono" x="70" y="126">catalogue  escoffier-1907  "preparations":140</text>
+
+  <!-- lines 3..292 as a stack -->
+  <text class="n" x="52" y="157">3</text>
+  <rect class="rec" x="62" y="140" width="404" height="26" rx="2"/>
+  <text class="l mono" x="70" y="158">preparation  escoffier-1909:line:1317  BROWN ROUX</text>
+
+  <text class="n" x="52" y="189">4</text>
+  <rect class="rec" x="62" y="172" width="404" height="26" rx="2"/>
+  <text class="l mono" x="70" y="190">preparation  escoffier-1909:line:1374  PALE ROUX</text>
+
+  <text class="n" x="52" y="221">⋮</text>
+  <rect class="rec" x="62" y="204" width="404" height="26" rx="2" stroke-dasharray="2 4"/>
+  <text class="l s" x="70" y="222">287 more preparation records: the rest of the text, then the scan</text>
+
+  <text class="n" x="52" y="253">292</text>
+  <rect class="rec" x="62" y="236" width="404" height="26" rx="2"/>
+  <text class="l mono" x="70" y="254">preparation  escoffier-1907:line:41802  RASPBERRY SAUCE</text>
+
+  <!-- line 293: deleted -->
+  <text class="n o" x="52" y="285">293</text>
+  <rect class="gone" x="62" y="268" width="404" height="26" rx="2"/>
+  <text class="l mono o" x="70" y="286">preparation  escoffier-1907:line:41807  STRAWBERRY SAUCE</text>
+  <line class="strike" x1="66" y1="281" x2="462" y2="281"/>
+  <text class="n o" x="52" y="300">deleted</text>
+
+  <text class="s g" x="264" y="322">every remaining line is valid JSON</text>
+  <text class="s" x="264" y="340">a reader that only asks "did every line parse" says yes</text>
+
+  <!-- divider -->
+  <line class="div" x1="492" y1="70" x2="492" y2="350"/>
+
+  <!-- RIGHT: the verdict -->
+  <text class="h o" x="665" y="34">the reader</text>
+  <text class="s" x="665" y="52">saucier import --check</text>
+
+  <path class="eo" d="M466,121 L478,121 L478,190 L508,190" marker-end="url(#ao)"/>
+
+  <g transform="translate(512, 150)">
+    <rect class="verdict" x="0" y="0" width="306" height="84" rx="2"/>
+    <text class="l mono" x="12" y="24">saucier: line 2: catalogue</text>
+    <text class="l mono" x="12" y="42">'escoffier-1907' states 140</text>
+    <text class="l mono" x="12" y="60">preparations, the stream carries 139</text>
+    <text class="l mono o" x="12" y="78">exit 2</text>
+  </g>
+
+  <text class="s" x="665" y="272">the line number points at the record</text>
+  <text class="s" x="665" y="290">that made the promise, not at the gap</text>
+
+  <text class="s" x="420" y="405">syntax cannot see a missing line. the record that promised a count can.</text>
+</svg>

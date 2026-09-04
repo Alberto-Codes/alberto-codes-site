@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 840 384" style="max-width: 840px; background-color: transparent; font-family: 'trebuchet ms', verdana, arial, sans-serif; font-size: 14px;" role="img" aria-labelledby="t d">
+  <title id="t">One line, one record</title>
+  <desc id="d">One JSON record laid out with callouts. The envelope: schema saucier/1, type preparation, id escoffier-1909:line:1467, which is the catalogue and the line the heading sits on. Then catalogue escoffier-1909, title ORDINARY VELOUTÉ SAUCE, and a terms list with one entry: surface ORDINARY VELOUTÉ SAUCE, language fr, concept ordinary-veloute-sauce. Then parent pale-roux, with a note that null here means unresolved and never means the sauce has none. Then ref: entry 25, line 1467, fidelity transcription, the address a reader checks by hand. A body field follows, elided. Beneath: 293 lines, 2 catalogue records then 291 preparation records, 271,730 bytes, the same SHA-256 on every run.</desc>
+  <style>
+    .box { fill: #1f2020; stroke: #cccccc; stroke-width: 1.5px; }
+    text { fill: #cccccc; text-anchor: start; }
+    .mono { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 12.5px; }
+    .k { fill: #aaaaaa; }
+    .v { fill: #e6e6e6; }
+    .n { fill: #e6e6e6; }
+    .p { fill: #888888; }
+    .h { font-size: 15px; font-weight: bold; }
+    .s { font-size: 12px; fill: #aaaaaa; }
+    text.g, tspan.g { fill: #7fb069; }
+    text.o, tspan.o { fill: #c96f4a; }
+    .lead { stroke: #555; stroke-width: 1px; stroke-dasharray: 3 3; }
+    .brace { stroke: #7fb069; stroke-width: 2px; fill: none; }
+    .brace.o { stroke: #c96f4a; }
+  </style>
+
+  <text class="h" x="30" y="30">line 9 of the export, one record, pretty-printed here only</text>
+  <text class="s" x="30" y="48">on disk it is one line, 1,971 bytes, one newline at the end</text>
+
+  <rect class="box" x="30" y="64" width="500" height="236" rx="2"/>
+
+  <text class="mono" x="44" y="88"><tspan class="p">{ </tspan><tspan class="k">"schema"</tspan><tspan class="p">: </tspan><tspan class="v">"saucier/1"</tspan><tspan class="p">,</tspan></text>
+  <text class="mono" x="44" y="106"><tspan class="p">  </tspan><tspan class="k">"type"</tspan><tspan class="p">: </tspan><tspan class="v">"preparation"</tspan><tspan class="p">,</tspan></text>
+  <text class="mono" x="44" y="124"><tspan class="p">  </tspan><tspan class="k">"id"</tspan><tspan class="p">: </tspan><tspan class="v">"escoffier-1909:line:1467"</tspan><tspan class="p">,</tspan></text>
+  <text class="mono" x="44" y="142"><tspan class="p">  </tspan><tspan class="k">"catalogue"</tspan><tspan class="p">: </tspan><tspan class="v">"escoffier-1909"</tspan><tspan class="p">,</tspan></text>
+  <text class="mono" x="44" y="160"><tspan class="p">  </tspan><tspan class="k">"title"</tspan><tspan class="p">: </tspan><tspan class="v">"ORDINARY VELOUTÉ SAUCE"</tspan><tspan class="p">,</tspan></text>
+  <text class="mono" x="44" y="178"><tspan class="p">  </tspan><tspan class="k">"terms"</tspan><tspan class="p">: [{ </tspan><tspan class="k">"surface"</tspan><tspan class="p">: </tspan><tspan class="v">"ORDINARY VELOUTÉ SAUCE"</tspan><tspan class="p">,</tspan></text>
+  <text class="mono" x="44" y="196"><tspan class="p">     </tspan><tspan class="k">"language"</tspan><tspan class="p">: </tspan><tspan class="v">"fr"</tspan><tspan class="p">, </tspan><tspan class="k">"concept"</tspan><tspan class="p">: </tspan><tspan class="v">"ordinary-veloute-sauce"</tspan><tspan class="p"> }],</tspan></text>
+  <text class="mono" x="44" y="214"><tspan class="p">  </tspan><tspan class="k">"concept"</tspan><tspan class="p">: </tspan><tspan class="v">"ordinary-veloute-sauce"</tspan><tspan class="p">,</tspan></text>
+  <text class="mono" x="44" y="232"><tspan class="p">  </tspan><tspan class="k">"parent"</tspan><tspan class="p">: </tspan><tspan class="v o">"pale-roux"</tspan><tspan class="p">,</tspan></text>
+  <text class="mono" x="44" y="250"><tspan class="p">  </tspan><tspan class="k">"ref"</tspan><tspan class="p">: { </tspan><tspan class="k">"entry"</tspan><tspan class="p">: </tspan><tspan class="n g">25</tspan><tspan class="p">, </tspan><tspan class="k">"line"</tspan><tspan class="p">: </tspan><tspan class="n g">1467</tspan><tspan class="p">, </tspan><tspan class="k">"fidelity"</tspan><tspan class="p">: </tspan><tspan class="v">"transcription"</tspan><tspan class="p"> },</tspan></text>
+  <text class="mono" x="44" y="268"><tspan class="p">  </tspan><tspan class="k">"body"</tspan><tspan class="p">: </tspan><tspan class="v">"_Quantities Required for Four Quarts._— ..."</tspan></text>
+  <text class="mono" x="44" y="286"><tspan class="p">}</tspan></text>
+
+  <!-- callouts -->
+  <path class="brace" d="M538,78 L546,78 L546,130 L538,130"/>
+  <line class="lead" x1="546" y1="104" x2="566" y2="104"/>
+  <text class="g" x="570" y="100">the envelope</text>
+  <text class="s" x="570" y="116">schema, type, and an id that is the</text>
+  <text class="s" x="570" y="130">catalogue plus the heading's line</text>
+
+  <path class="brace" d="M538,150 L546,150 L546,218 L538,218"/>
+  <line class="lead" x1="546" y1="184" x2="566" y2="184"/>
+  <text class="g" x="570" y="180">what the book says</text>
+  <text class="s" x="570" y="196">the heading, each name in it with its</text>
+  <text class="s" x="570" y="210">language, and the concept they fold to</text>
+
+  <path class="brace o" d="M538,224 L546,224 L546,240 L538,240"/>
+  <line class="lead" x1="546" y1="232" x2="566" y2="232"/>
+  <text class="o" x="570" y="228">the parent the opening paragraph states</text>
+  <text class="s" x="570" y="244">null means unresolved, never "has none"</text>
+
+  <path class="brace" d="M538,244 L546,244 L546,258 L538,258"/>
+  <line class="lead" x1="546" y1="251" x2="566" y2="251"/>
+  <text class="g" x="570" y="262">the address a reader checks by hand</text>
+  <text class="s" x="570" y="278">entry 25, line 1467, in a transcription</text>
+
+  <!-- footer -->
+  <line class="lead" x1="30" y1="330" x2="810" y2="330"/>
+  <text class="s" x="30" y="352">the whole export: 293 lines. 2 catalogue records, each stating how many preparations follow, then 291 preparation records.</text>
+  <text class="s" x="30" y="368">271,730 bytes, fixed key order, no timestamp, one newline per record, so the same two catalogues give the same SHA-256 every run.</text>
+</svg>
