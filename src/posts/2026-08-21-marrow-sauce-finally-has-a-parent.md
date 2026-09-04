@@ -70,6 +70,8 @@ now.
 
 ![A chain of four sauces descending. At the top, Espagnole, entry 22 line 1392, the only one the source explicitly calls a mother. A dashed arrow marked "assumed, not stated" runs down to half-glaze, a reduction of Espagnole the book never spells out. Another dashed "assumed, not stated" arrow runs to Sauce Bordelaise, entry 32 line 1680, whose opening says "half-glaze" and never "Espagnole", so its parent is still null. The last arrow, marked "stated outright, now resolved", is solid: Marrow Sauce, entry 45 line 1895, which calls itself "only a variety of the Bordelaise", now records parent: sauce-bordelaise.](/saucier-unstated-chain-resolved.svg)
 
+*Correction, 2026-09-03: this figure and the paragraph beneath it say the book never spells out that half glaze is a reduction of Espagnole. It does, at entry 23, line 1437, in the first sentence of an entry the parser at this tag could not see. The figure is left as printed, because it shows what the parser recorded. [The post about line 1437](/blog/2026-09-03-the-book-spells-it-out-at-line-1437) is the correction.*
+
 Notice what did not change. Bordelaise's own parent is still null. Its opening
 names shallots, red wine, mignonette pepper, thyme, bay, and half a pint of
 half-glaze — and a *demi-glace* is an Espagnole reduction, which every reader

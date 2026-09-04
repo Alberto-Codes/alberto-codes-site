@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 840 640" style="max-width: 840px; background-color: transparent; font-family: 'trebuchet ms', verdana, arial, sans-serif; font-size: 16px;" role="img" aria-labelledby="t d">
+  <title id="t">The chain from brown roux to Marrow Sauce, every link stated, at v0.4.0</title>
+  <desc id="d">Five sauces in a vertical chain. Brown roux, entry 19 line 1317, states nothing. Espagnole, entry 22 line 1392, opens with one lb. of brown roux. Half glaze, entry 23 line 1437, opens with This is the Espagnole sauce. Sauce Bordelaise, entry 32 line 1680, opens with half a pint of half-glaze. Marrow Sauce, entry 45 line 1895, calls itself only a variety of the Bordelaise. Every arrow is solid and labelled stated. A side note says that the two earlier figures drew the top two arrows dashed and labelled them assumed, not stated, because the parser could not see entries 19 to 23.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7fb069"/>
+    </marker>
+  </defs>
+  <style>
+    .node rect { fill: #1f2020; stroke: #7fb069; stroke-width: 2px; }
+    .node.was rect { stroke: #7fb069; }
+    .node text { fill: #cccccc; text-anchor: middle; }
+    .node .name { font-weight: bold; }
+    .edge { stroke: #7fb069; stroke-width: 2px; fill: none; }
+    .edge.thick { stroke-width: 3.5px; }
+    .label { fill: #cccccc; text-anchor: middle; font-size: 14px; }
+    .label rect { fill: #575757; opacity: 0.6; stroke: none; }
+    .ghost { stroke: #c96f4a; stroke-width: 2px; stroke-dasharray: 5 3; fill: none; }
+    .note { fill: #cccccc; font-size: 13px; }
+    .note .head { fill: #c96f4a; font-weight: bold; }
+  </style>
+
+  <!-- brown roux -->
+  <g class="node" transform="translate(320, 40)">
+    <rect x="-300" y="-27" width="600" height="54" rx="2"/>
+    <text y="-4"><tspan class="name">BROWN ROUX</tspan>  ·  entry 19, line 1317  ·  states no parent</text>
+    <text y="16" font-size="13">out of the catalogue until v0.4.0: its heading names no mother</text>
+  </g>
+  <path class="edge" d="M320,67 L320,128" marker-end="url(#arrow)"/>
+  <g class="label" transform="translate(320, 98)"><rect x="-170" y="-11" width="340" height="22"/><text y="5">"one lb. of brown roux"  ·  stated, resolved</text></g>
+
+  <!-- espagnole -->
+  <g class="node" transform="translate(320, 160)">
+    <rect x="-300" y="-27" width="600" height="54" rx="2"/>
+    <text y="-4"><tspan class="name">ESPAGNOLE</tspan>  ·  entry 22, line 1392  ·  a mother, and no longer a root</text>
+    <text y="16" font-size="13">parent: brown-roux</text>
+  </g>
+  <path class="edge" d="M320,187 L320,248" marker-end="url(#arrow)"/>
+  <g class="label" transform="translate(320, 218)"><rect x="-230" y="-11" width="460" height="22"/><text y="5">"This is the Espagnole sauce"  ·  stated at line 1437, resolved</text></g>
+
+  <!-- half glaze -->
+  <g class="node" transform="translate(320, 280)">
+    <rect x="-300" y="-27" width="600" height="54" rx="2"/>
+    <text y="-4"><tspan class="name">HALF GLAZE</tspan>  ·  entry 23, line 1437  ·  in The Leading Warm Sauces</text>
+    <text y="16" font-size="13">out of the catalogue until v0.4.0  ·  parent: espagnole</text>
+  </g>
+  <path class="edge" d="M320,307 L320,368" marker-end="url(#arrow)"/>
+  <g class="label" transform="translate(320, 338)"><rect x="-185" y="-11" width="370" height="22"/><text y="5">"one-half pint of half-glaze"  ·  stated, resolved</text></g>
+
+  <!-- bordelaise -->
+  <g class="node" transform="translate(320, 400)">
+    <rect x="-300" y="-27" width="600" height="54" rx="2"/>
+    <text y="-4"><tspan class="name">SAUCE BORDELAISE</tspan>  ·  entry 32, line 1680  ·  post #2 left it unresolved on purpose</text>
+    <text y="16" font-size="13">parent: half-glaze</text>
+  </g>
+  <path class="edge thick" d="M320,427 L320,488" marker-end="url(#arrow)"/>
+  <g class="label" transform="translate(320, 458)"><rect x="-225" y="-11" width="450" height="22"/><text y="5">"only a variety of the Bordelaise"  ·  stated, resolved in v0.2.0</text></g>
+
+  <!-- marrow -->
+  <g class="node" transform="translate(320, 520)">
+    <rect x="-300" y="-27" width="600" height="54" rx="2"/>
+    <text y="-4"><tspan class="name">MARROW SAUCE</tspan>  ·  entry 45, line 1895</text>
+    <text y="16" font-size="13">parent: sauce-bordelaise</text>
+  </g>
+
+  <!-- side note: what the earlier figures drew -->
+  <g transform="translate(640, 120)">
+    <path class="ghost" d="M20,0 L20,60"/>
+    <path class="ghost" d="M20,120 L20,180"/>
+    <g class="note">
+      <text x="40" y="8" class="head">the two earlier figures</text>
+      <text x="40" y="28">drew these two arrows</text>
+      <text x="40" y="46">dashed and labelled them</text>
+      <text x="40" y="64">"assumed, not stated"</text>
+      <text x="40" y="94">The book states both.</text>
+      <text x="40" y="112">The parser could not see</text>
+      <text x="40" y="130">entries 19 to 23, because</text>
+      <text x="40" y="148">a rule of mine required</text>
+      <text x="40" y="166">their headings to name</text>
+      <text x="40" y="184">a mother.</text>
+    </g>
+  </g>
+
+  <!-- footer -->
+  <text x="420" y="600" class="note" text-anchor="middle">saucier v0.4.0  ·  escoffier-1909  ·  151 sauces, 57 derived, 94 unresolved  ·  every arrow quotes an opening paragraph</text>
+</svg>

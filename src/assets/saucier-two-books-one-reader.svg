@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 840 470" style="max-width: 840px; background-color: transparent; font-family: 'trebuchet ms', verdana, arial, sans-serif; font-size: 14px;" role="img" aria-labelledby="t d">
+  <title id="t">Two books, one reader</title>
+  <desc id="d">Two panels. Left, the scan's blind spot: the 1907 scan and the 1909 text go into saucier diff, which measures 284 entries the scan cannot read, because a clean witness exists to compare against. Right, the mother clause's blind spot: both books go into the same is_sauce rule, and both come out missing the same 27 entries. Identical absences from two witnesses, and nothing to compare against. A second copy of the book cannot catch an error in the reader.</desc>
+  <defs>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7fb069"/></marker>
+    <marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c96f4a"/></marker>
+  </defs>
+  <style>
+    .book { fill: #1f2020; stroke: #cccccc; stroke-width: 1.5px; }
+    .ok { fill: #1f2020; stroke: #7fb069; stroke-width: 2px; }
+    .bad { fill: #1f2020; stroke: #c96f4a; stroke-width: 2px; stroke-dasharray: 5 3; }
+    .eg { stroke: #7fb069; stroke-width: 2px; fill: none; }
+    .eo { stroke: #c96f4a; stroke-width: 2px; fill: none; }
+    text { fill: #cccccc; text-anchor: middle; }
+    .h { font-size: 15px; font-weight: bold; }
+    .h.o { fill: #c96f4a; }
+    .h.g { fill: #7fb069; }
+    .s { font-size: 12px; fill: #aaaaaa; }
+    .div { stroke: #555; stroke-width: 1px; stroke-dasharray: 3 4; }
+  </style>
+
+  <line class="div" x1="420" y1="20" x2="420" y2="430"/>
+
+  <!-- LEFT PANEL -->
+  <text class="h g" x="210" y="34">the scan's blind spot</text>
+  <text class="s" x="210" y="52">the second-copy post</text>
+
+  <g transform="translate(60, 80)">
+    <rect class="book" x="0" y="0" width="140" height="56" rx="2"/>
+    <text x="70" y="24">escoffier-1907</text>
+    <text class="s" x="70" y="42">scan, Internet Archive</text>
+  </g>
+  <g transform="translate(220, 80)">
+    <rect class="book" x="0" y="0" width="140" height="56" rx="2"/>
+    <text x="70" y="24">escoffier-1909</text>
+    <text class="s" x="70" y="42">text, Project Gutenberg</text>
+  </g>
+
+  <path class="eg" d="M130,136 L130,170 L210,170 L210,196" marker-end="url(#ag)"/>
+  <path class="eg" d="M290,136 L290,170 L210,170"/>
+
+  <g transform="translate(120, 200)">
+    <rect class="ok" x="0" y="0" width="180" height="50" rx="2"/>
+    <text x="90" y="22">saucier diff</text>
+    <text class="s" x="90" y="40">one witness against the other</text>
+  </g>
+
+  <path class="eg" d="M210,250 L210,296" marker-end="url(#ag)"/>
+
+  <g transform="translate(60, 300)">
+    <rect class="ok" x="0" y="0" width="300" height="56" rx="2"/>
+    <text x="150" y="24">284 entries the scan cannot read</text>
+    <text class="s" x="150" y="42">measured, and printed beside every count</text>
+  </g>
+
+  <text class="s" x="210" y="395">a clean witness existed,</text>
+  <text class="s" x="210" y="412">so the blind spot had a size</text>
+
+  <!-- RIGHT PANEL -->
+  <text class="h o" x="630" y="34">the mother clause's blind spot</text>
+  <text class="s" x="630" y="52">this post</text>
+
+  <g transform="translate(480, 80)">
+    <rect class="book" x="0" y="0" width="140" height="56" rx="2"/>
+    <text x="70" y="24">escoffier-1907</text>
+    <text class="s" x="70" y="42">scan, Internet Archive</text>
+  </g>
+  <g transform="translate(640, 80)">
+    <rect class="book" x="0" y="0" width="140" height="56" rx="2"/>
+    <text x="70" y="24">escoffier-1909</text>
+    <text class="s" x="70" y="42">text, Project Gutenberg</text>
+  </g>
+
+  <path class="eo" d="M550,136 L550,170 L630,170 L630,196" marker-end="url(#ao)"/>
+  <path class="eo" d="M710,136 L710,170 L630,170"/>
+
+  <g transform="translate(500, 200)">
+    <rect class="bad" x="0" y="0" width="260" height="50" rx="2"/>
+    <text x="130" y="22">is_sauce: heading names a mother?</text>
+    <text class="s" x="130" y="40">one rule, both books</text>
+  </g>
+
+  <path class="eo" d="M580,250 L580,296" marker-end="url(#ao)"/>
+  <path class="eo" d="M680,250 L680,296" marker-end="url(#ao)"/>
+
+  <g transform="translate(480, 300)">
+    <rect class="bad" x="0" y="0" width="140" height="56" rx="2"/>
+    <text x="70" y="24">1907 catalogue</text>
+    <text class="s" x="70" y="42">the same 27 missing</text>
+  </g>
+  <g transform="translate(640, 300)">
+    <rect class="bad" x="0" y="0" width="140" height="56" rx="2"/>
+    <text x="70" y="24">1909 catalogue</text>
+    <text class="s" x="70" y="42">the same 27 missing</text>
+  </g>
+
+  <text class="s" x="630" y="395">identical absences from two witnesses,</text>
+  <text class="s" x="630" y="412">and nothing left to compare against</text>
+
+  <text x="420" y="452" style="font-size: 14px;">A second copy of the book cannot catch an error in the reader. Only a second reader can.</text>
+</svg>

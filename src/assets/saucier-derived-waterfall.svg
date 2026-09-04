@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 840 430" style="max-width: 840px; background-color: transparent; font-family: 'trebuchet ms', verdana, arial, sans-serif; font-size: 15px;" role="img" aria-labelledby="t d">
+  <title id="t">Derived went from 50 to 57, and the seven is three numbers</title>
+  <desc id="d">A waterfall chart. Derived at v0.3.0 is 50. Twelve sauces gained a parent, up to 62. Ten sauces lost one, down to 52, drawn in dashed orange. Five admitted entries state a parent of their own, up to 57. Derived at v0.4.0 is 57. The net gain of seven hides a loss of ten.</desc>
+  <style>
+    .axis { stroke: #777; stroke-width: 1px; }
+    .tick { fill: #999; font-size: 13px; text-anchor: end; }
+    .gain { fill: #1f2020; stroke: #7fb069; stroke-width: 2px; }
+    .total { fill: #2a3a2a; stroke: #7fb069; stroke-width: 2px; }
+    .loss { fill: #1f2020; stroke: #c96f4a; stroke-width: 2px; stroke-dasharray: 5 3; }
+    .link { stroke: #777; stroke-width: 1px; stroke-dasharray: 2 3; fill: none; }
+    .val { fill: #cccccc; text-anchor: middle; font-weight: bold; font-size: 16px; }
+    .val.neg { fill: #c96f4a; }
+    .cat { fill: #cccccc; text-anchor: middle; font-size: 13px; }
+    .note { fill: #cccccc; font-size: 13px; text-anchor: middle; }
+  </style>
+
+  <!-- axis: value v maps to y = 340 - (v - 40) * 10 -->
+  <line class="axis" x1="90" y1="340" x2="810" y2="340"/>
+  <g>
+    <line class="axis" x1="86" y1="340" x2="90" y2="340"/><text class="tick" x="80" y="345">40</text>
+    <line class="axis" x1="86" y1="240" x2="90" y2="240"/><text class="tick" x="80" y="245">50</text>
+    <line class="axis" x1="86" y1="140" x2="90" y2="140"/><text class="tick" x="80" y="145">60</text>
+  </g>
+
+  <!-- bar 1: v0.3.0 total, 40 to 50 -->
+  <rect class="total" x="110" y="240" width="110" height="100" rx="2"/>
+  <text class="val" x="165" y="228">50</text>
+  <text class="cat" x="165" y="362">derived</text>
+  <text class="cat" x="165" y="380">at v0.3.0</text>
+  <line class="link" x1="220" y1="240" x2="255" y2="240"/>
+
+  <!-- bar 2: +12, 50 to 62 -->
+  <rect class="gain" x="255" y="120" width="110" height="120" rx="2"/>
+  <text class="val" x="310" y="108">+12</text>
+  <text class="cat" x="310" y="362">gained the parent</text>
+  <text class="cat" x="310" y="380">Escoffier wrote</text>
+  <line class="link" x1="365" y1="120" x2="400" y2="120"/>
+
+  <!-- bar 3: -10, 62 down to 52 -->
+  <rect class="loss" x="400" y="120" width="110" height="100" rx="2"/>
+  <text class="val neg" x="455" y="108">−10</text>
+  <text class="cat" x="455" y="362">lost one to a butter</text>
+  <text class="cat" x="455" y="380">or to half glaze</text>
+  <line class="link" x1="510" y1="220" x2="545" y2="220"/>
+
+  <!-- bar 4: +5, 52 to 57 -->
+  <rect class="gain" x="545" y="170" width="110" height="50" rx="2"/>
+  <text class="val" x="600" y="158">+5</text>
+  <text class="cat" x="600" y="362">admitted entries that</text>
+  <text class="cat" x="600" y="380">state a parent</text>
+  <line class="link" x1="655" y1="170" x2="690" y2="170"/>
+
+  <!-- bar 5: v0.4.0 total, 40 to 57 -->
+  <rect class="total" x="690" y="170" width="110" height="170" rx="2"/>
+  <text class="val" x="745" y="158">57</text>
+  <text class="cat" x="745" y="362">derived</text>
+  <text class="cat" x="745" y="380">at v0.4.0</text>
+
+  <!-- the seven -->
+  <line class="link" x1="165" y1="240" x2="745" y2="240"/>
+  <text class="note" x="455" y="60">net +7, read alone, is a gain that hides a loss</text>
+
+  <text class="note" x="450" y="418">escoffier-1909  ·  every bar is a list of named sauces in ADR-0015</text>
+</svg>

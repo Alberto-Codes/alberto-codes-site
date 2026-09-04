@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 840 400" style="max-width: 840px; background-color: transparent; font-family: 'trebuchet ms', verdana, arial, sans-serif; font-size: 14px;" role="img" aria-labelledby="t d">
+  <title id="t">The veto gate, at v0.3.0 and at v0.4.0</title>
+  <desc id="d">Two rows of a decision flow. At v0.3.0: a numbered entry; does the heading say sauce, yes goes in; no, is it in a chapter titled as sauces; no goes out; yes reaches a third test, does the heading name a mother, drawn in dashed orange; no sends 27 entries out, yes goes in. At v0.4.0 the third test is gone: an entry in a chapter titled as sauces goes straight in.</desc>
+  <defs>
+    <marker id="vg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7fb069"/></marker>
+    <marker id="vo" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c96f4a"/></marker>
+    <marker id="vn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#999"/></marker>
+  </defs>
+  <style>
+    .q { fill: #1f2020; stroke: #cccccc; stroke-width: 1.5px; }
+    .in { fill: #2a3a2a; stroke: #7fb069; stroke-width: 2px; }
+    .out { fill: #1f2020; stroke: #999; stroke-width: 1.5px; }
+    .veto { fill: #1f2020; stroke: #c96f4a; stroke-width: 2px; stroke-dasharray: 5 3; }
+    .en { stroke: #999; stroke-width: 1.5px; fill: none; }
+    .eg { stroke: #7fb069; stroke-width: 2px; fill: none; }
+    .eo { stroke: #c96f4a; stroke-width: 2px; fill: none; }
+    text { fill: #cccccc; text-anchor: middle; }
+    .lbl { font-size: 12px; fill: #aaaaaa; }
+    .row { font-size: 15px; font-weight: bold; text-anchor: start; }
+    .row.o { fill: #c96f4a; }
+    .row.g { fill: #7fb069; }
+    .div { stroke: #555; stroke-width: 1px; stroke-dasharray: 3 4; }
+  </style>
+
+  <!-- ROW 1: v0.3.0 -->
+  <text class="row o" x="20" y="30">v0.3.0</text>
+
+  <g transform="translate(20, 60)"><rect class="q" x="0" y="0" width="110" height="44" rx="22"/><text x="55" y="27">numbered entry</text></g>
+  <path class="en" d="M130,82 L165,82" marker-end="url(#vn)"/>
+
+  <g transform="translate(168, 60)"><rect class="q" x="0" y="0" width="140" height="44" rx="22"/><text x="70" y="27">heading says sauce?</text></g>
+  <path class="eg" d="M308,82 L360,82 L360,42 L690,42 L690,60" marker-end="url(#vg)"/>
+  <text class="lbl" x="335" y="76">yes</text>
+  <path class="en" d="M238,104 L238,140" marker-end="url(#vn)"/>
+  <text class="lbl" x="252" y="126">no</text>
+
+  <g transform="translate(150, 144)"><rect class="q" x="0" y="0" width="176" height="44" rx="22"/><text x="88" y="27">in a chapter titled sauces?</text></g>
+  <path class="en" d="M238,188 L238,224" marker-end="url(#vn)"/>
+  <text class="lbl" x="252" y="210">no</text>
+  <g transform="translate(193, 228)"><rect class="out" x="0" y="0" width="90" height="36" rx="18"/><text x="45" y="23">out</text></g>
+
+  <path class="eo" d="M326,166 L400,166" marker-end="url(#vo)"/>
+  <text class="lbl" x="363" y="160">yes</text>
+
+  <g transform="translate(404, 144)"><rect class="veto" x="0" y="0" width="190" height="44" rx="22"/><text x="95" y="27">heading names a mother?</text></g>
+  <path class="eo" d="M499,188 L499,224" marker-end="url(#vo)"/>
+  <text class="lbl" x="513" y="210">no</text>
+  <g transform="translate(414, 228)"><rect class="veto" x="0" y="0" width="170" height="36" rx="18"/><text x="85" y="23">out: 27 entries vetoed</text></g>
+  <path class="eg" d="M594,166 L640,166 L640,82 L660,82" marker-end="url(#vg)"/>
+  <text class="lbl" x="617" y="160">yes</text>
+
+  <g transform="translate(660, 60)"><rect class="in" x="0" y="0" width="160" height="44" rx="22"/><text x="80" y="27">in the catalogue: 124</text></g>
+
+  <line class="div" x1="20" y1="286" x2="820" y2="286"/>
+
+  <!-- ROW 2: v0.4.0 -->
+  <text class="row g" x="20" y="316">v0.4.0</text>
+
+  <g transform="translate(20, 336)"><rect class="q" x="0" y="0" width="110" height="44" rx="22"/><text x="55" y="27">numbered entry</text></g>
+  <path class="en" d="M130,358 L165,358" marker-end="url(#vn)"/>
+  <g transform="translate(168, 336)"><rect class="q" x="0" y="0" width="140" height="44" rx="22"/><text x="70" y="27">heading says sauce?</text></g>
+  <path class="en" d="M308,358 L340,358" marker-end="url(#vn)"/>
+  <text class="lbl" x="324" y="352">no</text>
+  <g transform="translate(344, 336)"><rect class="q" x="0" y="0" width="176" height="44" rx="22"/><text x="88" y="27">in a chapter titled sauces?</text></g>
+  <path class="eg" d="M520,358 L656,358" marker-end="url(#vg)"/>
+  <text class="lbl" x="588" y="345">yes, and that decides it</text>
+  <g transform="translate(660, 336)"><rect class="in" x="0" y="0" width="160" height="44" rx="22"/><text x="80" y="27">in the catalogue: 151</text></g>
+</svg>
