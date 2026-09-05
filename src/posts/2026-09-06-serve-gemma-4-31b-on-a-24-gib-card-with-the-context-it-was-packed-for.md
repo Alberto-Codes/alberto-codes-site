@@ -26,10 +26,11 @@ and the evidence is on
 [the model card](https://huggingface.co/Alberto-Codes/gemma-4-31B-it-fit24gib-GGUF).
 This post repeats none of it.
 
-Every number below is a published measurement, taken on an RTX 4090
-running llama.cpp b10362 on 2026-08-31. Your card is a different box,
-and the last section is about what to do when a number does not
-reproduce.
+Every number below is published, and the serve boundaries were
+measured on an RTX 4090 running llama.cpp b10362 on 2026-08-31.
+Numbers from another frame, the H100 build, the multi-image ladder,
+say so where they appear. Your card is a different box, and the last
+section is about what to do when a number does not reproduce.
 
 ## Before you start
 
@@ -196,8 +197,10 @@ until ! pgrep -x llama-server > /dev/null; do sleep 1; done
 "$BIN/llama-server" -m "$M/gemma-4-31B-it-fit24gib.gguf" -c 90112 -ngl 99 -np 1 --port 8991
 ```
 
-That load should fail. If it passes, your box idles with more VRAM
-free than the card's did, and you have a higher boundary. The card
+If it fails, you have confirmed the boundary; if it loads, stop it
+with Ctrl-C and keep climbing a rung at a time until one fails; that
+rung is yours. A higher rung means your box idles with more VRAM free
+than the card's did. The card
 calls the tuple of box, build, backend, and free VRAM before load the
 frame, and it prints the frame beside every boundary, because the
 same file served 81,920 for text three days earlier in a frame with
@@ -253,7 +256,9 @@ curl -s localhost:8991/v1/chat/completions -H 'Content-Type: application/json' \
 ```
 
 One 768×768 image costs 256 decoder tokens on this pack, measured at
-the server. One 1280×720 screenshot costs 271 with its wrapper.
+the server. The 1280×720 screenshot above is 264 image tokens, 271
+once its wrapper is counted, which is why the cap is 264 and the
+decoder sees 271.
 
 ## What you should see
 

@@ -105,9 +105,11 @@ why a 14.92 GiB pack beats the 16.44 GiB official build on this card is
 and the evidence is on
 [the model card](https://huggingface.co/Alberto-Codes/gemma-4-31B-it-fit24gib-GGUF).
 
-Every number below is a published measurement, taken on an RTX 4090 running
-llama.cpp b10362 on 2026-08-31. Your card is a different box, and the last
-section is about what to do when a number does not reproduce.
+Every number below is published, and the serve boundaries were measured on
+an RTX 4090 running llama.cpp b10362 on 2026-08-31. Numbers from another
+frame, the H100 build, the multi-image ladder, say so where they appear.
+Your card is a different box, and the last section is about what to do when
+a number does not reproduce.
 
 ## Before you start
 
@@ -271,8 +273,9 @@ curl -s localhost:8991/v1/chat/completions -H 'Content-Type: application/json' \
   -d @req.json | python3 -c 'import json,sys; print(json.load(sys.stdin)["choices"][0]["message"]["content"])'
 ```
 
-One 768×768 image costs 256 decoder tokens on this pack. One 1280×720
-screenshot costs 271 with its wrapper.
+One 768×768 image costs 256 decoder tokens on this pack, measured at the
+server. The 1280×720 screenshot above is 264 image tokens, 271 once its
+wrapper is counted, which is why the cap is 264 and the decoder sees 271.
 
 ## What you should see
 
