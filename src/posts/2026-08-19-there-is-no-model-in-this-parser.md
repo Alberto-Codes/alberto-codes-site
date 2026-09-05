@@ -283,3 +283,8 @@ there is
 [an issue template for exactly that](https://github.com/Alberto-Codes/saucier/issues/new?template=extraction.yml).
 It asks for the entry number and the source lines, because a claim about this
 project should be checkable the same way the project's own claims are.
+
+**The release:** [saucier v0.1.0](https://github.com/Alberto-Codes/saucier/releases/tag/v0.1.0)
+— the parser exactly as this post leaves it: 124 sauces, 29 linked to a mother,
+95 that state no base in their prose, and every one of those claims citing a
+line you can open with `sed`. MIT.

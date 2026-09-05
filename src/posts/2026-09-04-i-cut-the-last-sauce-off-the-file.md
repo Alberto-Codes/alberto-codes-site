@@ -186,3 +186,10 @@ through,
 [the issue template](https://github.com/Alberto-Codes/saucier/issues/new?template=extraction.yml)
 asks for the entry number and the source lines. Line 2314 of the scan is
 where I would start.
+
+**The release:** [saucier v0.5.0](https://github.com/Alberto-Codes/saucier/releases/tag/v0.5.0)
+— the stream and the reader that refuses it: `saucier export` writes both
+witnesses as `saucier/1` records, 293 lines to the same SHA-256 every run, and
+`saucier import --check` rejects the empty file, the truncated one, the
+repeated key and the rest, each with the line number where there is a line to
+name — the empty stream has none. MIT.

@@ -280,3 +280,8 @@ on purpose. If you find a stated parent the resolver missed — or an inferred
 one it should never have recorded — [the issue template](https://github.com/Alberto-Codes/saucier/issues/new?template=extraction.yml)
 asks for the entry number and the source lines, because a claim about this
 project should be checkable the same way the project's own claims are.
+
+**The release:** [saucier v0.2.0](https://github.com/Alberto-Codes/saucier/releases/tag/v0.2.0)
+— the resolver this post argues for: a parent may be any catalogued
+preparation, derived goes from 29 to 50, three derivations the old rule
+recorded are given back, and Bordelaise stays unresolved on purpose. MIT.
