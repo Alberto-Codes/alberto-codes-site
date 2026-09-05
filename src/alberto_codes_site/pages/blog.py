@@ -137,7 +137,7 @@ def _code_block(value: object, **props) -> rx.Component:
             min_width="100%",
             width="max-content",
         ),
-        type="always",
+        type="auto",
         scrollbars="horizontal",
         width="100%",
         min_width="0",

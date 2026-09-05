@@ -27,8 +27,10 @@ Before: all blocks had `white-space: pre`, `overflow-x: auto`, and zero reserved
 scrollbar height; overlay scrollbars were invisible. After: all 17 blocks retain
 `white-space: pre`. The nine overflowing blocks have visible tracks and thumbs
 at `scrollLeft = 0`, in both themes, without hovering or scrolling. The other
-eight fit. The scroll viewport now owns scrolling; the inner `pre` takes its
-natural width. The dedicated 12 px bottom strip keeps the 4 px track clear of text.
+eight fit, and render no scrollbar element at all — the affordance appears
+exactly where content is hidden. The scroll viewport now owns scrolling; the
+inner `pre` takes its natural width. The dedicated 12 px bottom strip keeps the
+4 px track clear of text.
 
 Thumb/track colors use the site's gray tokens: light rgb(96, 100, 108) against
 rgb(232, 232, 236), dark rgb(176, 180, 186) against rgb(39, 42, 45).
@@ -39,7 +41,7 @@ At 390 × 844 (358 px code viewport), all 17 draft blocks overflow and have visi
 4 px thumbs. No document-level horizontal overflow occurs. Gemma was checked
 in light mode and Post 6 in dark mode at this size. An existing published post,
 `2026-09-04-i-cut-the-last-sauce-off-the-file`, was also checked: all four blocks
-fit at desktop width.
+fit at desktop width and show no scrollbar.
 
 Inline code has 0 px trailing padding throughout both drafts and the published
 post. Following punctuation sits flush; ordinary prose retains its authored
@@ -70,6 +72,8 @@ placeholder in the screenshot is unrelated to the code rendering change.
 Open a post in Chrome with `chrome-devtools-axi`, resize to the dimensions above,
 and evaluate the function in [measure.js](measure.js). Capture before interacting
 with any scrollbar. Toggle the navbar theme button and repeat. Check each row:
-`whiteSpace` is `pre`; either `overflow` is zero or `visible` is true with nonzero
-thumb dimensions. `pageOverflow` must be zero. Scroll an overflowing viewport
-with the keyboard and verify its maximum offset is reachable.
+`whiteSpace` is `pre`; and `visible` is true with nonzero thumb dimensions if and
+only if `overflow` is nonzero — a row with `overflow` zero must report
+`trackHeight` zero, because no scrollbar element is rendered for it.
+`pageOverflow` must be zero. Scroll an overflowing viewport with the keyboard and
+verify its maximum offset is reachable.
