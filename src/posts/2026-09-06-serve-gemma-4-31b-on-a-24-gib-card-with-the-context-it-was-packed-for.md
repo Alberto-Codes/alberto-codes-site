@@ -139,9 +139,10 @@ Three flags carry the claim.
   this geometry adds about 2,400 MiB of sliding-window cache and
   fails loads that fit at one.
 
-Wait for `model loaded` in the log, then hit the health route. Do not
-wait on `all slots are idle`: the CUDA build never prints it, and a
-check on that line waits forever with the server healthy.
+Wait for `model loaded` in the log, then hit the health route. This
+build logs `all slots are idle` only at trace verbosity, so do not
+wait on it: a check on that line waits forever with the server
+healthy.
 
 ```bash
 while pgrep -x llama-server > /dev/null && ! grep -q "model loaded" server.log; do sleep 2; done
@@ -205,13 +206,18 @@ boundaries compare.
 
 ## 6. Serve images
 
-Images need the sidecar and two more flags. From the card:
+Images need the sidecar and two more flags. Stop whichever server is
+still holding the card, start the image server from the card, and wait
+for `model loaded` the same way as in step 3:
 
 ```bash
+pkill -f llama-server
+until ! pgrep -x llama-server > /dev/null; do sleep 1; done
 "$BIN/llama-server" -m "$M/gemma-4-31B-it-fit24gib.gguf" \
   --mmproj "$M/gemma-4-31B-it-mmproj-q4km.gguf" \
   -c 73728 -ngl 99 -np 1 --mtmd-batch-max-tokens 264 \
   --port 8991 > server.log 2>&1 &
+while pgrep -x llama-server > /dev/null && ! grep -q "model loaded" server.log; do sleep 2; done
 ```
 
 - `-c 73728` is the measured one-image boundary. The next rung,

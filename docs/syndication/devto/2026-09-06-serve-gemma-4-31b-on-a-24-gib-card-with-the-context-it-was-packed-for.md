@@ -185,8 +185,8 @@ Three flags carry the claim.
   geometry adds about 2,400 MiB of sliding-window cache and fails loads
   that fit at one.
 
-Wait for `model loaded` in the log, then hit the health route. Do not wait
-on `all slots are idle`; the CUDA build never prints it.
+Wait for `model loaded` in the log, then hit the health route. This build
+logs `all slots are idle` only at trace verbosity; do not wait on it.
 
 ```bash
 while pgrep -x llama-server > /dev/null && ! grep -q "model loaded" server.log; do sleep 2; done
@@ -230,11 +230,17 @@ every number. Write yours down the same way.
 
 ## 6. Serve images
 
+Stop the text server, start the image server, and wait for `model loaded`
+the same way as in step 3:
+
 ```bash
+pkill -f llama-server
+until ! pgrep -x llama-server > /dev/null; do sleep 1; done
 "$BIN/llama-server" -m "$M/gemma-4-31B-it-fit24gib.gguf" \
   --mmproj "$M/gemma-4-31B-it-mmproj-q4km.gguf" \
   -c 73728 -ngl 99 -np 1 --mtmd-batch-max-tokens 264 \
   --port 8991 > server.log 2>&1 &
+while pgrep -x llama-server > /dev/null && ! grep -q "model loaded" server.log; do sleep 2; done
 ```
 
 - `-c 73728` is the measured one-image boundary. The next rung, 77,824,
