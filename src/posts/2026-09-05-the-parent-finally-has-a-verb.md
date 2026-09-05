@@ -21,9 +21,9 @@ that matter:
 Boil one pint of Béchamel Sauce with one-quarter pint of the _fumet_
 ```
 
-The record says Mornay derives from Béchamel. The sentence underneath, entry
-91 of the 1909 text at line 2439, says what is done with the Béchamel, and
-the record does not read it. [The Marrow Sauce post](/blog/2026-08-21-marrow-sauce-finally-has-a-parent)
+The record says Mornay derives from Béchamel. The sentence underneath, at
+line 2439 of the 1909 text, two lines below the heading of entry 91, says
+what is done with the Béchamel, and the record does not read it. [The Marrow Sauce post](/blog/2026-08-21-marrow-sauce-finally-has-a-parent)
 spent two and a half thousand words getting the parent edge right, and the edge it got
 right is an input with the operation stripped off. A parent says what a sauce
 is built from. It does not say boil, reduce, or finish, and it does not say
