@@ -251,3 +251,9 @@ above differently than you would,
 [the issue template](https://github.com/Alberto-Codes/saucier/issues/new?template=extraction.yml)
 asks for the entry number and the source lines. Line 2440 is where I would
 start.
+
+**The release:** [saucier v0.6.0](https://github.com/Alberto-Codes/saucier/releases/tag/v0.6.0)
+— the first recorded procedure: `saucier show mornay` prints six operations in
+the book's own words, five quantities the text gives and three it withholds
+left unresolved rather than guessed, every word checked against the source
+before it prints. MIT.

@@ -316,3 +316,8 @@ and which is Escoffier changing his mind,
 [the issue template](https://github.com/Alberto-Codes/saucier/issues/new?template=extraction.yml)
 asks for the entry number and the source lines. It is the same thing I would
 have needed to catch the twenty, and the eight.
+
+**The release:** [saucier v0.3.0](https://github.com/Alberto-Codes/saucier/releases/tag/v0.3.0)
+— the second witness and the diff that reads it: the 1907 first printing beside
+the 1909 revision, 9 unmatched rows, 18 parent-changed, 35 ocr-suspected and
+not one of them adjudicated, and a 284-entry blind spot the tag admits to. MIT.
