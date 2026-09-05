@@ -348,7 +348,8 @@ asks for the entry number and the source lines. Entry 69, line 2192 is a
 good place to start.
 
 **The release:** [saucier v0.4.0](https://github.com/Alberto-Codes/saucier/releases/tag/v0.4.0)
-— the clause deleted: admission is the chapter test alone, the 27 entries
+— the mother clause deleted: the second test is the chapter clause alone and
+the heading test still stands beside it, the 27 entries
 Escoffier filed among his own sauces come back, ten derivations are given up on
 purpose, and a preparation is identified by the line its heading sits on rather
 than by an entry number the scan reads twice. MIT.
