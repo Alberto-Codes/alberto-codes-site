@@ -189,11 +189,13 @@ Wait for `model loaded` in the log, then hit the health route. Do not wait
 on `all slots are idle`; the CUDA build never prints it.
 
 ```bash
-until grep -q "model loaded" server.log; do sleep 2; done
+while pgrep -x llama-server > /dev/null && ! grep -q "model loaded" server.log; do sleep 2; done
 curl -s localhost:8991/health
 ```
 
-The reply is `{"status":"ok"}`.
+The reply is `{"status":"ok"}`. If the loop returns before `model loaded`
+appears, the server exited, and the tail of `server.log` says why; see
+"If it does not fit" below.
 
 ## 4. Send one request
 
