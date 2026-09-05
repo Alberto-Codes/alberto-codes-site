@@ -236,7 +236,7 @@ Stop the text server, start the image server, and wait for `model loaded`
 the same way as in step 3:
 
 ```bash
-pkill -f llama-server
+pkill -x llama-server
 until ! pgrep -x llama-server > /dev/null; do sleep 1; done
 "$BIN/llama-server" -m "$M/gemma-4-31B-it-fit24gib.gguf" \
   --mmproj "$M/gemma-4-31B-it-mmproj-q4km.gguf" \

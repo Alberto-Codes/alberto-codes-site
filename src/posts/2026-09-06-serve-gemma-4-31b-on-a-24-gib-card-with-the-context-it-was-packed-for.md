@@ -192,7 +192,7 @@ To confirm the boundary is real on your box, stop the server and load
 one rung higher:
 
 ```bash
-pkill -f llama-server
+pkill -x llama-server
 until ! pgrep -x llama-server > /dev/null; do sleep 1; done
 "$BIN/llama-server" -m "$M/gemma-4-31B-it-fit24gib.gguf" -c 90112 -ngl 99 -np 1 --port 8991
 ```
@@ -214,7 +214,7 @@ still holding the card, start the image server from the card, and wait
 for `model loaded` the same way as in step 3:
 
 ```bash
-pkill -f llama-server
+pkill -x llama-server
 until ! pgrep -x llama-server > /dev/null; do sleep 1; done
 "$BIN/llama-server" -m "$M/gemma-4-31B-it-fit24gib.gguf" \
   --mmproj "$M/gemma-4-31B-it-mmproj-q4km.gguf" \
