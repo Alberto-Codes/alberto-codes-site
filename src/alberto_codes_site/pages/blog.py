@@ -140,10 +140,7 @@ def _code_block(value: object, **props) -> rx.Component:
         type="auto",
         scrollbars="horizontal",
         width="100%",
-        min_width="0",
         margin_y="1em",
-        padding_bottom="12px",
-        background=rx.color("gray", 3),
         border_radius="var(--radius-2)",
         style={
             # Syntax-highlighter themes set these inline; only the viewport scrolls.

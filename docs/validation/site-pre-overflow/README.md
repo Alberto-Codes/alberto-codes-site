@@ -29,11 +29,29 @@ scrollbar height; overlay scrollbars were invisible. After: all 17 blocks retain
 at `scrollLeft = 0`, in both themes, without hovering or scrolling. The other
 eight fit, and render no scrollbar element at all — the affordance appears
 exactly where content is hidden. The scroll viewport now owns scrolling; the
-inner `pre` takes its natural width. The dedicated 12 px bottom strip keeps the
-4 px track clear of text.
+inner `pre` takes its natural width.
+
+The card is one box with one background. The scroll wrapper is transparent and
+adds no padding, so the only painted background is the syntax theme's own on the
+`pre`, clipped to the wrapper's 4 px radius. The 4 px track sits inside the
+`pre`'s existing 16 px bottom padding — 4 px clear of the card edge and well
+clear of text — so no extra bottom strip is needed.
+
+A vertical scan of Post 6 card 1 at x = 1050, a column with no glyphs, reads a
+single value from the first code line to the card's bottom edge: light
+rgb(250, 250, 250) for y = 498–601, dark rgb(40, 44, 52) for the same rows, then
+straight to the page background. The previous revision painted the wrapper
+gray-3 and reserved a 12 px strip, which showed as a second colour for
+y = 602–613 — rgb(240, 240, 243) in light, rgb(33, 34, 37) in dark. That band is
+gone; see `cardBackgroundColumn` in [measurements.json](measurements.json).
 
 Thumb/track colors use the site's gray tokens: light rgb(96, 100, 108) against
-rgb(232, 232, 236), dark rgb(176, 180, 186) against rgb(39, 42, 45).
+rgb(232, 232, 236), dark rgb(176, 180, 186) against rgb(39, 42, 45). Sampled over
+an overflowing card, the thumb reads rgb(96, 100, 108) on rgb(250, 250, 250) in
+light and rgb(176, 180, 186) on rgb(40, 44, 52) in dark, so the thumb — the part
+that signals content is hidden — carries strong contrast in both. The track is
+near-invisible in dark now that it sits on the code background rather than a
+gray-3 strip; the thumb alone carries the affordance there.
 See [measurements.json](measurements.json) for exact computed colors and every
 block's dimensions, including non-overflowing blocks.
 
@@ -71,9 +89,14 @@ placeholder in the screenshot is unrelated to the code rendering change.
 
 Open a post in Chrome with `chrome-devtools-axi`, resize to the dimensions above,
 and evaluate the function in [measure.js](measure.js). Capture before interacting
-with any scrollbar. Toggle the navbar theme button and repeat. Check each row:
+with any scrollbar. Switch themes with the navbar toggle button and repeat —
+forcing the `dark` class onto `.radix-themes` is not equivalent, because the
+syntax highlighter picks its theme from Reflex's colour-mode state rather than
+from CSS, so the code cards stay light while the page turns dark. Check each row:
 `whiteSpace` is `pre`; and `visible` is true with nonzero thumb dimensions if and
 only if `overflow` is nonzero — a row with `overflow` zero must report
 `trackHeight` zero, because no scrollbar element is rendered for it.
 `pageOverflow` must be zero. Scroll an overflowing viewport with the keyboard and
-verify its maximum offset is reachable.
+verify its maximum offset is reachable. Finally, scan a glyph-free pixel column
+through a card in a screenshot and confirm it holds one rgb value from the first
+code line to the card's bottom edge.
