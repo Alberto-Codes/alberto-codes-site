@@ -16,8 +16,8 @@
     .g { fill: #7fb069; }
     .o { fill: #c96f4a; }
     .box { fill: #1f2020; stroke: #555555; stroke-width: 1px; }
-    .num { fill: none; stroke: #7fb069; stroke-width: 1.5px; }
-    .unres { fill: none; stroke: #c96f4a; stroke-width: 1.5px; stroke-dasharray: 5 3; }
+    .num { fill: #1f2020; stroke: #7fb069; stroke-width: 1.5px; }
+    .unres { fill: #1f2020; stroke: #c96f4a; stroke-width: 1.5px; stroke-dasharray: 5 3; }
     .ln { stroke: #7fb069; stroke-width: 1.2px; fill: none; }
     .lo { stroke: #c96f4a; stroke-width: 1.2px; fill: none; stroke-dasharray: 5 3; }
     .hl { fill: #7fb069; fill-opacity: 0.16; }
