@@ -37,13 +37,29 @@ adds no padding, so the only painted background is the syntax theme's own on the
 `pre`'s existing 16 px bottom padding — 4 px clear of the card edge and well
 clear of text — so no extra bottom strip is needed.
 
-A vertical scan of Post 6 card 1 at x = 1050, a column with no glyphs, reads a
-single value from the first code line to the card's bottom edge: light
-rgb(250, 250, 250) for y = 498–601, dark rgb(40, 44, 52) for the same rows, then
-straight to the page background. The previous revision painted the wrapper
-gray-3 and reserved a 12 px strip, which showed as a second colour for
-y = 602–613 — rgb(240, 240, 243) in light, rgb(33, 34, 37) in dark. That band is
-gone; see `cardBackgroundColumn` in [measurements.json](measurements.json).
+Both claims are readable in the committed images. Scanning
+[after-post6-light.png](after-post6-light.png) down x = 796 — a column with no
+glyphs — through Post 6 card 2, which occupies y = 340–659:
+
+    y 334–339   rgb(255, 255, 255)   page
+    y 340–651   rgb(250, 250, 250)   card, one value, top edge downward
+    y 652–655   rgb( 96, 100, 108)   thumb
+    y 656–659   rgb(250, 250, 250)   card again — the 4 px clearance
+    y 660–667   rgb(255, 255, 255)   page
+
+One card colour from the top edge to the bottom edge, broken only by the thumb,
+and exactly four card-coloured rows between the track and the card edge.
+[after-post6-dark.png](after-post6-dark.png) gives the same rows with
+rgb(40, 44, 52) and thumb rgb(176, 180, 186). The Vulkan pair repeats it on a
+card at y = 200–352 with its track at y = 344–347.
+
+The revision before this one painted the wrapper gray-3 and reserved a 12 px
+strip, so the same kind of scan showed a second colour in the bottom 12 px of
+every card — rgb(240, 240, 243) in light, rgb(33, 34, 37) in dark, against card
+colours of rgb(250, 250, 250) and rgb(40, 44, 52). Those figures were read from
+that revision's own committed screenshots and are kept under
+`cardBackgroundColumn` in [measurements.json](measurements.json); the band is
+gone from the images above.
 
 Thumb/track colors use the site's gray tokens: light rgb(96, 100, 108) against
 rgb(232, 232, 236), dark rgb(176, 180, 186) against rgb(39, 42, 45). Sampled over
@@ -77,10 +93,31 @@ Copilot review results are to be added during the Firstmate shipping handoff.
 
 ## Screenshots
 
-- Post 6: [before](before-post6.png), [light after](after-post6-light.png),
-  [dark after](after-post6-dark.png).
-- Gemma: [before](before-gemma.png), [light after](after-gemma-light.png),
-  [dark after](after-gemma-dark.png).
+Each after shot is captured at the same scroll offset as its before shot, so the
+pair is directly comparable and every after shot contains at least one
+overflowing card with a visible thumb. Offsets and the thumb rows read back out
+of each PNG are recorded under `screenshotEvidence` in
+[measurements.json](measurements.json). The pairs are pixel-aligned: scanning a
+fixed column down each before/after pair returns the same card bands — Post 6
+card 2 at y = 340–659 in both, Gemma's three cards at y = 170–249, 412–587 and
+798–853 in both — with the only difference being the thumb rows the after shots
+now contain.
+
+- Post 6, `scrollY = 544`: [before](before-post6.png),
+  [light after](after-post6-light.png), [dark after](after-post6-dark.png).
+  Card 2, the `saucier show mornay` output that overflows by 18 px. In the before
+  shot its `stirring` line runs into the right edge with no scrollbar; in the
+  after shots the same card carries a thumb at y = 652–655.
+- Gemma, `scrollY = 2726`: [before](before-gemma.png),
+  [light after](after-gemma-light.png), [dark after](after-gemma-dark.png).
+  Three cards in view — blocks 7 and 8 overflow by 98 px and 215 px and both gain
+  thumbs, while block 9 (`nvidia-smi`) fits and correctly shows none, so the same
+  image demonstrates both halves of `type="auto"`.
+- Gemma Vulkan detail, `scrollY = 1565`:
+  [light](after-gemma-vulkan-light.png), [dark](after-gemma-vulkan-dark.png).
+  Block 3, the llama.cpp Vulkan download command — the worst overflow on the site
+  at 265 px, and the case the brief singles out. `before-gemma.png` is not
+  scrolled here, so this one has no before counterpart.
 
 The draft Post 6 illustration is absent from this baseline checkout; its image
 placeholder in the screenshot is unrelated to the code rendering change.

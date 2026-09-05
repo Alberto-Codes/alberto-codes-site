@@ -166,5 +166,89 @@
               }
           ]
       }
+  },
+  "screenshotEvidence": {
+      "note": "Every 'after' screenshot is captured at the same scroll offset as its 'before' counterpart, at 1280x1000, so the pair is directly comparable. Thumb and track rows were then read back out of the committed PNGs with an exact-colour scan.",
+      "pairs": [
+          {
+              "before": "before-post6.png",
+              "after": [
+                  "after-post6-light.png",
+                  "after-post6-dark.png"
+              ],
+              "scrollY": 544,
+              "cardsInView": [
+                  {
+                      "block": 2,
+                      "top": 340,
+                      "bottom": 660,
+                      "overflow": 18
+                  }
+              ],
+              "thumbInImage": {
+                  "y": "652-655",
+                  "x": "206-1056",
+                  "light": "rgb(96, 100, 108)",
+                  "dark": "rgb(176, 180, 186)"
+              },
+              "cardEdgeClearanceBelowTrackPx": 4
+          },
+          {
+              "before": "before-gemma.png",
+              "after": [
+                  "after-gemma-light.png",
+                  "after-gemma-dark.png"
+              ],
+              "scrollY": 2726,
+              "cardsInView": [
+                  {
+                      "block": 7,
+                      "top": 170,
+                      "overflow": 98
+                  },
+                  {
+                      "block": 8,
+                      "top": 412,
+                      "overflow": 215
+                  },
+                  {
+                      "block": 9,
+                      "top": 798,
+                      "overflow": 0
+                  }
+              ],
+              "thumbInImage": {
+                  "y": "242-245",
+                  "x": "206-986",
+                  "light": "rgb(96, 100, 108)",
+                  "dark": "rgb(176, 180, 186)"
+              },
+              "cardEdgeClearanceBelowTrackPx": 4
+          },
+          {
+              "before": null,
+              "after": [
+                  "after-gemma-vulkan-light.png",
+                  "after-gemma-vulkan-dark.png"
+              ],
+              "scrollY": 1565,
+              "cardsInView": [
+                  {
+                      "block": 3,
+                      "top": 200,
+                      "bottom": 352,
+                      "overflow": 265
+                  }
+              ],
+              "thumbInImage": {
+                  "y": "344-347",
+                  "x": "206-871",
+                  "light": "rgb(96, 100, 108)",
+                  "dark": "rgb(176, 180, 186)"
+              },
+              "cardEdgeClearanceBelowTrackPx": 4,
+              "why": "The llama.cpp Vulkan download command, the worst overflow on the site at 265 px. before-gemma.png is not scrolled here, so this pair has no before counterpart."
+          }
+      ]
   }
 }
