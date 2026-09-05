@@ -51,7 +51,7 @@ One card colour from the top edge to the bottom edge, broken only by the thumb,
 and exactly four card-coloured rows between the track and the card edge.
 [after-post6-dark.png](after-post6-dark.png) gives the same rows with
 rgb(40, 44, 52) and thumb rgb(176, 180, 186). The Vulkan pair repeats it on a
-card at y = 200–352 with its track at y = 344–347.
+card at y = 200–351 with its track at y = 344–347.
 
 The revision before this one painted the wrapper gray-3 and reserved a 12 px
 strip, so the same kind of scan showed a second colour in the bottom 12 px of

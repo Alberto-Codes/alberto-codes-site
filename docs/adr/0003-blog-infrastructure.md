@@ -71,6 +71,27 @@ Routes for individual posts are registered dynamically at app startup by scannin
 - Content stays with the code — no external dependency
 - Appropriate scale for a personal blog
 
+## Amendment, 2026-09-05: code blocks render through a scroll area
+
+Post bodies still go through `rx.markdown(use_gfm=True)`, but fenced code
+blocks are no longer left to the browser. Two rendering defects were found in
+the browser and corrected in `_render_post` and `_code_block`
+(`src/alberto_codes_site/pages/blog.py`); the correction is recorded here
+rather than by rewriting the decisions above.
+
+- **Code blocks own their horizontal scrolling.** `component_map={"pre": ...}`
+  wraps each highlighted block in a scroll area with a styled horizontal
+  scrollbar, so a block wider than the prose column shows a visible thumb at
+  rest. The previous default relied on the OS's overlay scrollbars, which stay
+  invisible until a scroll happens, so a reader got no hint that the end of a
+  line — a URL, a flag — was cut off.
+- **Inline code carries no trailing padding.** The Radix default detached a
+  following period or comma from the closing backtick.
+
+Browser verification of both, including the measurement script and before/after
+screenshots, is in
+[docs/validation/site-pre-overflow/README.md](../validation/site-pre-overflow/README.md).
+
 ## Consequences
 
 ### Positive
