@@ -2,7 +2,7 @@
 title: The parent finally has a verb. The book still will not say how many minutes.
 date: 2026-09-05
 type: explanation
-summary: At v0.5.0 the saucier record for Mornay said it derives from Béchamel and stopped there, four lines above the sentence that says how. v0.6.0 records that sentence for one preparation, by hand, as six operations in the book's own words, with every number the text gives and every one it withholds left empty. The check that refuses a misquote also turned up the first confirmed difference between the 1907 and 1909 printings.
+summary: At v0.5.0 the saucier record for Mornay said it derives from Béchamel and stopped there, two lines above the sentence that says how. v0.6.0 records that sentence for one preparation, by hand, as six operations in the book's own words, with every number the text gives and every one it withholds left empty. The check that refuses a misquote also turned up the first confirmed difference between the 1907 and 1909 printings.
 tags:
   - ai
   - python
@@ -175,8 +175,8 @@ text resolves it. The verb is on the record in both. `Gruy^re` stays
 TO MODERN COOKERY` inside its wording, because the scan carries it there
 and [ADR-0013](https://github.com/Alberto-Codes/saucier/blob/v0.3.0/docs/adr/0013-repair-structure-never-content.md)
 repairs the punctuation that delimits a record, never the characters inside
-one. The Périgueux page break from the stream post is the same page header
-one entry over, doing the same damage.
+one. The Périgueux page break from the stream post is the same running header,
+ten pages earlier, doing the same damage.
 
 ## The one difference that is not the scanner
 
