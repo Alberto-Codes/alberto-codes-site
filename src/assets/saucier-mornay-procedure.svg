@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 980 480" style="max-width: 980px; background-color: transparent; font-family: 'trebuchet ms', verdana, arial, sans-serif; font-size: 14px;" role="img" aria-labelledby="t d">
+  <title id="t">The Mornay entry and the six operations read from it</title>
+  <desc id="d">Left, lines 2439 to 2446 of escoffier-1909, the eight lines of the Mornay body, with six clauses highlighted in reading order. Right, the six operations as saucier show prints them, one per row, each joined to its clause by an arrow. Slots that hold a number are drawn solid green: 1 pint, 1/4 pint, 2 oz. three times. Slots the text leaves without a number are drawn in dashed orange and labelled unresolved: by a good quarter, a few minutes, the melting of the cheese. Caption: every word on the right is a run of words on the left, and the command checks that before it prints.</desc>
+  <defs>
+    <marker id="ag" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7fb069"/></marker>
+    <marker id="ao" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#c96f4a"/></marker>
+  </defs>
+  <style>
+    text { fill: #cccccc; text-anchor: start; }
+    .n { text-anchor: end; fill: #888888; font-size: 11px; }
+    .h { font-size: 15px; font-weight: bold; }
+    .s { font-size: 12px; fill: #aaaaaa; }
+    .mono { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 11px; }
+    .body { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 10px; fill: #bbbbbb; }
+    .verb { font-weight: bold; fill: #dddddd; }
+    .g { fill: #7fb069; }
+    .o { fill: #c96f4a; }
+    .box { fill: #1f2020; stroke: #555555; stroke-width: 1px; }
+    .num { fill: #1f2020; stroke: #7fb069; stroke-width: 1.5px; }
+    .unres { fill: #1f2020; stroke: #c96f4a; stroke-width: 1.5px; stroke-dasharray: 5 3; }
+    .ln { stroke: #7fb069; stroke-width: 1.2px; fill: none; }
+    .lo { stroke: #c96f4a; stroke-width: 1.2px; fill: none; stroke-dasharray: 5 3; }
+    .hl { fill: #7fb069; fill-opacity: 0.16; }
+    .hlo { fill: #c96f4a; fill-opacity: 0.16; }
+    .div { stroke: #555; stroke-width: 1px; stroke-dasharray: 3 4; }
+  </style>
+
+  <text class="h" x="40" y="30">the body, escoffier-1909</text>
+  <text class="s" x="40" y="48">sed -n 2439,2446p corpus/escoffier-1909.txt</text>
+
+  <text class="h" x="580" y="30">what saucier show prints</text>
+  <text class="s" x="580" y="48">procedure  6 operations, recorded by hand</text>
+
+  <!-- body lines -->
+  <rect class="box" x="30" y="62" width="500" height="318" rx="4"/>
+
+  <!-- highlights (behind text) -->
+  <rect class="hl" x="66" y="72" width="416" height="15"/>
+  <rect class="hl" x="66" y="92" width="416" height="15"/>
+  <rect class="hlo" x="66" y="112" width="150" height="15"/>
+  <rect class="hl" x="216" y="112" width="266" height="15"/>
+  <rect class="hl" x="66" y="132" width="98" height="15"/>
+  <rect class="hlo" x="66" y="172" width="300" height="15"/>
+  <rect class="hlo" x="366" y="172" width="116" height="15"/>
+  <rect class="hlo" x="66" y="192" width="318" height="15"/>
+  <rect class="hl" x="384" y="192" width="98" height="15"/>
+  <rect class="hl" x="66" y="212" width="356" height="15"/>
+
+  <text class="n" x="58" y="84">2439</text>
+  <text class="body" x="68" y="84">Boil one pint of Béchamel Sauce with one-quarter pint of the _fumet_</text>
+  <text class="n" x="58" y="104">2440</text>
+  <text class="body" x="68" y="104">of the fish, poultry, or vegetable, which is to constitute the dish.</text>
+  <text class="n" x="58" y="124">2441</text>
+  <text class="body" x="68" y="124">Reduce by a good quarter, and add two oz. of Gruyère and two oz. of</text>
+  <text class="n" x="58" y="144">2442</text>
+  <text class="body" x="68" y="144">grated Parmesan.</text>
+  <text class="n" x="58" y="164">2443</text>
+  <text class="n" x="58" y="184">2444</text>
+  <text class="body" x="68" y="184">Put the sauce on the fire again for a few minutes, and ensure the</text>
+  <text class="n" x="58" y="204">2445</text>
+  <text class="body" x="68" y="204">melting of the cheese by stirring with a small whisk. Finish the sauce</text>
+  <text class="n" x="58" y="224">2446</text>
+  <text class="body" x="68" y="224">away from the fire with two oz. of butter added by degrees.</text>
+
+  <text class="s" x="40" y="262">solid green: a clause whose numbers the text gives</text>
+  <text class="s" x="40" y="280">dashed orange: a clause the text leaves without a number</text>
+  <text class="s" x="40" y="310">1909 line 2440 reads "of the fish, poultry, or vegetable".</text>
+  <text class="s" x="40" y="328">1907 line 2867 reads "of that fish". Confirmed by hand,</text>
+  <text class="s" x="40" y="346">the first editorial difference between the printings.</text>
+
+  <!-- operations, right -->
+  <g class="mono">
+    <rect class="num"   x="580" y="70" width="370" height="36" rx="4"/>
+    <text class="verb" x="590" y="86">Boil</text>
+    <text x="660" y="86">Béchamel Sauce [fr] 1 pint,</text>
+    <text x="660" y="100">fumet [fr] 1/4 pint</text>
+
+    <rect class="unres" x="580" y="118" width="370" height="36" rx="4"/>
+    <text class="verb" x="590" y="134">Reduce</text>
+    <text x="660" y="134">criterion: by a good quarter</text>
+    <text class="o" x="660" y="148">(unresolved)</text>
+
+    <rect class="num"   x="580" y="166" width="370" height="36" rx="4"/>
+    <text class="verb" x="590" y="182">add</text>
+    <text x="660" y="182">Gruyère [fr] 2 oz.,</text>
+    <text x="660" y="196">Parmesan [en] 2 oz.</text>
+
+    <rect class="unres" x="580" y="214" width="370" height="36" rx="4"/>
+    <text class="verb" x="590" y="230">Put</text>
+    <text x="660" y="230">duration: a few minutes</text>
+    <text x="660" y="244"><tspan class="o">(unresolved)</tspan>, on the fire again</text>
+
+    <rect class="unres" x="580" y="262" width="370" height="50" rx="4"/>
+    <text class="verb" x="590" y="278">stirring</text>
+    <text x="660" y="278">instrument: small whisk,</text>
+    <text x="660" y="292">criterion: the melting of the cheese</text>
+    <text class="o" x="660" y="306">(unresolved)</text>
+
+    <rect class="num"   x="580" y="324" width="370" height="36" rx="4"/>
+    <text class="verb" x="590" y="340">Finish</text>
+    <text x="660" y="340">butter [en] 2 oz., away from the fire,</text>
+    <text x="660" y="354">added by degrees</text>
+  </g>
+
+  <!-- arrows from clause to operation -->
+  <path class="ln" d="M 530 80 L 578 88" marker-end="url(#ag)"/>
+  <path class="lo" d="M 530 119 L 578 136" marker-end="url(#ao)"/>
+  <path class="ln" d="M 530 128 L 578 184" marker-end="url(#ag)"/>
+  <path class="lo" d="M 530 179 L 578 232" marker-end="url(#ao)"/>
+  <path class="lo" d="M 530 199 L 578 287" marker-end="url(#ao)"/>
+  <path class="ln" d="M 530 219 L 578 342" marker-end="url(#ag)"/>
+
+  <line class="div" x1="30" y1="404" x2="950" y2="404"/>
+  <text class="s" x="40" y="428">every word on the right is a run of words on the left, in the same order.</text>
+  <text class="s" x="40" y="446">show looks for each one in the body before it prints, and exits 2 with nothing printed if one is not there.</text>
+</svg>
