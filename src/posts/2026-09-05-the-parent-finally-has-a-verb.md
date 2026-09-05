@@ -189,7 +189,7 @@ Writing the 1907 procedure by hand meant reading line 2867 of the scan
 against line 2440 of the text, word by word, because the check would refuse
 anything else. The fumet is `of that fish which is to constitute the dish`
 in 1907. It is `of the fish, poultry, or vegetable, which is to constitute
-the dish` in 1909. No scanner adds two nouns and two commas. Between the first
+the dish` in 1909. No scanner adds two nouns and three commas. Between the first
 printing and the revised edition the sentence widened, from fish to fish,
 poultry, or vegetable. Whose hand widened it, the two texts do not say.
 
