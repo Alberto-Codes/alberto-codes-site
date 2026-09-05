@@ -127,6 +127,30 @@ def _post_card(meta: dict) -> rx.Component:
     )
 
 
+def _code_block(value: object, **props) -> rx.Component:
+    """Keep console columns intact with a scrollbar independent of OS settings."""
+    return rx.scroll_area(
+        rx.code_block(
+            value,
+            **props,
+            wrap_long_lines=False,
+            min_width="100%",
+            width="max-content",
+        ),
+        type="auto",
+        scrollbars="horizontal",
+        width="100%",
+        margin_y="1em",
+        border_radius="var(--radius-2)",
+        style={
+            # Syntax-highlighter themes set these inline; only the viewport scrolls.
+            "& pre": {"margin": "0 !important", "overflow": "visible !important"},
+            "& .rt-ScrollAreaScrollbar": {"background": rx.color("gray", 4)},
+            "& .rt-ScrollAreaThumb": {"background": rx.color("gray", 11)},
+        },
+    )
+
+
 def _render_post(meta: dict, body: str) -> rx.Component:
     """Render a full blog post with metadata header and markdown body."""
     return rx.vstack(
@@ -166,9 +190,10 @@ def _render_post(meta: dict, body: str) -> rx.Component:
         ),
         rx.separator(size="4", color_scheme="blue"),
         rx.box(
-            rx.markdown(body, use_gfm=True),
+            rx.markdown(body, use_gfm=True, component_map={"pre": _code_block}),
             width="100%",
             style={
+                "& :not(pre) > code": {"padding_inline_end": "0"},
                 "& table": {
                     "width": "100%",
                     "border_collapse": "collapse",
