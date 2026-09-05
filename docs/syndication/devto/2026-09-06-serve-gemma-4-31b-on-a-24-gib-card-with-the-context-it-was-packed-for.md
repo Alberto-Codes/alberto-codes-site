@@ -229,8 +229,8 @@ wrapper script.
 The boundary belongs to the box, the build, the backend, and the VRAM free
 before load together. The card calls that the frame and prints it beside
 every number. Write yours down the same way, and if 86,016 loads with room
-to spare, keep climbing a rung at a time until one fails; that rung is
-yours.
+to spare, stop it, load the next rung, and keep climbing a rung at a time
+until one fails; that rung is yours.
 
 ## 6. Serve images
 
