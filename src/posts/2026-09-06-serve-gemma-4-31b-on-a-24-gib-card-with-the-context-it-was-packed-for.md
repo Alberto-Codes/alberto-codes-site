@@ -154,6 +154,24 @@ The reply is `{"status":"ok"}`. If the loop returns before
 `model loaded` appears, the server exited, and the tail of
 `server.log` says why; see "If it does not fit" below.
 
+A loaded server is not a server on the GPU. Confirm the offload
+before you trust any number below:
+
+```bash
+grep -i offloaded server.log
+grep -i "gpu-layers option will be ignored" server.log
+```
+
+The first prints `offloaded N/N layers to GPU`, both numbers equal
+and neither of them zero. The second prints nothing. `offloaded 0/N`
+means `-ngl 99` was parsed and then discarded, and the second grep
+says why: the build has no backend for your card, a CPU-only archive
+or a driver it cannot see. Nothing else looks wrong — the server
+loads, the health route answers `ok`, requests come back — and every
+layer runs on the CPU at a fraction of the speed, while every
+boundary in this post assumes the card is doing the work. Fix step 2
+before you measure anything.
+
 ## 4. Send one request
 
 The server speaks the OpenAI chat shape. One text turn:
