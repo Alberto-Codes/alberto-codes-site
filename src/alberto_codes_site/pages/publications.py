@@ -34,6 +34,12 @@ PUBLICATIONS = [
                 "https://huggingface.co/Alberto-Codes/gemma-4-31B-it-fit24gib-GGUF",
             ),
             (
+                "Sensitivity maps",
+                "database",
+                "https://huggingface.co/datasets/Alberto-Codes/"
+                "gemma-4-31B-it-sensitivity-maps",
+            ),
+            (
                 "Evidence",
                 "flask-conical",
                 "https://github.com/Alberto-Codes/vramfit/blob/v0.4.0/publication/"
@@ -49,6 +55,11 @@ PUBLICATIONS = [
                 "Writeup",
                 "book-open",
                 "/blog/2026-09-02-googles-4-bit-gemma-already-fit-my-card",
+            ),
+            (
+                "Serve guide",
+                "terminal",
+                "/blog/2026-09-06-serve-gemma-4-31b-on-a-24-gib-card-with-the-context-it-was-packed-for",
             ),
         ],
     },
