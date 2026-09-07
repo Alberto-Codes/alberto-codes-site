@@ -343,8 +343,11 @@ the only kind of number the card ever claimed.
 - **The baseline:**
   [google/gemma-4-31B-it-qat-q4_0-gguf](https://huggingface.co/google/gemma-4-31B-it-qat-q4_0-gguf),
   16.44 GiB.
-- **The tool:** [vramfit](https://github.com/Alberto-Codes/vramfit),
-  and its [releases page](https://github.com/Alberto-Codes/vramfit/releases).
+- **The tool:**
+  [vramfit v0.5.0](https://github.com/Alberto-Codes/vramfit/releases/tag/v0.5.0)
+  — the tag this guide serves from: the thin `gguf` extra that reads a
+  pack without torch, `pack` comparing its packed bytes against the
+  recipe's prediction, and every refusal raised under one root. MIT.
 - **The argument:**
   [the explanation post](/blog/2026-09-02-googles-4-bit-gemma-already-fit-my-card).
   The pipeline that built the file is
