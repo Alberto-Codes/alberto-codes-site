@@ -134,6 +134,6 @@ I'd rather publish the gap named than the story clean. Naming it is also what ma
 - **The tool:** [vramfit](https://github.com/Alberto-Codes/vramfit) — scan, plan, validate, pack. MIT.
 - **The model:** [the packed 49B](https://huggingface.co/Alberto-Codes/Llama-3_3-Nemotron-Super-49B-v1_5-fit24gib-GGUF) — a quantization of [NVIDIA's Nemotron Super 49B v1_5](https://huggingface.co/nvidia/Llama-3_3-Nemotron-Super-49B-v1_5), under the NVIDIA Open Model License. Built with Llama.
 - **The measurements:** the [sensitivity-map dataset](https://huggingface.co/datasets/Alberto-Codes/Llama-3_3-Nemotron-Super-49B-v1_5-sensitivity-maps) — the per-layer price list the recipe was solved from.
-- **The full ledger:** [all seventeen data points](https://github.com/Alberto-Codes/vramfit/blob/main/docs/explanation/evaluating-packed-models.md), every number and every loss.
+- **The full ledger:** [all the data points](https://github.com/Alberto-Codes/vramfit/blob/main/docs/explanation/evaluating-packed-models.md), every number and every loss.
 
 Coming next: how to fit a model to the card you actually have, and why some layers break and others don't. It's also the second time I've come at quantization from the measurement end — the [first was TurboQuant on a vision model](/blog/2026-03-26-i-ran-turboquant-on-a-vision-model-the-first-output-was-garbage), where the first output was garbage for a reason no benchmark would have told me.

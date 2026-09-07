@@ -2,9 +2,9 @@
 
 import reflex as rx
 
-# Every figure below is hand-copied from another repository. This site is a
-# static build with no runtime fetch, so the numbers cannot read themselves and
-# will rot silently unless re-read. Where each one comes from:
+# This site is a static build with no runtime fetch, so the figures below
+# cannot read themselves and will rot silently unless re-read. The open-source
+# project figures are hand-copied from other repositories:
 #
 #   saucier counts   the "state this tag represents" census in the saucier
 #                    release notes, which is what `uv run saucier parse` prints
