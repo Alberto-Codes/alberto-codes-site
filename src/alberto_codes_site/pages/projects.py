@@ -19,10 +19,18 @@ import reflex as rx
 # Download counts have no agreed source and are not refreshed here; pypistats
 # reports recent windows, not the lifetime totals these appear to be.
 #
-# The home page's "N PyPI Packages" figure is not hand-copied from anywhere: it
-# is the count of entries below carrying a pypi.org "link", five today. Change
-# it in src/alberto_codes_site/pages/home.py whenever that count changes, and
-# keep the package list on the About page agreeing with it.
+# Two figures are not hand-copied from another repository, but are read off
+# this repository instead:
+#
+#   pypi packages    the count of entries below carrying a pypi.org "link",
+#                    five today. It appears as "N PyPI Packages" on the home
+#                    page; the same list is spelled out on the About page, in
+#                    the current-role bullet in pages/experience.py, and in the
+#                    /projects meta description in alberto_codes_site.py, so a
+#                    sixth package means editing all four.
+#   published packs  the PUBLICATIONS entries with kind "Quantized model" in
+#                    src/alberto_codes_site/pages/publications.py, three today,
+#                    which is what the vramfit entry below counts.
 PROJECTS = [
     {
         "title": "saucier",

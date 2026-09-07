@@ -94,8 +94,8 @@ app.add_page(
     route="/projects",
     title="Projects | Alberto Nieto",
     description=(
-        "Technical projects including gepa-adk, an open-source AI agent "
-        "optimization library, and enterprise AI/ML initiatives."
+        "Technical projects including saucier, vramfit, and gepa-adk, "
+        "open-source Python and AI tooling, and enterprise AI/ML initiatives."
     ),
 )
 app.add_page(
