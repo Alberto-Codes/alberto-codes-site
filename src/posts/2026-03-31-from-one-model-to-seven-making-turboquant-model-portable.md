@@ -73,7 +73,7 @@ The fused kernels, the non-pow2 padding, the SWA bypass — these are the kind o
 
 ## What's next
 
-- **Upstream vLLM contribution** — there's an open feature request for TurboQuant support. The fused paged kernel architecture is the candidate for contribution.
+- **Upstream vLLM contribution** — the fused paged kernel architecture is the candidate for contribution.
 - **Flash Attention kernel fusion** — full multi-layer correctness for the fused path, reducing decode overhead further.
 - **VL-Cache stacking** — combining TQ4 KV compression with token pruning for multiplicative savings on VLMs.
 
