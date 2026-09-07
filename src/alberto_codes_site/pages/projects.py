@@ -24,10 +24,12 @@ import reflex as rx
 #
 #   pypi packages    the count of entries below carrying a pypi.org "link",
 #                    five today. It appears as "N PyPI Packages" on the home
-#                    page; the same list is spelled out on the About page, in
-#                    the current-role bullet in pages/experience.py, and in the
-#                    /projects meta description in alberto_codes_site.py, so a
-#                    sixth package means editing all four.
+#                    page, and the full list is spelled out on the About page
+#                    and in the current-role bullet in pages/experience.py, so
+#                    a sixth package means editing those three. The /projects
+#                    meta description in alberto_codes_site.py names only a
+#                    representative few and carries no count, so it stands
+#                    whatever the list becomes.
 #   published packs  the PUBLICATIONS entries with kind "Quantized model" in
 #                    src/alberto_codes_site/pages/publications.py, three today,
 #                    which is what the vramfit entry below counts.
