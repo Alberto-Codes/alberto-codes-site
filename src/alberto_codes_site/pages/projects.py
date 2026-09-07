@@ -38,6 +38,13 @@ import reflex as rx
 #   published packs  the PUBLICATIONS entries with kind "Quantized model" in
 #                    src/alberto_codes_site/pages/publications.py, three today,
 #                    which is what the vramfit entry below counts.
+#
+# The four cards with no repository describe enterprise work with no public
+# source, so their figures cannot be checked against anything. One is written
+# by hand twice: "500K+ documents" on the OCR card is the same claim as the OCR
+# bullet in the 2022-2025 role in pages/experience.py, so the two have to move
+# together. The credential badges on the home page have their own note above
+# them in pages/home.py; only the package count is sourced from here.
 PROJECTS = [
     {
         "title": "saucier",

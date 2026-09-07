@@ -51,6 +51,22 @@ def home_page() -> rx.Component:
                 max_width=["100%", "100%", "36em", "36em", "36em"],
                 text_align="center",
             ),
+            # These badges are claims about a career rather than a repository,
+            # so no build can re-read them. Each is stated in full on the page
+            # that owns it:
+            #
+            #   2x Top Performer    the 2006-2018 role in pages/experience.py,
+            #                       "Two-time Top Performer award recipient
+            #                       (2014, 2018)"
+            #   Patent Co-Inventor  the current role in pages/experience.py,
+            #                       "Co-inventor on patent application"
+            #   25+ Years           the earliest role in pages/experience.py
+            #                       begins in 1999. The same tenure is worded
+            #                       twice more, in the paragraph above and on
+            #                       the About page, so all three move together
+            #   N PyPI Packages     the comment above PROJECTS in
+            #                       pages/projects.py, which owns this figure
+            #                       and names every page that repeats it
             rx.hstack(
                 rx.hstack(
                     rx.icon("award", size=16, color=rx.color("blue", 9)),
