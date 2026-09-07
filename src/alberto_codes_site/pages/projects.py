@@ -9,8 +9,8 @@ import reflex as rx
 #   saucier counts   the "state this tag represents" census in the saucier
 #                    release notes, which is what `uv run saucier parse` prints
 #                    and what the saucier README leads with
-#   vramfit points   "all twenty data points" in vramfit's evidence ledger,
-#                    docs/explanation/evaluating-packed-models.md
+#   vramfit points   the last "## The Nth data point" heading in vramfit's
+#                    evidence ledger, docs/explanation/evaluating-packed-models.md
 #   release counts   gh api /repos/Alberto-Codes/<repo>/releases --paginate
 #   dependency count the [project] dependencies array in that repo's
 #                    pyproject.toml, not its README, which lags
@@ -18,6 +18,11 @@ import reflex as rx
 #
 # Download counts have no agreed source and are not refreshed here; pypistats
 # reports recent windows, not the lifetime totals these appear to be.
+#
+# The home page's "N PyPI Packages" figure is not hand-copied from anywhere: it
+# is the count of entries below carrying a pypi.org "link", five today. Change
+# it in src/alberto_codes_site/pages/home.py whenever that count changes, and
+# keep the package list on the About page agreeing with it.
 PROJECTS = [
     {
         "title": "saucier",

@@ -76,8 +76,10 @@ def about_page() -> rx.Component:
                         "Outside of my enterprise work, I build and publish open "
                         "source Python tools \u2014 including docvet for docstring "
                         "quality, adk-secure-sessions for encrypted AI agent "
-                        "storage, and gepa-adk for evolutionary prompt optimization. "
-                        "All three are on PyPI.",
+                        "storage, gepa-adk for evolutionary prompt optimization, "
+                        "saucier for provenance-traced recipe extraction, and "
+                        "vramfit for fitting large models onto one GPU. "
+                        "All five are on PyPI.",
                         size="3",
                         color=rx.color("slate", 11),
                         line_height="1.8",

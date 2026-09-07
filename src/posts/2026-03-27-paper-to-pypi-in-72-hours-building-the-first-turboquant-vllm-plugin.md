@@ -99,7 +99,7 @@ The experiment logs document failure modes nobody else has published: the [fp16 
 
 ## What's next
 
-- **Upstream vLLM contribution** — there's an [open feature request](https://github.com/vllm-project/vllm/issues/38171) with 49 upvotes for TurboQuant support. The plugin is a staging ground.
+- **Upstream vLLM contribution** — there's an open feature request for TurboQuant support. The plugin is a staging ground.
 - **Flash Attention fusion** — the fused Triton kernel achieves 17.8x on the Q@K^T micro-benchmark but needs full softmax+V fusion for multi-layer correctness
 - **Stacking with token pruning** — combining TurboQuant compression with VL-Cache-style sparsification for multiplicative savings on VLMs
 
