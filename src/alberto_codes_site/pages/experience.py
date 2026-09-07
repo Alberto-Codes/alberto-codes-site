@@ -14,7 +14,7 @@ ROLES = [
             "Built video processing pipeline handling thousands of videos daily",
             "Co-inventor on patent application",
             "Open source: shipped gepa-adk, docvet, adk-secure-sessions, "
-            "saucier, and vramfit to PyPI",
+            "saucier, vramfit, and turboquant-vllm to PyPI",
         ],
     },
     {

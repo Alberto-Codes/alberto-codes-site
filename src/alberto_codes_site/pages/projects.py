@@ -19,14 +19,19 @@ import reflex as rx
 # Download counts have no agreed source and are not refreshed here; pypistats
 # reports recent windows, not the lifetime totals these appear to be.
 #
-# Two figures are not hand-copied from another repository, but are read off
-# this repository instead:
+# Two figures do not come from a project's own repository:
 #
-#   pypi packages    the count of entries below carrying a pypi.org "link",
-#                    five today. It appears as "N PyPI Packages" on the home
-#                    page, and the full list is spelled out on the About page
-#                    and in the current-role bullet in pages/experience.py, so
-#                    a sixth package means editing those three. The /projects
+#   pypi packages    the number of packages published under this author on
+#                    PyPI, six today: docvet, gepa-adk, adk-secure-sessions,
+#                    saucier, vramfit, and turboquant-vllm. Re-derive it by
+#                    querying https://pypi.org/pypi/<name>/json for each and
+#                    confirming a 200 with author "Alberto-Codes". Do not
+#                    count the cards below: the grid is curated, and
+#                    turboquant-vllm is published with no card here. The
+#                    figure appears as "N PyPI Packages" on the home page,
+#                    and the full list is spelled out on the About page and
+#                    in the current-role bullet in pages/experience.py, so a
+#                    seventh package means editing those three. The /projects
 #                    meta description in alberto_codes_site.py names only a
 #                    representative few and carries no count, so it stands
 #                    whatever the list becomes.

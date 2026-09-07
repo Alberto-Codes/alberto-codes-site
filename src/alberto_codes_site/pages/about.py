@@ -77,9 +77,10 @@ def about_page() -> rx.Component:
                         "source Python tools \u2014 including docvet for docstring "
                         "quality, adk-secure-sessions for encrypted AI agent "
                         "storage, gepa-adk for evolutionary prompt optimization, "
-                        "saucier for provenance-traced recipe extraction, and "
-                        "vramfit for fitting large models onto one GPU. "
-                        "All five are on PyPI.",
+                        "saucier for provenance-traced recipe extraction, "
+                        "vramfit for fitting large models onto one GPU, and "
+                        "turboquant-vllm for KV cache compression. "
+                        "All six are on PyPI.",
                         size="3",
                         color=rx.color("slate", 11),
                         line_height="1.8",

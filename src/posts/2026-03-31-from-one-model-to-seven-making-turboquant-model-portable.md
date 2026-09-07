@@ -77,7 +77,7 @@ The fused kernels, the non-pow2 padding, the SWA bypass — these are the kind o
 - **Flash Attention kernel fusion** — full multi-layer correctness for the fused path, reducing decode overhead further.
 - **VL-Cache stacking** — combining TQ4 KV compression with token pruning for multiplicative savings on VLMs.
 
-> Note 2026-09-06: upstream has since shipped TurboQuant, and the feature request, [vllm-project/vllm#38479](https://github.com/vllm-project/vllm/issues/38479), is closed.
+> Note 2026-09-06: upstream has since shipped TurboQuant in [vllm-project/vllm#38479](https://github.com/vllm-project/vllm/pull/38479), and the feature request, [vllm-project/vllm#38201](https://github.com/vllm-project/vllm/issues/38201), is closed.
 
 ---
 

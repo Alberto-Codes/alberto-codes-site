@@ -103,7 +103,7 @@ The experiment logs document failure modes nobody else has published: the [fp16 
 - **Flash Attention fusion** — the fused Triton kernel achieves 17.8x on the Q@K^T micro-benchmark but needs full softmax+V fusion for multi-layer correctness
 - **Stacking with token pruning** — combining TurboQuant compression with VL-Cache-style sparsification for multiplicative savings on VLMs
 
-> Note 2026-09-06: upstream has since shipped TurboQuant, and the feature request, [vllm-project/vllm#38479](https://github.com/vllm-project/vllm/issues/38479), is closed.
+> Note 2026-09-06: upstream has since shipped TurboQuant in [vllm-project/vllm#38479](https://github.com/vllm-project/vllm/pull/38479), and the feature request, [vllm-project/vllm#38201](https://github.com/vllm-project/vllm/issues/38201), is closed.
 
 The full implementation, 16 experiment logs, and architecture docs are at [github.com/Alberto-Codes/turboquant-vllm](https://github.com/Alberto-Codes/turboquant-vllm).
 
