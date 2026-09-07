@@ -123,6 +123,8 @@ Then a second campaign put the bound somewhere real: **1,349 GUI screenshots** a
 
 **The sensitivity map and the importance matrix are not published.** Publications #1 and #2 shipped their maps as datasets; this one ships the recipe, the run log, the evaluation sidecars, and both campaign records, but the map and the matrix stay in the run archive. The recipe replays the type placement from the base checkpoint. Without the map, `vramfit plan` cannot re-solve this model for a different budget, and without the matrix a rebuild reproduces the placement but not this file's exact bytes.
 
+> Note 2026-09-04: both have since been published. The [sensitivity-map dataset](https://huggingface.co/datasets/Alberto-Codes/gemma-4-31B-it-sensitivity-maps) carries the map, the framed importance matrix, and both calibration texts, so neither limit above still holds.
+
 **Google's build is the comparator, not the shelf.** It is the vendor's own artifact and the obvious baseline. No claim here covers the other GGUFs of this model on the Hub.
 
 **The vision numbers bound divergence, not safety.** Quantization compresses every tensor with one lossy procedure and can shift any behavior. The tables are the measured bound on that shift over text, ten images, and 1,349 screenshots. Read the card as a damage disclosure. Deploy the pack with whatever protections you'd give the base model.

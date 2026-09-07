@@ -2,18 +2,34 @@
 
 import reflex as rx
 
+# Every figure below is hand-copied from another repository. This site is a
+# static build with no runtime fetch, so the numbers cannot read themselves and
+# will rot silently unless re-read. Where each one comes from:
+#
+#   saucier counts   the "state this tag represents" census in the saucier
+#                    release notes, which is what `uv run saucier parse` prints
+#                    and what the saucier README leads with
+#   vramfit points   "all twenty data points" in vramfit's evidence ledger,
+#                    docs/explanation/evaluating-packed-models.md
+#   release counts   gh api /repos/Alberto-Codes/<repo>/releases --paginate
+#   dependency count the [project] dependencies array in that repo's
+#                    pyproject.toml, not its README, which lags
+#   docvet rules     the "What It Checks" section of the docvet README
+#
+# Download counts have no agreed source and are not refreshed here; pypistats
+# reports recent windows, not the lifetime totals these appear to be.
 PROJECTS = [
     {
         "title": "saucier",
         "description": (
-            "Reads a 1907 cookbook and returns a catalogue of sauces, every "
-            "claim traceable to the line it came from. 124 preparations, 29 "
-            "linked to a mother, 95 that state no base at all — the measured "
-            "bar anything cleverer has to beat. Deterministic extraction "
-            "behind four layers with no runtime dependencies, so a model can "
-            "be added later without touching the provenance guarantees. "
-            "Corpus committed, so a clone runs offline. First tag in a "
-            "series. MIT."
+            "Reads two printings of one cookbook and returns a catalogue of "
+            "sauces, every claim traceable to the line it came from. 151 "
+            "preparations in the 1909 witness, 57 that state a parent, 94 "
+            "that state no base at all — the measured bar anything cleverer "
+            "has to beat. Deterministic extraction behind four layers with "
+            "no runtime dependencies, so a model can be added later without "
+            "touching the provenance guarantees. Corpus committed, so a "
+            "clone runs offline. Counts are the v0.6.0 README census. MIT."
         ),
         "tags": [
             "Python",
@@ -36,8 +52,8 @@ PROJECTS = [
             "its baseline with the losing numbers printed: Nemotron Super "
             "49B on a 24 GiB card, Nemotron 3.5 Lightning 30B-A3B entirely "
             "on a 16 GiB card, and Gemma 4 31B solved for 86k tokens of "
-            "context beside Google's own 4-bit build. Nineteen recorded "
-            "data points, losses included. MIT."
+            "context beside Google's own 4-bit build. Twenty recorded "
+            "data points in the evidence ledger, losses included. MIT."
         ),
         "tags": [
             "Generative AI",
@@ -57,7 +73,7 @@ PROJECTS = [
             "Evolves AI agent instructions automatically using genetic "
             "algorithms. Async-first engine built on Google ADK with "
             "hexagonal architecture and protocol-based interfaces. "
-            "12 releases, ~4,900 downloads. Apache-2.0."
+            "17 releases, ~4,900 downloads. Apache-2.0."
         ),
         "tags": ["Generative AI", "Google ADK", "Python", "PyPI"],
         "link": "https://pypi.org/project/gepa-adk/",
@@ -71,7 +87,7 @@ PROJECTS = [
             "storage in 5 minutes. Drop-in replacement that encrypts state "
             "and conversation history at rest using Fernet, closing the "
             "encryption gap for PHI, PII, and financial data. "
-            "3 dependencies. Apache-2.0."
+            "4 dependencies. Apache-2.0."
         ),
         "tags": ["Generative AI", "Google ADK", "Security", "Python", "PyPI"],
         "link": "https://pypi.org/project/adk-secure-sessions/",
@@ -81,8 +97,8 @@ PROJECTS = [
         "title": "docvet",
         "description": (
             "Python docstring quality vetting that catches what linters miss. "
-            "19 rules across completeness, accuracy, rendering, and "
-            "visibility \u2014 including git-based staleness detection via "
+            "31 rules across presence, completeness, accuracy, rendering, "
+            "and visibility \u2014 including git-based staleness detection via "
             "diff and blame. Production/Stable, ~3,300 downloads. MIT."
         ),
         "tags": ["Python", "CLI", "Code Quality", "PyPI", "Open Source"],

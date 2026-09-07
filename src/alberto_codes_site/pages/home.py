@@ -74,7 +74,7 @@ def home_page() -> rx.Component:
                 ),
                 rx.hstack(
                     rx.icon("package", size=16, color=rx.color("blue", 9)),
-                    rx.text("3 PyPI Packages", size="2", color=rx.color("slate", 10)),
+                    rx.text("5 PyPI Packages", size="2", color=rx.color("slate", 10)),
                     spacing="1",
                     align="center",
                 ),
