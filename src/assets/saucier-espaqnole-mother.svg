@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 980 470" style="max-width: 980px; background-color: transparent; font-family: 'trebuchet ms', verdana, arial, sans-serif; font-size: 14px;" role="img" aria-labelledby="t d">
+  <title id="t">One scanned heading, and the 1907 Espagnole tree before and after the guard</title>
+  <desc id="d">Top, the heading of entry 22 as the 1907 scan reads it, 22 em-dash BROWN SAUCE OR ESPAQNOLE, with the Q drawn in orange, beside the same heading in the 1909 transcription, which reads ESPAGNOLE. Below, two columns. Left, before: the only candidate for the mother espagnole is LENTEN ESPAGNOLE, entry 24 at line 1795, crowned because it is first in source order, and the tree heads on LENTEN ESPAGNOLE with HALF GLAZE and its nine derivatives and the two Poivrade sauces beneath it. Right, after: that candidate is struck out because its opening paragraph states Espagnole, no candidate is left, the mother stays uncatalogued, and the tree heads on the bare concept espagnole with LENTEN ESPAGNOLE demoted to a child alongside the others. Caption: the guard removed one candidate, and one line of JSON changed.</desc>
+  <style>
+    text { fill: #cccccc; text-anchor: start; }
+    .h { font-size: 15px; font-weight: bold; fill: #dddddd; }
+    .s { font-size: 12px; fill: #999999; }
+    .mono { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 12px; fill: #cccccc; }
+    .tree { font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace; font-size: 12px; fill: #bbbbbb; }
+    .dim { fill: #888888; }
+    .g { fill: #7fb069; }
+    .o { fill: #c96f4a; }
+    .box { fill: #1f2020; stroke: #555555; stroke-width: 1px; }
+    .kept { fill: #1f2020; stroke: #7fb069; stroke-width: 1.5px; }
+    .cut { fill: #1f2020; stroke: #c96f4a; stroke-width: 1.5px; stroke-dasharray: 5 3; }
+    .hlo { fill: #c96f4a; fill-opacity: 0.30; }
+    .strike { stroke: #c96f4a; stroke-width: 1.2px; }
+    .cap { font-size: 12px; fill: #999999; }
+  </style>
+
+  <text class="h" x="30" y="26">the heading of entry 22, as each witness carries it</text>
+
+  <rect class="box" x="30" y="38" width="920" height="66" rx="4"/>
+  <text class="s" x="48" y="60">corpus/escoffier-1907.txt, line 1730</text>
+  <text class="mono" x="48" y="83">22— BROWN  SAUCE  OR  ESPA<tspan class="o">Q</tspan>NOLE</text>
+  <text class="s" x="520" y="60">corpus/escoffier-1909.txt, line 1392</text>
+  <text class="mono" x="520" y="83">22—BROWN SAUCE OR ESPA<tspan class="g">G</tspan>NOLE</text>
+
+  <text class="h" x="30" y="136">before: bind by source order</text>
+  <text class="s" x="30" y="153">a mother takes the first preparation answering to its name</text>
+  <text class="h" x="510" y="136">after: reject a stated derivative</text>
+  <text class="s" x="510" y="153">and never one whose opening paragraph states that mother</text>
+
+  <rect class="box" x="30" y="166" width="440" height="62" rx="4"/>
+  <text class="s" x="46" y="186">candidates for espagnole in escoffier-1907</text>
+  <text class="mono" x="46" y="206">LENTEN ESPAGNOLE   entry 24, line 1795</text>
+  <text class="s o" x="46" y="222">crowned: the only run match, so nothing to rank</text>
+
+  <rect class="cut" x="510" y="166" width="440" height="62" rx="4"/>
+  <text class="s" x="526" y="186">candidates for espagnole in escoffier-1907</text>
+  <text class="mono dim" x="526" y="206">LENTEN ESPAGNOLE   entry 24, line 1795</text>
+  <line class="strike" x1="526" y1="202" x2="786" y2="202"/>
+  <text class="s o" x="526" y="222">rejected: its opening states Espagnole. None left.</text>
+
+  <text class="s" x="30" y="256">saucier tree espagnole --source escoffier-1907</text>
+  <text class="s" x="510" y="256">saucier tree espagnole --source escoffier-1907</text>
+
+  <rect class="box" x="30" y="266" width="440" height="130" rx="4"/>
+  <text class="tree o" x="46" y="288">LENTEN ESPAGNOLE  [espagnole]</text>
+  <text class="tree" x="46" y="306">├── HALF GLAZE</text>
+  <text class="tree dim" x="46" y="324">│   └── nine derivatives</text>
+  <text class="tree" x="46" y="342">├── ORDINARY POIVRADE SAUCE</text>
+  <text class="tree" x="46" y="360">└── POIVRADE SAUCE FOR VENISON</text>
+  <text class="s dim" x="46" y="382">twelve preparations under a Lenten sauce</text>
+
+  <rect class="box" x="510" y="266" width="440" height="130" rx="4"/>
+  <text class="tree g" x="526" y="288">espagnole  [espagnole]</text>
+  <text class="tree" x="526" y="306">├── HALF GLAZE</text>
+  <text class="tree dim" x="526" y="324">│   └── nine derivatives</text>
+  <text class="tree g" x="526" y="342">├── LENTEN ESPAGNOLE</text>
+  <text class="tree" x="526" y="360">├── ORDINARY POIVRADE SAUCE</text>
+  <text class="tree" x="526" y="378">└── POIVRADE SAUCE FOR VENISON</text>
+
+  <text class="cap" x="30" y="426">The guard removed one candidate in this witness. The 1907 catalogue gained one derived sauce, 140 / 50 / 90 became 140 / 51 / 89,</text>
+  <text class="cap" x="30" y="444">and the 1909 catalogue came out byte-identical. No repair was made to the heading: the scan still reads ESPAQNOLE.</text>
+</svg>
