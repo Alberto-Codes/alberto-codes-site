@@ -11,9 +11,7 @@
     .g { fill: #7fb069; }
     .o { fill: #c96f4a; }
     .box { fill: #1f2020; stroke: #555555; stroke-width: 1px; }
-    .kept { fill: #1f2020; stroke: #7fb069; stroke-width: 1.5px; }
     .cut { fill: #1f2020; stroke: #c96f4a; stroke-width: 1.5px; stroke-dasharray: 5 3; }
-    .hlo { fill: #c96f4a; fill-opacity: 0.30; }
     .strike { stroke: #c96f4a; stroke-width: 1.2px; }
     .cap { font-size: 12px; fill: #999999; }
   </style>

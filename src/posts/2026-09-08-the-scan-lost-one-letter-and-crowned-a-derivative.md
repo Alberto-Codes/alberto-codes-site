@@ -180,10 +180,12 @@ veloute, escoffier-1909   ORDINARY VELOUTÉ SAUCE
                           ALLEMANDE SAUCE OR THICKENED VELOUTÉ
 ```
 
-The other eight bindings have a single candidate each. Espagnole in 1907 had
-a single candidate too. Nothing was ranked, so no ranking rule could have
-prevented it. Measuring the proposal is what made that visible, and the
-measurement is the reason the actual defect got named: the run-match branch
+Seven of the other eight bindings have a single candidate each, and the
+eighth, the 1909 Espagnole, never reaches the candidate list because its
+exact name wins first. Espagnole in 1907 had a single candidate too. Nothing
+was ranked, so no ranking rule could have prevented it. Measuring the
+proposal is what made that visible, and the measurement is the reason the
+actual defect got named: the run-match branch
 never tested whether the name it crowned belonged to the base or to a
 derivative of the base.
 
@@ -212,8 +214,8 @@ despumation of an Espagnole` at line 1755, is not a claim of derivation, and
 the guard does not read that far.
 
 An exact catalogued name still wins outright, before the guard runs. A base
-that names itself in its own first line keeps its own identity; the guard
-only ever removes run matches. Ordering is untouched, and the survivors
+that names itself exactly in its own heading keeps its own identity; the
+guard only ever removes run matches. Ordering is untouched, and the survivors
 still rank by source order. When nothing survives, the mother is
 uncatalogued in that witness, which is the honest outcome and not a
 fallback:
@@ -305,12 +307,17 @@ with its name. The ninth, the 1909 `ESPAGNOLE`, is an exact catalogued name
 and returns before the guard runs, so it never faced the test at all.
 
 Entry 22 comes within a paragraph of a different trap. It names Espagnole at
-line 1755, in its third paragraph, discussing how long despumation takes.
-Had that paragraph opened the entry, entry 22 would have recorded
-`espagnole` as its own parent, because an uncatalogued mother is keyed by a
-bare concept that no entry holds, so no entry is held out from stating it.
-The cycle check reads heading lines, and would not have caught a parent that
-names no entry.
+line 1755, in its third paragraph, discussing how long despumation takes, and
+nothing would hold it back from stating itself: an uncatalogued mother is
+keyed by a bare concept that no entry holds, so no entry is held out from
+stating it. Had that paragraph opened the entry, though, entry 22 would have
+recorded no parent at all. Three lines on, the same paragraph names a second
+mother — `the Mirepoix and the tomato are inserted from the first`, at line
+1758 — and ADR-0008 takes exactly one stated candidate or no parent, so two
+of them resolve to none. What catches the near-miss is a rule that already
+refuses to guess, not the cycle check: nothing reaches the cycle check, and
+it reads heading lines, so it could not have caught a parent that names no
+entry.
 
 And the crown is the only thing that got fixed. The scan still reads
 `ESPAQNOLE`, entry 22 is still catalogued as `brown-sauce`, and
