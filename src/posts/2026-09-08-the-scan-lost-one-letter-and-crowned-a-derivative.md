@@ -153,9 +153,15 @@ names:
 + mornay-sauce  parent  bechamel-sauce
 ```
 
-Eight parent values move like that: Cream Sauce and Mornay off `bechamel`,
-Maltese and Mousseline off `hollandaise` in both printings, and Noisette as
-well in 1907. `saucier tree hollandaise` then prints a bare heading with no
+Eight parent values move like that, four in each witness: in 1909, Cream
+Sauce and Mornay off `bechamel`, Maltese and Mousseline off `hollandaise`;
+in 1907, Cream Sauce off `bechamel`, and Maltese, Mousseline and Noisette
+off `hollandaise`. Mornay is the asymmetry — the 1907 scan splits its
+heading into `MORN AY SAUCE` and its first input reads `Bdchamel Sauce`,
+which reaches no catalogued name, so that witness has no `bechamel` parent
+there to move, as
+[the parent post](/blog/2026-09-05-the-parent-finally-has-a-verb) worked
+through. `saucier tree hollandaise` then prints a bare heading with no
 children in either witness, and the family survives only under
 `hollandaise-sauce`, which is a heading and not a mother. That is ADR-0008's
 coalescing rule — names reaching one preparation coalesce under the mother
@@ -201,8 +207,9 @@ offered as. Same reading, opposite direction.
 The opening paragraph is the right place to look because of how Escoffier
 writes. The first paragraph of an entry is its ingredient list. A sauce
 named there is a sauce this one is built from, not one it is being compared
-against — `Compare with Espagnole` eight paragraphs down is not a claim of
-derivation, and the guard does not read that far.
+against — entry 22's own third paragraph, `The time required for the
+despumation of an Espagnole` at line 1755, is not a claim of derivation, and
+the guard does not read that far.
 
 An exact catalogued name still wins outright, before the guard runs. A base
 that names itself in its own first line keeps its own identity; the guard
@@ -267,9 +274,11 @@ velouté, but it was already losing to entry 25 on source order, so nothing
 downstream notices. Two candidates removed across both witnesses, one
 binding changed, nine correct bindings untouched. The `diff` summary moves
 from `11 unmatched, 19 parent-changed, 36 ocr-suspected` to `11 unmatched,
-18 parent-changed, 35 ocr-suspected`. The row that leaves is Lenten
-Espagnole's own, which read `(none) / espagnole`: the 1909 witness always
-resolved that parent, and the two printings now agree on it.
+18 parent-changed, 35 ocr-suspected`. One row leaves and both counters drop,
+because that row carried both labels: it is Lenten Espagnole's own, marked
+`parent-changed, ocr-suspected` and reading
+`lenten-espagnole (none) / espagnole`. The 1909 witness always resolved that
+parent, and the two printings now agree on it.
 
 ADR-0008 stays accepted with its mother-binding clause amended, and
 everything else in it intact. Its subject, shadow, ambiguity, and cycle
@@ -290,8 +299,10 @@ heading alone defeated the old rule.
 
 The guard also reads the true base's own opening, and a base that stated its
 own name there would remove itself and hand the heading to the next match in
-source order. None do, which is what it means that all nine correct bindings
-survived: Escoffier opens a base with its quantities, not with its name.
+source order. None do, which is what it means that the eight name-run
+bindings survived the test: Escoffier opens a base with its quantities, not
+with its name. The ninth, the 1909 `ESPAGNOLE`, is an exact catalogued name
+and returns before the guard runs, so it never faced the test at all.
 
 Entry 22 comes within a paragraph of a different trap. It names Espagnole at
 line 1755, in its third paragraph, discussing how long despumation takes.
