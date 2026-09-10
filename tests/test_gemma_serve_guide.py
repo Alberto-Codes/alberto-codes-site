@@ -12,7 +12,7 @@ def _posts_by_slug() -> dict[str, dict]:
     return {meta["slug"]: meta for meta, _body in _load_posts()}
 
 
-def test_serve_guide_loads_as_a_how_to_and_leads_the_index() -> None:
+def test_serve_guide_loads_as_a_how_to_and_sorts_into_the_index() -> None:
     posts = _load_posts()
     by_slug = {meta["slug"]: meta for meta, _ in posts}
     meta = by_slug[SERVE_GUIDE_SLUG]
@@ -21,8 +21,10 @@ def test_serve_guide_loads_as_a_how_to_and_leads_the_index() -> None:
     assert meta["title"].startswith("Serve Gemma 4 31B on a 24 GiB card")
     assert "vramfit" in meta["tags"]
     assert meta["reading_time"] >= 5
-    # Newest post sorts first, so the how-to leads the blog index.
-    assert posts[0][0]["slug"] == SERVE_GUIDE_SLUG
+    # The index sorts newest first, so the how-to sits at its own date's place;
+    # pinning it to the first slot only held until the next post was published.
+    dates = [m["date"] for m, _ in posts]
+    assert dates == sorted(dates, reverse=True)
 
 
 def test_publication_blog_links_resolve_to_published_posts() -> None:
