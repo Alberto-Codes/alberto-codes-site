@@ -181,8 +181,8 @@ veloute, escoffier-1909   ORDINARY VELOUTÉ SAUCE
 ```
 
 Seven of the other eight bindings have a single candidate each, and the
-eighth, the 1909 Espagnole, never reaches the candidate list because its
-exact name wins first. Espagnole in 1907 had a single candidate too. Nothing
+1909 Espagnole binding never reaches the candidate list because its exact
+name wins first. Espagnole in 1907 had a single candidate too. Nothing
 was ranked, so no ranking rule could have prevented it. Measuring the
 proposal is what made that visible, and the measurement is the reason the
 actual defect got named: the run-match branch
@@ -303,8 +303,8 @@ The guard also reads the true base's own opening, and a base that stated its
 own name there would remove itself and hand the heading to the next match in
 source order. None do, which is what it means that the eight name-run
 bindings survived the test: Escoffier opens a base with its quantities, not
-with its name. The ninth, the 1909 `ESPAGNOLE`, is an exact catalogued name
-and returns before the guard runs, so it never faced the test at all.
+with its name. The 1909 `ESPAGNOLE` binding is an exact catalogued name and
+returns before the guard runs, so it never faced the test at all.
 
 Entry 22 comes within a paragraph of a different trap. It names Espagnole at
 line 1755, in its third paragraph, discussing how long despumation takes, and
