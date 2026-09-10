@@ -8,7 +8,9 @@ import reflex as rx
 #
 #   saucier counts   the "state this tag represents" census in the saucier
 #                    release notes, which is what `uv run saucier parse` prints
-#                    and what the saucier README leads with
+#                    and what the saucier README leads with. The card names the
+#                    tag it read, so that version moves on every saucier
+#                    release, including one that leaves the figures untouched
 #   vramfit points   the last "## The Nth data point" heading in vramfit's
 #                    evidence ledger, docs/explanation/evaluating-packed-models.md
 #   release counts   gh api /repos/Alberto-Codes/<repo>/releases --paginate
