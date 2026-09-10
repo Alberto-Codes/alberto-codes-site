@@ -56,7 +56,7 @@ PROJECTS = [
             "has to beat. Deterministic extraction behind four layers with "
             "no runtime dependencies, so a model can be added later without "
             "touching the provenance guarantees. Corpus committed, so a "
-            "clone runs offline. Counts are the v0.6.0 README census. MIT."
+            "clone runs offline. Counts are the v0.7.0 README census. MIT."
         ),
         "tags": [
             "Python",
