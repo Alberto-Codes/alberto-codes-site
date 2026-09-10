@@ -333,11 +333,11 @@ thing: a damaged witness cannot establish identity by promoting a stated
 derivative when the base's name disappears. Neither one repairs anything.
 They both decline to conclude.
 
-Everything here reproduces from the commit:
+Everything here reproduces from the tag:
 
 ```console
 $ git clone https://github.com/Alberto-Codes/saucier
-$ cd saucier && git checkout 1664e75
+$ cd saucier && git checkout v0.7.0
 $ uv sync && uv run saucier parse
 $ uv run saucier tree espagnole --source escoffier-1907
 $ uv run saucier show espaqnole --source escoffier-1907
@@ -346,10 +346,17 @@ $ sed -n 1730p corpus/escoffier-1907.txt
 $ sed -n 1795,1800p corpus/escoffier-1907.txt
 ```
 
-The change is
-[on `main`](https://github.com/Alberto-Codes/saucier/commit/1664e75e95c6806ce604cbab0436e4f1bdaab1e0)
-and not yet tagged. If a heading in either witness is being read as
-something it is not, or if the guard rejects a candidate you think belongs,
+If a heading in either witness is being read as something it is not, or if
+the guard rejects a candidate you think belongs,
 [the issue template](https://github.com/Alberto-Codes/saucier/issues/new?template=extraction.yml)
 asks for the entry number and the source lines. Line 1730 is where I would
 start.
+
+**The release:** [saucier v0.7.0](https://github.com/Alberto-Codes/saucier/releases/tag/v0.7.0)
+— the guard: a mother no longer binds by a name run to a preparation whose
+opening paragraph states that mother, with ADR-0008's statement test moved
+into the shared `saucier.domain.statement` so both readers apply the same
+one. In the 1907 scan the mother stays uncatalogued rather than falling back
+to a derivative, `saucier show espagnole --source escoffier-1907` refuses
+and exits 1 where it used to print a Lenten sauce, and one field of the
+parsed data moves. MIT.
