@@ -339,6 +339,7 @@ Everything here reproduces from the tag:
 $ git clone https://github.com/Alberto-Codes/saucier
 $ cd saucier && git checkout v0.7.0
 $ uv sync && uv run saucier parse
+$ uv run saucier diff escoffier-1907 escoffier-1909
 $ uv run saucier tree espagnole --source escoffier-1907
 $ uv run saucier show espaqnole --source escoffier-1907
 $ uv run saucier show lenten-espagnole --source escoffier-1907
@@ -355,7 +356,7 @@ start.
 **The release:** [saucier v0.7.0](https://github.com/Alberto-Codes/saucier/releases/tag/v0.7.0)
 — the guard: a mother no longer binds by a name run to a preparation whose
 opening paragraph states that mother, with ADR-0008's statement test moved
-into the shared `saucier.domain.statement` so both readers apply the same
+into the shared `saucier.domain.statement` so both callers apply the same
 one. In the 1907 scan the mother stays uncatalogued rather than falling back
 to a derivative, `saucier show espagnole --source escoffier-1907` refuses
 and exits 1 where it used to print a Lenten sauce, and one field of the
