@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 840 440" style="max-width: 840px; background-color: transparent; font-family: 'trebuchet ms', verdana, arial, sans-serif; font-size: 14px;" role="img" aria-labelledby="t d">
+  <title id="t">Jev&#x27;s answer against my answer key, message by message</title>
+  <desc id="d">Six messages from the two topics I counted as yes. For each, my answer key said yes. Charged twice: I have multiple charges on the same transaction, Jev 16 percent. What are my remedies if I think I was charged twice for the same expense, Jev 16 percent. Extra charge: When will the $1 transaction be credited to me, Jev 7 percent. Why are there so many fees on my statement, Jev 8 percent. There is a fee I don&#x27;t recognize on my statement, Jev 78 percent. I do not remember purchasing anything for 1 pound, and it is on my statement, Jev 87 percent. Jev scored the questions about fees and double charges low and the charges the customer did not make high; my key said yes to all six.</desc>
+  <style>
+    text { fill: #cccccc; }
+    .m { fill: #888888; font-size: 12px; }
+    .h { font-size: 15px; font-weight: bold; }
+    .c { text-anchor: middle; }
+    .e { text-anchor: end; }
+  </style>
+  <rect id="card" x="0" y="0" width="100%" height="100%" rx="12" fill="#1f2020"/>
+  <text class="m" x="20" y="24">MESSAGE</text><text class="m c" x="640" y="24">JEV</text><text class="m c" x="780" y="24">MY KEY</text>
+  <text class="h" x="20" y="60" style="font-size:13px;fill:#888888">A transaction charged twice</text>
+  <text x="20" y="84">"I have multiple charges on the same transaction."</text>
+  <rect x="560" y="72" width="120" height="16" rx="4" fill="#1f2020" stroke="#444444"/>
+  <rect x="560" y="72" width="19.2" height="16" rx="4" fill="#888888"/>
+  <text class="h" x="690" y="85">16%</text>
+  <text class="h c" x="780" y="85" style="fill:#c96f4a">yes</text>
+  <text x="20" y="142">"What are my remedies if I think I was charged twice</text>
+  <text x="20" y="160">for the same expense?"</text>
+  <rect x="560" y="130" width="120" height="16" rx="4" fill="#1f2020" stroke="#444444"/>
+  <rect x="560" y="130" width="19.2" height="16" rx="4" fill="#888888"/>
+  <text class="h" x="690" y="143">16%</text>
+  <text class="h c" x="780" y="143" style="fill:#c96f4a">yes</text>
+  <text class="h" x="20" y="198" style="font-size:13px;fill:#888888">An extra charge on my statement</text>
+  <text x="20" y="222">"When will the $1 transaction be credited to me?"</text>
+  <rect x="560" y="210" width="120" height="16" rx="4" fill="#1f2020" stroke="#444444"/>
+  <rect x="560" y="210" width="8.4" height="16" rx="4" fill="#888888"/>
+  <text class="h" x="690" y="223">7%</text>
+  <text class="h c" x="780" y="223" style="fill:#c96f4a">yes</text>
+  <text x="20" y="280">"Why are there so many fees on my statement?"</text>
+  <rect x="560" y="268" width="120" height="16" rx="4" fill="#1f2020" stroke="#444444"/>
+  <rect x="560" y="268" width="9.6" height="16" rx="4" fill="#888888"/>
+  <text class="h" x="690" y="281">8%</text>
+  <text class="h c" x="780" y="281" style="fill:#c96f4a">yes</text>
+  <text x="20" y="338">"There is a fee I don&#x27;t recognize on my statement."</text>
+  <rect x="560" y="326" width="120" height="16" rx="4" fill="#1f2020" stroke="#444444"/>
+  <rect x="560" y="326" width="93.6" height="16" rx="4" fill="#7fb069"/>
+  <text class="h" x="690" y="339">78%</text>
+  <text class="h c" x="780" y="339" style="fill:#c96f4a">yes</text>
+  <text x="20" y="396">"I do not remember purchasing anything for 1£, and</text>
+  <text x="20" y="414">it is on my statement."</text>
+  <rect x="560" y="384" width="120" height="16" rx="4" fill="#1f2020" stroke="#444444"/>
+  <rect x="560" y="384" width="104.4" height="16" rx="4" fill="#7fb069"/>
+  <text class="h" x="690" y="397">87%</text>
+  <text class="h c" x="780" y="397" style="fill:#c96f4a">yes</text>
+</svg>

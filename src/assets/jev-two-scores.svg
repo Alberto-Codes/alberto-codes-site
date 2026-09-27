@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 840 300" style="max-width: 840px; background-color: transparent; font-family: 'trebuchet ms', verdana, arial, sans-serif; font-size: 14px;" role="img" aria-labelledby="t d">
+  <title id="t">Same answers, two scores, before and after relabelling</title>
+  <desc id="d">Two small charts. Left, the sorting score, where higher is better: 0.986 with my first labels and 0.972 after relabelling two topics, nearly the same. Right, the average gap, where lower is better: 17 points with my first labels and 6 points after relabelling, about a third. Changing two topics&#x27; labels barely moved the sorting score and cut the average gap by about two thirds.</desc>
+  <style>
+    text { fill: #cccccc; text-anchor: middle; }
+    .m { fill: #888888; font-size: 12px; }
+    .h { font-size: 15px; font-weight: bold; }
+    .v { font-size: 18px; font-weight: bold; }
+  </style>
+  <rect id="card" x="0" y="0" width="100%" height="100%" rx="12" fill="#1f2020"/>
+  <text class="h" x="210" y="28">Sorting score</text>
+  <text class="m" x="210" y="48">higher is better · 1.0 is perfect</text>
+  <line x1="80" y1="240" x2="340" y2="240" stroke="#888888" stroke-width="1"/>
+  <rect x="115" y="92.1" width="70" height="147.9" rx="4" fill="#c96f4a"/>
+  <text class="v" x="150" y="82.1">0.986</text>
+  <text class="m" x="150" y="258">my first labels</text>
+  <rect x="235" y="94.2" width="70" height="145.8" rx="4" fill="#7fb069"/>
+  <text class="v" x="270" y="84.2">0.972</text>
+  <text class="m" x="270" y="258">relabelled</text>
+  <text class="h" x="210" y="288" style="fill:#888888">barely moved</text>
+  <text class="h" x="630" y="28">Average gap</text>
+  <text class="m" x="630" y="48">lower is better · 0 is perfect</text>
+  <line x1="500" y1="240" x2="760" y2="240" stroke="#888888" stroke-width="1"/>
+  <rect x="535" y="109.5" width="70" height="130.5" rx="4" fill="#c96f4a"/>
+  <text class="v" x="570" y="99.5">17 points</text>
+  <text class="m" x="570" y="258">my first labels</text>
+  <rect x="655" y="198.0" width="70" height="42.0" rx="4" fill="#7fb069"/>
+  <text class="v" x="690" y="188.0">6 points</text>
+  <text class="m" x="690" y="258">relabelled</text>
+  <text class="h" x="630" y="288" style="fill:#888888">fell by about two thirds</text>
+</svg>

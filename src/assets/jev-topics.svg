@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 840 330" style="max-width: 840px; background-color: transparent; font-family: 'trebuchet ms', verdana, arial, sans-serif; font-size: 14px;" role="img" aria-labelledby="t d">
+  <title id="t">Jev&#x27;s average percentage for each topic I counted as yes</title>
+  <desc id="d">Horizontal bars, one per topic, each topic 40 messages, with a dashed line at 50 percent. A card payment I don&#x27;t recognise, 83 percent, 36 of 40 at 50 percent or more. A direct debit I don&#x27;t recognise, 82 percent, 35 of 40. A cash withdrawal I don&#x27;t recognise, 80 percent, 34 of 40. My card may be compromised, 71 percent, 30 of 40. An extra charge on my statement, 36 percent, 8 of 40, drawn in orange. A transaction charged twice, 29 percent, 4 of 40, drawn in orange. The first four sit well above 50 percent; the last two sit below it.</desc>
+  <style>
+    text { fill: #cccccc; }
+    .m { fill: #888888; font-size: 12px; }
+    .h { font-size: 15px; font-weight: bold; }
+    .c { text-anchor: middle; }
+    .e { text-anchor: end; }
+  </style>
+  <rect id="card" x="0" y="0" width="100%" height="100%" rx="12" fill="#1f2020"/>
+  <text class="h" x="20" y="28">Jev's average for each topic I counted as yes</text>
+  <text class="e" x="288" y="73">A card payment I don&#x27;t recognise</text>
+  <rect x="300" y="56" width="316.9" height="24" rx="4" fill="#7fb069"/>
+  <text class="h" x="624.9" y="73">83%</text>
+  <text class="m e" x="830" y="73">36 of 40 at 50%+</text>
+  <text class="e" x="288" y="115">A direct debit I don&#x27;t recognise</text>
+  <rect x="300" y="98" width="310.1" height="24" rx="4" fill="#7fb069"/>
+  <text class="h" x="618.1" y="115">82%</text>
+  <text class="m e" x="830" y="115">35 of 40 at 50%+</text>
+  <text class="e" x="288" y="157">A cash withdrawal I don&#x27;t recognise</text>
+  <rect x="300" y="140" width="305.1" height="24" rx="4" fill="#7fb069"/>
+  <text class="h" x="613.1" y="157">80%</text>
+  <text class="m e" x="830" y="157">34 of 40 at 50%+</text>
+  <text class="e" x="288" y="199">My card may be compromised</text>
+  <rect x="300" y="182" width="267.9" height="24" rx="4" fill="#7fb069"/>
+  <text class="h" x="575.9" y="199">71%</text>
+  <text class="m e" x="830" y="199">30 of 40 at 50%+</text>
+  <text class="e" x="288" y="241">An extra charge on my statement</text>
+  <rect x="300" y="224" width="135.7" height="24" rx="4" fill="#c96f4a"/>
+  <text class="h" x="443.7" y="241">36%</text>
+  <text class="m e" x="830" y="241">8 of 40 at 50%+</text>
+  <text class="e" x="288" y="283">A transaction charged twice</text>
+  <rect x="300" y="266" width="110.6" height="24" rx="4" fill="#c96f4a"/>
+  <text class="h" x="418.6" y="283">29%</text>
+  <text class="m e" x="830" y="283">4 of 40 at 50%+</text>
+  <line x1="490.0" y1="46" x2="490.0" y2="310" stroke="#888888" stroke-width="1.5" stroke-dasharray="5 4"/>
+  <text class="m c" x="490.0" y="324">50%</text>
+</svg>

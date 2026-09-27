@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 840 330" style="max-width: 840px; background-color: transparent; font-family: 'trebuchet ms', verdana, arial, sans-serif; font-size: 14px;" role="img" aria-labelledby="t d">
+  <title id="t">You write the test; Jev fills in the bubbles</title>
+  <desc id="d">Two cards. Left card, labelled you write: the text, I have multiple charges on the same transaction; the question, Does the customer report a transaction they did not authorize?; and two answer choices, Yes and No, with empty bubbles. An arrow leads to the right card, labelled Jev fills in: the same two choices with bubbles shaded by how likely each is, Yes 16 percent and No 84 percent.</desc>
+  <style>
+    text { fill: #cccccc; }
+    .m { fill: #888888; font-size: 12px; }
+    .h { font-size: 15px; font-weight: bold; }
+    .c { text-anchor: middle; }
+    .e { text-anchor: end; }
+  </style>
+  <rect id="card" x="0" y="0" width="100%" height="100%" rx="12" fill="#1f2020"/>
+  <rect x="20" y="40" width="350" height="270" rx="10" fill="#1f2020" stroke="#444444" stroke-width="1.5"/>
+  <text class="h" x="40" y="28">You write</text>
+  <text class="m" x="40" y="70">TEXT</text>
+  <text x="40" y="92">"I have multiple charges on the</text>
+  <text x="40" y="112">same transaction."</text>
+  <text class="m" x="40" y="146">QUESTION</text>
+  <text x="40" y="168">Does the customer report a</text>
+  <text x="40" y="188">transaction they did not authorize?</text>
+  <circle cx="56" cy="232" r="14" fill="none" stroke="#cccccc" stroke-width="2"/>
+  <text x="82" y="237">Yes</text>
+  <circle cx="56" cy="276" r="14" fill="none" stroke="#cccccc" stroke-width="2"/>
+  <text x="82" y="281">No</text>
+  <rect x="470" y="40" width="350" height="270" rx="10" fill="#1f2020" stroke="#444444" stroke-width="1.5"/>
+  <text class="h" x="490" y="28">Jev fills in</text>
+  <text class="m" x="490" y="70">TEXT</text>
+  <text x="490" y="92">"I have multiple charges on the</text>
+  <text x="490" y="112">same transaction."</text>
+  <text class="m" x="490" y="146">QUESTION</text>
+  <text x="490" y="168">Does the customer report a</text>
+  <text x="490" y="188">transaction they did not authorize?</text>
+  <clipPath id="b0"><circle cx="506" cy="232" r="14"/></clipPath>
+  <rect x="492" y="241.5" width="28" height="4.5" fill="#7fb069" clip-path="url(#b0)"/>
+  <circle cx="506" cy="232" r="14" fill="none" stroke="#cccccc" stroke-width="2"/>
+  <text class="h" x="770" y="237" style="text-anchor:end">16%</text>
+  <text x="532" y="237">Yes</text>
+  <clipPath id="b1"><circle cx="506" cy="276" r="14"/></clipPath>
+  <rect x="492" y="266.5" width="28" height="23.5" fill="#7fb069" clip-path="url(#b1)"/>
+  <circle cx="506" cy="276" r="14" fill="none" stroke="#cccccc" stroke-width="2"/>
+  <text class="h" x="770" y="281" style="text-anchor:end">84%</text>
+  <text x="532" y="281">No</text>
+  <line x1="382" y1="175" x2="456" y2="175" stroke="#7fb069" stroke-width="2"/><path d="M456,169 L466,175 L456,181 z" fill="#7fb069"/>
+</svg>
