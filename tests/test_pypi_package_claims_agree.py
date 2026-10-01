@@ -87,6 +87,7 @@ def _experience_names() -> list[str]:
 
 
 def test_home_badge_count_matches_the_about_paragraph() -> None:
+    """The home badge's package count matches the About paragraph."""
     badge = _home_badge_count()
     names, spelled_out = _about_claim()
     assert spelled_out == badge, (
@@ -98,6 +99,7 @@ def test_home_badge_count_matches_the_about_paragraph() -> None:
 
 
 def test_about_and_experience_name_the_same_packages() -> None:
+    """The About and Experience pages name the same packages."""
     about_names, _ = _about_claim()
     experience_names = _experience_names()
     assert set(about_names) == set(experience_names), (

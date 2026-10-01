@@ -13,6 +13,7 @@ def _posts_by_slug() -> dict[str, dict]:
 
 
 def test_serve_guide_loads_as_a_how_to_and_sorts_into_the_index() -> None:
+    """The serve guide loads as a how-to and sorts into the blog index."""
     posts = _load_posts()
     by_slug = {meta["slug"]: meta for meta, _ in posts}
     meta = by_slug[SERVE_GUIDE_SLUG]
@@ -28,6 +29,7 @@ def test_serve_guide_loads_as_a_how_to_and_sorts_into_the_index() -> None:
 
 
 def test_publication_blog_links_resolve_to_published_posts() -> None:
+    """Every publication's blog link points at a published post."""
     slugs = _posts_by_slug()
     for pub in PUBLICATIONS:
         for _label, _icon, url in pub["links"]:
@@ -36,7 +38,10 @@ def test_publication_blog_links_resolve_to_published_posts() -> None:
 
 
 def test_gemma_pack_entry_carries_maps_and_serve_guide_links() -> None:
-    gemma = next(p for p in PUBLICATIONS if p["title"] == "gemma-4-31B-it-fit24gib-GGUF")
+    """The Gemma pack entry links its maps and the serve guide."""
+    gemma = next(
+        p for p in PUBLICATIONS if p["title"] == "gemma-4-31B-it-fit24gib-GGUF"
+    )
     links = {label: url for label, _icon, url in gemma["links"]}
     assert links["Sensitivity maps"] == (
         "https://huggingface.co/datasets/Alberto-Codes/gemma-4-31B-it-sensitivity-maps"
