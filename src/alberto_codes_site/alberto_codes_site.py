@@ -80,7 +80,9 @@ def layout(page: rx.Component) -> rx.Component:
         footer(),
         spacing="0",
         min_height="100vh",
-        overflow_x="hidden",
+        # clip, not hidden: hidden makes this a scroll container, which stops
+        # the navbar's position: sticky from sticking (#113).
+        overflow_x="clip",
         width="100%",
     )
 
