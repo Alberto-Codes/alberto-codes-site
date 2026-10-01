@@ -2,7 +2,7 @@
 
 import reflex as rx
 
-from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
+from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y, READING_WIDTH
 
 
 def contact_link(icon_name: str, label: str, href: str) -> rx.Component:
@@ -55,13 +55,19 @@ def contact_page() -> rx.Component:
             rx.box(height="4em"),
             rx.heading("Contact", as_="h1", size="8", weight="bold"),
             rx.separator(size="4", color_scheme="blue"),
+            rx.box(height="1em"),
             rx.text(
-                "Feel free to reach out.",
+                "Email is the best way to reach me. Questions about a post, a "
+                "bug in one of the open source tools, or a correction to "
+                "something I measured are all welcome. For a bug or a feature "
+                "request, an issue on the tool's GitHub repository reaches me "
+                "just as well, and it helps the next person who runs into it.",
                 size="3",
                 color=rx.color("slate", 11),
+                line_height="1.8",
+                max_width=READING_WIDTH,
             ),
-            rx.box(height="2em"),
-            rx.vstack(
+            rx.grid(
                 contact_link(
                     "mail",
                     "Email",
@@ -82,9 +88,9 @@ def contact_page() -> rx.Component:
                     "Resume",
                     "/Alberto_Nieto_Resume.pdf",
                 ),
+                columns=rx.breakpoints(initial="1", md="2"),
                 spacing="3",
                 width="100%",
-                max_width="28em",
             ),
             spacing="4",
             **PAGE_COLUMN,
