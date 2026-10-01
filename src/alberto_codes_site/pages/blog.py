@@ -1151,6 +1151,52 @@ def _series_index(all_series: list[Series]) -> rx.Component:
     )
 
 
+# What each Diataxis type offers a reader, shown beside its label on /blog.
+DIATAXIS_DESCRIPTIONS = {
+    "tutorial": "learn by doing, step by step",
+    "how-to": "solve one specific problem",
+    "explanation": "understand why something works",
+    "reference": "look up the details",
+}
+
+
+def _type_legend() -> rx.Component:
+    """Render the post types as a definition list: label, then what it means.
+
+    The labels stay inert text (issue #79) and the meanings are always
+    visible rather than in a hover tooltip, which touch and keyboard readers
+    could not reach (issue #49). Two columns from the ``sm`` breakpoint, one
+    on phones.
+
+    Returns:
+        A ``<dl>`` with one ``<dt>``/``<dd>`` pair per Diataxis type.
+    """
+    pairs = [
+        rx.el.div(
+            rx.el.dt(_type_badge(label, size="2")),
+            rx.el.dd(
+                rx.text(description, as_="span", size="2"),
+                margin="0",
+                color=rx.color("slate", 11),
+            ),
+            display="flex",
+            align_items="baseline",
+            column_gap="0.5em",
+            flex_wrap="wrap",
+        )
+        for label, description in DIATAXIS_DESCRIPTIONS.items()
+    ]
+    return rx.el.dl(
+        *pairs,
+        display="grid",
+        grid_template_columns=rx.breakpoints(initial="1fr", sm="repeat(2, 1fr)"),
+        column_gap="2em",
+        row_gap="0.25em",
+        margin="0",
+        width="100%",
+    )
+
+
 def blog_page(today: date | None = None) -> rx.Component:
     """Render the blog index page listing the published posts.
 
@@ -1220,11 +1266,7 @@ def blog_page(today: date | None = None) -> rx.Component:
                 size="3",
                 color=rx.color("slate", 11),
             ),
-            rx.hstack(
-                *[_type_badge(label, size="2") for label in DIATAXIS_COLORS],
-                spacing="4",
-                wrap="wrap",
-            ),
+            _type_legend(),
             *([_series_index(all_series)] if all_series else []),
             rx.box(height="1em"),
             *[_post_card(m, _series_label(m, all_series)) for m, _ in posts],
