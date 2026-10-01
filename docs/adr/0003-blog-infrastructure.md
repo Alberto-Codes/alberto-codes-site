@@ -238,3 +238,13 @@ part.
 
 - [ADR-0002: Blog Content Strategy Using the Diataxis Framework](0002-blog-content-strategy-diataxis.md)
 - [Reflex Markdown Component](https://reflex.dev/docs/library/typography/markdown/)
+
+## Amendment, 2026-10-01: a wider measure at 18px on desktop
+
+The first measure (34rem of 16px text) read narrow on a desktop screen beside
+880px figures. From the md breakpoint (768px) up, a post's paragraphs, list
+items and blockquotes now set at 18px (`READING_FONT_SIZE`, 1.125rem), and
+`READING_WIDTH` is 40rem (640px). That still measures about 74 characters per
+line at 1440px wide, and figures, tables and code blocks step out only 120px
+a side. Phones keep the 16px base, where the measure is wider than the screen
+anyway. Tables and code blocks keep their own font sizes.

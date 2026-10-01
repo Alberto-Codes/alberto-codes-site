@@ -35,6 +35,7 @@ from alberto_codes_site.layout import (
     PAGE_COLUMN,
     PAGE_PADDING_Y,
     READING_COLUMN,
+    READING_FONT_SIZE,
     READING_WIDTH,
 )
 from alberto_codes_site.series import Series, build_series, series_of
@@ -1034,6 +1035,13 @@ def _render_post(
                     READING_COLUMN
                 ),
                 "& div.heading-wrap": READING_COLUMN,
+                # Desktop reads at 18px so the wider measure stays near 70
+                # characters; tables and code keep their own sizes.
+                "@media screen and (min-width: 768px)": {
+                    "& :is(p:not(:has(> img)), li, blockquote)": {
+                        "font_size": READING_FONT_SIZE,
+                    },
+                },
                 # Lists keep their 1.5rem bullet indent inside the measure.
                 "& :is(ul, ol)": {
                     "max_width": f"calc({READING_WIDTH} - 1.5rem)",
