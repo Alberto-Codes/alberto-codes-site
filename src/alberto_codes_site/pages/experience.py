@@ -115,7 +115,7 @@ def timeline_item(role: dict) -> rx.Component:
         rx.card(
             rx.vstack(
                 rx.hstack(
-                    rx.heading(role["title"], size="4", weight="bold"),
+                    rx.heading(role["title"], as_="h2", size="4", weight="bold"),
                     rx.spacer(),
                     rx.badge(role["period"], variant="surface", size="1"),
                     width="100%",
@@ -165,7 +165,7 @@ def experience_page() -> rx.Component:
     return rx.container(
         rx.vstack(
             rx.box(height="4em"),
-            rx.heading("Experience", size="8", weight="bold"),
+            rx.heading("Experience", as_="h1", size="8", weight="bold"),
             rx.separator(size="4", color_scheme="blue"),
             rx.text(
                 "From banking operations to enterprise AI \u2014 a "
@@ -182,7 +182,7 @@ def experience_page() -> rx.Component:
             rx.box(height="2em"),
             rx.card(
                 rx.vstack(
-                    rx.heading("Education", size="4", weight="bold"),
+                    rx.heading("Education", as_="h2", size="4", weight="bold"),
                     rx.text(
                         "DeVry University",
                         size="3",

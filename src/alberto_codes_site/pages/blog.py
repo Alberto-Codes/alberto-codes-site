@@ -6,6 +6,7 @@ from pathlib import Path
 import reflex as rx
 
 from alberto_codes_site.figures import figure_page_style, split_figures
+from alberto_codes_site.headings import Slugger, heading_component_map, heading_ids
 
 POSTS_DIR = Path(__file__).resolve().parent.parent.parent / "posts"
 
@@ -110,6 +111,7 @@ def _post_card(meta: dict) -> rx.Component:
                 ),
                 rx.heading(
                     meta.get("title", "Untitled"),
+                    as_="h2",
                     size="4",
                     weight="bold",
                 ),
@@ -173,14 +175,20 @@ def _post_body(body: str) -> list[rx.Component]:
 
     A figure carrying the shared token block (ADR-0005) is inlined so the
     site's theme reaches it; every other image stays inside the markdown.
+    Headings get slug ids that are unique across all runs of the post.
     """
+    slugger = Slugger()
     return [
         rx.html(content)
         if kind == "figure"
         else rx.markdown(
             content,
             use_gfm=True,
-            component_map={"pre": _code_block, "table": _table},
+            component_map={
+                **heading_component_map(heading_ids(content, slugger)),
+                "pre": _code_block,
+                "table": _table,
+            },
         )
         for kind, content in split_figures(body)
     ]
@@ -214,6 +222,7 @@ def _render_post(meta: dict, body: str) -> rx.Component:
         ),
         rx.heading(
             meta.get("title", "Untitled"),
+            as_="h1",
             size="7",
             weight="bold",
         ),
@@ -277,12 +286,14 @@ def blog_page() -> rx.Component:
         return rx.container(
             rx.vstack(
                 rx.box(height="4em"),
-                rx.heading("Blog", size="8", weight="bold"),
+                rx.heading("Blog", as_="h1", size="8", weight="bold"),
                 rx.separator(size="4", color_scheme="blue"),
                 rx.box(height="4em"),
                 rx.vstack(
                     rx.icon("notebook-pen", size=48, color=rx.color("slate", 7)),
-                    rx.heading("Coming Soon", size="6", color=rx.color("slate", 9)),
+                    rx.heading(
+                        "Coming Soon", as_="h2", size="6", color=rx.color("slate", 9)
+                    ),
                     rx.text(
                         "I'm working on sharing thoughts on AI engineering, "
                         "career growth, and technical leadership.",
@@ -306,7 +317,7 @@ def blog_page() -> rx.Component:
         rx.vstack(
             rx.box(height="4em"),
             rx.hstack(
-                rx.heading("Blog", size="8", weight="bold"),
+                rx.heading("Blog", as_="h1", size="8", weight="bold"),
                 rx.link(
                     "RSS",
                     href="/feed.xml",
@@ -369,7 +380,7 @@ def blog_post_page(slug: str) -> rx.Component:
     return rx.container(
         rx.vstack(
             rx.box(height="4em"),
-            rx.heading("Post Not Found", size="7", weight="bold"),
+            rx.heading("Post Not Found", as_="h1", size="7", weight="bold"),
             rx.text(
                 "Sorry, that post doesn't exist.", size="3", color=rx.color("slate", 10)
             ),

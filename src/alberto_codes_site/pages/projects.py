@@ -315,7 +315,7 @@ def project_card(project: dict) -> rx.Component:
         )
         ```
     """
-    title_el = rx.heading(project["title"], size="4", weight="bold")
+    title_el = rx.heading(project["title"], as_="h2", size="4", weight="bold")
     card = rx.card(
         rx.vstack(
             title_el,
@@ -353,7 +353,7 @@ def projects_page() -> rx.Component:
     return rx.container(
         rx.vstack(
             rx.box(height="4em"),
-            rx.heading("Projects", size="8", weight="bold"),
+            rx.heading("Projects", as_="h1", size="8", weight="bold"),
             rx.separator(size="4", color_scheme="blue"),
             rx.text(
                 "Key technical work and initiatives.",
@@ -373,6 +373,7 @@ def projects_page() -> rx.Component:
                     rx.vstack(
                         rx.heading(
                             "Want to collaborate?",
+                            as_="h2",
                             size="4",
                             weight="bold",
                         ),

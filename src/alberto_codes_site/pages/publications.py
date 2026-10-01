@@ -259,7 +259,7 @@ def publication_card(publication: dict) -> rx.Component:
                 spacing="2",
                 align="center",
             ),
-            rx.heading(publication["title"], size="4", weight="bold"),
+            rx.heading(publication["title"], as_="h2", size="4", weight="bold"),
             rx.text(
                 publication["summary"],
                 size="2",
@@ -321,7 +321,7 @@ def publications_page() -> rx.Component:
     return rx.container(
         rx.vstack(
             rx.box(height="4em"),
-            rx.heading("Publications", size="8", weight="bold"),
+            rx.heading("Publications", as_="h1", size="8", weight="bold"),
             rx.separator(size="4", color_scheme="blue"),
             rx.text(
                 "Artifacts I have published, with what I contributed, what "
