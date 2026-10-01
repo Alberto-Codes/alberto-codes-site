@@ -27,9 +27,13 @@ PAGE_PADDING_Y = "var(--space-6)"
 PAGE_COLUMN = {"max_width": "48em", "width": "100%", "margin_x": "auto"}
 
 # The measure of a post's running text: about 70 characters per line in the
-# 16px body font (issue #78). Set in rem rather than ch so that headings, whose
-# ch is larger, share the paragraphs' left edge.
-READING_WIDTH = "34rem"
+# post body font, which is 18px on desktop (issue #78; the 16px/34rem first
+# cut read narrow beside 880px figures). Set in rem rather than ch so that
+# headings, whose ch is larger, share the paragraphs' left edge.
+READING_WIDTH = "40rem"
+
+# A post's running text from the md breakpoint up; phones keep the 16px base.
+READING_FONT_SIZE = "1.125rem"
 
 # Applied to a block that holds running text in a post: the reading measure,
 # centred in the wider post column.

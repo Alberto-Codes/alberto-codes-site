@@ -10,7 +10,11 @@ import re
 
 import pytest
 
-from alberto_codes_site.layout import PAGE_PADDING_Y, READING_WIDTH
+from alberto_codes_site.layout import (
+    PAGE_PADDING_Y,
+    READING_FONT_SIZE,
+    READING_WIDTH,
+)
 from alberto_codes_site.pages.about import about_page
 from alberto_codes_site.pages.blog import _render_post, blog_page, blog_post_page
 from alberto_codes_site.pages.contact import contact_page
@@ -66,3 +70,10 @@ def test_post_text_keeps_the_measure_and_wide_blocks_do_not():
         f'({{ ["maxWidth"] : "{READING_WIDTH}", ["marginInline"] : "auto" }})'
     ) in jsx
     assert f'["maxWidth"] : "calc({READING_WIDTH} - 1.5rem)"' in jsx
+
+
+def test_post_text_is_larger_on_desktop_only():
+    """From the md breakpoint up, running text sets at the reading font size."""
+    jsx = str(_render_post({"title": "T"}, "Text."))
+    assert '["@media screen and (min-width: 768px)"]' in jsx
+    assert f'["fontSize"] : "{READING_FONT_SIZE}"' in jsx
