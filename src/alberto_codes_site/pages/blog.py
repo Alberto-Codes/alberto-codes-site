@@ -16,6 +16,12 @@ from reflex.vars import Var
 
 from alberto_codes_site.figures import figure_page_style, split_figures
 from alberto_codes_site.headings import Slugger, heading_component_map, heading_ids
+from alberto_codes_site.layout import (
+    PAGE_COLUMN,
+    PAGE_PADDING_Y,
+    READING_COLUMN,
+    READING_WIDTH,
+)
 
 POSTS_DIR = Path(__file__).resolve().parent.parent.parent / "posts"
 
@@ -356,8 +362,12 @@ def _post_body(body: str) -> list[rx.Component]:
 
 
 def _render_post(meta: dict, body: str) -> rx.Component:
-    """Render a full blog post with metadata header and markdown body."""
-    return rx.vstack(
+    """Render a full blog post with metadata header and markdown body.
+
+    The header and the body's running text keep to the reading measure, centred
+    in the post column; figures, tables and code blocks use the full column.
+    """
+    header = rx.vstack(
         rx.link(
             rx.hstack(
                 rx.icon("arrow-left", size=14),
@@ -394,11 +404,29 @@ def _render_post(meta: dict, body: str) -> rx.Component:
             style={"font-style": "italic"},
         ),
         rx.separator(size="4", color_scheme="blue"),
+        spacing="4",
+        width="100%",
+        **READING_COLUMN,
+    )
+    return rx.vstack(
+        header,
         rx.box(
             *_post_body(body),
             width="100%",
             style={
                 **figure_page_style(),
+                # Running text keeps to the measure; a paragraph that holds
+                # an image is a figure and keeps the full width.
+                "& :is(p:not(:has(> img)), h2, h3, h4, h5, h6, blockquote)": (
+                    READING_COLUMN
+                ),
+                # Lists keep their 1.5rem bullet indent inside the measure.
+                "& :is(ul, ol)": {
+                    "max_width": f"calc({READING_WIDTH} - 1.5rem)",
+                    "margin_inline_start": (
+                        f"calc(max(0px, (100% - {READING_WIDTH}) / 2) + 1.5rem)"
+                    ),
+                },
                 "& :not(pre) > code": {"padding_inline_end": "0"},
                 # Body links sit in running text; colour alone is under 3:1
                 # against it in dark mode, so underline them.
@@ -479,9 +507,10 @@ def blog_page(today: date | None = None) -> rx.Component:
                 spacing="4",
                 align="center",
                 min_height="60vh",
+                **PAGE_COLUMN,
             ),
             size="3",
-            padding_y="6",
+            padding_y=PAGE_PADDING_Y,
         )
 
     return rx.container(
@@ -525,10 +554,10 @@ def blog_page(today: date | None = None) -> rx.Component:
             rx.box(height="1em"),
             *[_post_card(m) for m, _ in posts],
             spacing="4",
-            max_width="64em",
+            **PAGE_COLUMN,
         ),
         size="3",
-        padding_y="6",
+        padding_y=PAGE_PADDING_Y,
     )
 
 
@@ -550,10 +579,10 @@ def blog_post_page(slug: str, today: date | None = None) -> rx.Component:
                     rx.box(height="4em"),
                     _render_post(meta, body),
                     spacing="4",
-                    max_width="64em",
+                    width="100%",
                 ),
                 size="3",
-                padding_y="6",
+                padding_y=PAGE_PADDING_Y,
             )
     # Post not found
     return rx.container(
@@ -567,7 +596,8 @@ def blog_post_page(slug: str, today: date | None = None) -> rx.Component:
             spacing="4",
             align="center",
             min_height="60vh",
+            **PAGE_COLUMN,
         ),
         size="3",
-        padding_y="6",
+        padding_y=PAGE_PADDING_Y,
     )

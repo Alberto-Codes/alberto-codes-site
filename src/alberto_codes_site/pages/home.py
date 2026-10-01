@@ -5,6 +5,7 @@ from datetime import date
 import reflex as rx
 
 from alberto_codes_site.components.button_link import button_link
+from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
 from alberto_codes_site.pages.blog import _load_posts, published_posts
 from alberto_codes_site.tenure import years_at_wells_fargo
 
@@ -273,10 +274,9 @@ def home_page() -> rx.Component:
             spacing="4",
             align="center",
             min_height="85vh",
-            max_width="48em",
-            width="100%",
+            **PAGE_COLUMN,
         ),
         size="3",
         padding_x=["var(--space-4)", "var(--space-4)", "0", "0", "0"],
-        padding_y="6",
+        padding_y=PAGE_PADDING_Y,
     )

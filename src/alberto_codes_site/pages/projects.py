@@ -3,6 +3,7 @@
 import reflex as rx
 
 from alberto_codes_site.components.button_link import button_link
+from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
 
 # This site is a static build with no runtime fetch, so the figures below
 # cannot read themselves and will rot silently unless re-read. The open-source
@@ -407,8 +408,8 @@ def projects_page() -> rx.Component:
                 width="100%",
             ),
             spacing="4",
-            max_width="48em",
+            **PAGE_COLUMN,
         ),
         size="3",
-        padding_y="6",
+        padding_y=PAGE_PADDING_Y,
     )

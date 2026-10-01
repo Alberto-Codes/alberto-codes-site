@@ -109,6 +109,21 @@ in; it flags the button for two seconds (copy icon swaps to a check) and
 writes "Copied" to a polite live region. The highlighting theme is unchanged.
 `tests/test_code_block_toolbar.py` checks the compiled structure.
 
+## Amendment, 2026-10-01: running text keeps a reading measure
+
+A post's column stays at the container's 880px, but its running text no longer
+fills it (issue #78): at 16px a full-width line ran to about 116 characters.
+The header and the body's paragraphs, headings, lists and blockquotes are
+capped at `READING_WIDTH` (34rem) and centred, which measures about 71
+characters per line at 1440px wide. Tables, code blocks, inlined figures and
+image paragraphs still use the full 880px. The measure is set in rem rather
+than `ch`, because `ch` grows with a heading's font size and would break the
+shared left edge; lists keep their 1.5rem bullet indent inside it. The widths
+live in `src/alberto_codes_site/layout.py`, which also holds the 48em column
+every other page now centres, and the containers' vertical padding, which was
+a bare Radix step (`"6"`) that browsers dropped and is now `var(--space-6)`.
+`tests/test_page_widths.py` checks the compiled styles.
+
 ## Consequences
 
 ### Positive
