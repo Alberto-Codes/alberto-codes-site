@@ -216,6 +216,25 @@ the RSS item bodies. `tests/test_series.py` checks the membership, numbering,
 published-only counting, the routes against the sitemap, and the box on every
 part.
 
+## Amendment, 2026-10-01: readable dates and an Updated date
+
+Every post date on the site reads as "1 Oct 2026" (day, short month, year,
+the order the experience page's periods use) inside
+`<time datetime="2026-10-01">` (issue #83): blog and series cards, the post
+header, home's "Latest writing", the end section's related posts, and the
+series page's date range. Publication dates use the same form. The helpers
+are in `dates.py`.
+
+A post that carries a dated `> Note YYYY-MM-DD:` correction block (the
+house convention in AGENTS.md) shows "Updated <date>" in its header, also in
+a `<time>`. The rule lives in one function, `dates.post_updated`: the later of
+the newest note's date and the optional frontmatter `updated`, counted only
+when it falls after the post's `date`. The header's Updated line, the
+sitemap `<lastmod>` (`post_lastmod`, which falls back to `date`) and the
+JSON-LD `dateModified` all read it, so the three agree. Post bodies are not
+edited, and the RSS `pubDate` stays the publication date.
+`tests/test_post_dates.py` checks every dated page and every post.
+
 ## Consequences
 
 ### Positive

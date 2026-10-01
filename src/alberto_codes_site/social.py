@@ -164,7 +164,8 @@ def blog_posting_data(
         description: The post summary.
         date: The frontmatter ``date``, `YYYY-MM-DD`.
         image: The post's card PNG file name under `src/assets/og/`.
-        updated: The frontmatter ``updated`` date, when the post has one.
+        updated: The post's updated date from ``dates.post_updated``, when
+            it has one.
         series: ``(title, route)`` of the post's series, when it is a part.
 
     Returns:

@@ -8,8 +8,9 @@ collection and XML writer and swaps the namespace before the file is saved,
 in the same compile step that `reflex run` and `reflex export` already run.
 
 Every registered page is listed. A page opts into ``<lastmod>`` through
-``add_page(context=sitemap_context(...))``; blog posts pass their frontmatter
-date, and the other routes omit it rather than claim a date nobody recorded.
+``add_page(context=sitemap_context(...))``; blog posts pass their updated
+date (``post_updated``) or else their frontmatter date, and the other routes
+omit it rather than claim a date nobody recorded.
 
 Examples:
     In `rxconfig.py`:
@@ -22,30 +23,31 @@ Examples:
 """
 
 from collections.abc import Sequence
-from datetime import date
 
 from reflex.plugins import sitemap as reflex_sitemap
+
+from alberto_codes_site.dates import parse_date, post_updated
 
 SITEMAP_NAMESPACE = "http://www.sitemaps.org/schemas/sitemap/0.9"
 _REFLEX_NAMESPACE = "https://www.sitemaps.org/schemas/sitemap/0.9"
 
 
-def post_lastmod(meta: dict) -> str | None:
-    """Return a post's ``<lastmod>`` value from its frontmatter.
+def post_lastmod(meta: dict, body: str = "") -> str | None:
+    """Return a post's ``<lastmod>`` value.
 
     Args:
         meta: The post's frontmatter.
+        body: The post's markdown, for its dated correction notes.
 
     Returns:
-        The ``updated`` date when the post has a valid one, else its ``date``,
-        as `YYYY-MM-DD`; None when neither parses.
+        The post's updated date (``post_updated``) when it has one, else its
+        ``date``, as `YYYY-MM-DD`; None when neither parses.
     """
-    for key in ("updated", "date"):
-        try:
-            return date.fromisoformat(str(meta.get(key, "")).strip()).isoformat()
-        except ValueError:
-            continue
-    return None
+    updated = post_updated(meta, body)
+    if updated:
+        return updated
+    published = parse_date(meta.get("date"))
+    return published.isoformat() if published else None
 
 
 def sitemap_context(lastmod: str | None) -> dict | None:

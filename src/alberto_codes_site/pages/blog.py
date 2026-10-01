@@ -16,6 +16,7 @@ import reflex as rx
 from reflex.vars import Var
 
 from alberto_codes_site.components.meta_label import meta_label
+from alberto_codes_site.dates import post_updated, time_el
 from alberto_codes_site.figures import (
     WIDE_FIGURE_CLASS,
     figure_page_style,
@@ -184,7 +185,7 @@ def _post_card(meta: dict, series_label: str | None = None) -> rx.Component:
                 rx.hstack(
                     _type_badge(meta.get("type", "post")),
                     rx.text(
-                        meta.get("date", ""),
+                        time_el(meta.get("date", "")),
                         size="1",
                         color=rx.color("slate", 11),
                     ),
@@ -852,7 +853,8 @@ def _post_end(
                                 ),
                             ),
                             rx.el.span(
-                                f" · {other.get('date', '')}",
+                                " · ",
+                                time_el(other.get("date", "")),
                                 class_name="post-end-date",
                             ),
                         )
@@ -976,6 +978,20 @@ def _render_post(
     toc = _table_of_contents(outline)
     posts = posts if posts is not None else [(meta, body)]
     series = series_of(meta, build_series(posts))
+    updated = post_updated(meta, body)
+    updated_line = (
+        [
+            rx.text(
+                "Updated ",
+                time_el(updated),
+                size="2",
+                color=rx.color("slate", 11),
+                class_name="post-updated",
+            )
+        ]
+        if updated
+        else []
+    )
     header = rx.vstack(
         rx.link(
             rx.hstack(
@@ -991,7 +1007,10 @@ def _render_post(
         rx.box(height="1em"),
         rx.hstack(
             _type_badge(meta.get("type", "post"), size="2"),
-            rx.text(meta.get("date", ""), size="2", color=rx.color("slate", 11)),
+            rx.text(
+                time_el(meta.get("date", "")), size="2", color=rx.color("slate", 11)
+            ),
+            *updated_line,
             rx.text(
                 f"{meta.get('reading_time', 1)} min read",
                 size="2",
@@ -999,6 +1018,7 @@ def _render_post(
             ),
             spacing="2",
             align="center",
+            wrap="wrap",
         ),
         rx.heading(
             meta.get("title", "Untitled"),
@@ -1347,9 +1367,14 @@ def series_page(slug: str, today: date | None = None) -> rx.Component:
         raise ValueError(f"no published series {slug!r}")
     (series,) = matches
     if len(series) == 1:
-        span = f"published on {series.first_date}"
+        span = ["published on ", time_el(series.first_date)]
     else:
-        span = f"published from {series.first_date} to {series.last_date}"
+        span = [
+            "published from ",
+            time_el(series.first_date),
+            " to ",
+            time_el(series.last_date),
+        ]
     return rx.container(
         rx.vstack(
             rx.box(height="4em"),
@@ -1367,7 +1392,9 @@ def series_page(slug: str, today: date | None = None) -> rx.Component:
             rx.heading(series.title, as_="h1", size="8", weight="bold"),
             rx.separator(size="4", color_scheme="blue"),
             rx.text(
-                f"A series in {_parts(len(series))}, {span}.",
+                f"A series in {_parts(len(series))}, ",
+                *span,
+                ".",
                 size="3",
                 color=rx.color("slate", 11),
             ),
