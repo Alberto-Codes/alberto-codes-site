@@ -100,7 +100,8 @@ One set of figure colour tokens, defined once in
 | `accent-2` | second series (warm) | `#a85200` | `#d9894a` | 5.09 / 5.93 |
 | `good` | semantic right / after | `#1a7f37` | `#7fb069` | 4.77 / 6.47 |
 | `bad` | semantic wrong | `#cf222e` | `#e07a5f` | 5.03 / 5.54 |
-| `*-soft` | tinted fills that carry text (`accent-1`, `accent-2`, `good`, `bad`, `muted`) | pale tints | dark tints | `ink` on each: ≥ 13.07 / ≥ 7.22 |
+| `accent-3` | third series (violet), added 2026-10-01 | `#8250df` | `#b083f0` | 4.74 / 5.72 |
+| `*-soft` | tinted fills that carry text (`accent-1`, `accent-2`, `accent-3`, `good`, `bad`, `muted`) | pale tints | dark tints | `ink` on each: ≥ 13.07 / ≥ 7.22 |
 
 Text-bearing tokens meet WCAG AA for text (4.5:1) against `bg` in each theme;
 `grid` meets AA for non-text graphics (3:1). Only `ink` may sit on a soft
@@ -180,6 +181,60 @@ Gemma 4 post. The rest are tracked in a child issue of #68.
 - A figure placed inside a paragraph, list or blockquote is not inlined.
   It renders as `<img>` and follows the OS rather than the toggle. Keep
   figures on their own line.
+
+## Amendment 2026-10-01: the remaining 39 figures, and Mermaid
+
+Issue #91 migrated the 39 figures left in `NOT_YET_MIGRATED`; the list is
+empty. 23 of them are Mermaid renders (18 with a `.mmd` beside them, 5
+without), 16 are hand-drawn.
+
+**A third series token.** Six figures, four of them in the turboquant set,
+use a violet node class as a category distinct from blue and amber, and
+`vramfit-recipe-shapes` draws its 4-bit bars violet beside blue 8-bit bars.
+Folding violet into an existing accent would merge two categories, so
+`accent-3` and `accent-3-soft` were added. They sit in `TEXT_TOKENS` and
+`SOFT_TOKENS`, so the contrast tests cover them like every other token.
+
+**Mermaid route: the script, not `themeVariables`.** Mermaid derives many
+colours from its theme variables (darkening, lightening, alpha), which fails
+on `var()` strings, and a fresh render could move layout and break the
+geometry comparison. `scripts/theme_figure.py` was extended instead, with
+tests in `tests/test_theme_figure.py`:
+
+- A root that already has an id (Mermaid's `my-svg`) is renamed to
+  `fig-<stem>`; selectors written against it are rewritten rather than
+  nested, and other id selectors in the stylesheet follow their renamed ids.
+- Colours are normalised to `#rrggbb` before lookup, so `rgb()`, `rgba()`,
+  `hsl()`, `white`, `black` and `lightgrey` are mapped like hex; an alpha is
+  dropped because the token replaces the tint. Colour properties beyond
+  `fill` and `stroke` are mapped too: `color`, `background`, `border`,
+  `flood-color`. Any other named colour stops the script.
+- A map key may be qualified by property (`fill:#3b82f6=accent-1-soft` beside
+  `#3b82f6=accent-1`), because Mermaid reuses one colour as a fill in one node
+  and a border in another.
+- Mermaid's `@keyframes` are dropped: only edge-animation classes use them, and
+  the script stops if any element carries one.
+- The card goes behind everything painted, at the viewBox origin, because a
+  sequence diagram draws before its `<style>` and starts at negative
+  coordinates.
+- The tree comparison now also compares text between elements, so a label in
+  an HTML `foreignObject` cannot change.
+
+Each figure's map is recorded in `scripts/figure_maps.toml`. **A re-render
+from a `.mmd` overwrites the migrated SVG with Mermaid's own colours**, so
+after every re-render run
+`uv run python scripts/theme_figure.py src/assets/NAME.svg --recorded`. If the
+render introduces a colour the record lacks, the script stops and names it;
+add it to the record by role. A test fails if any `.mmd` lacks a record.
+
+**Role choices worth knowing.** Saturated Mermaid fills became the soft tint of
+their series and their borders the series colour. Where a figure also had pale
+fills of the same hue (boto3, adk, docstring), the pale fills became the card,
+outlined in the series colour, so tinted-versus-outlined keeps the
+strong-versus-pale distinction. The saucier figures map their orange to
+`accent-2`, as the Jev pilot did, since their text calls it orange. Inlined
+Mermaid figures render at their own `max-width` instead of being stretched to
+the column as `<img>` did, and the page now centres them.
 
 ## References
 
