@@ -5,6 +5,8 @@ from pathlib import Path
 
 import reflex as rx
 
+from alberto_codes_site.figures import figure_page_style, split_figures
+
 POSTS_DIR = Path(__file__).resolve().parent.parent.parent / "posts"
 
 DIATAXIS_COLORS = {
@@ -166,6 +168,24 @@ def _table(*children, **props) -> rx.Component:
     )
 
 
+def _post_body(body: str) -> list[rx.Component]:
+    """Render a post body, inlining theme-aware figures between markdown runs.
+
+    A figure carrying the shared token block (ADR-0005) is inlined so the
+    site's theme reaches it; every other image stays inside the markdown.
+    """
+    return [
+        rx.html(content)
+        if kind == "figure"
+        else rx.markdown(
+            content,
+            use_gfm=True,
+            component_map={"pre": _code_block, "table": _table},
+        )
+        for kind, content in split_figures(body)
+    ]
+
+
 def _render_post(meta: dict, body: str) -> rx.Component:
     """Render a full blog post with metadata header and markdown body."""
     return rx.vstack(
@@ -205,13 +225,10 @@ def _render_post(meta: dict, body: str) -> rx.Component:
         ),
         rx.separator(size="4", color_scheme="blue"),
         rx.box(
-            rx.markdown(
-                body,
-                use_gfm=True,
-                component_map={"pre": _code_block, "table": _table},
-            ),
+            *_post_body(body),
             width="100%",
             style={
+                **figure_page_style(),
                 "& :not(pre) > code": {"padding_inline_end": "0"},
                 "& table": {
                     "border_collapse": "collapse",
