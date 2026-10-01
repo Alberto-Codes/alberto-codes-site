@@ -9,7 +9,7 @@ ROLES = [
         "title": "Principal Engineer (Executive Director)",
         "company": "Wells Fargo",
         "period": "Jul 2025 - Present",
-        "location": "Chandler, Arizona - Hybrid",
+        "location": "Chandler, Arizona (Phoenix area) - Hybrid",
         "bullets": [
             "Lead generative AI engineering initiatives presented to CTO weekly",
             "Created AI agent framework to automate line-of-business operations",
@@ -23,7 +23,7 @@ ROLES = [
         "title": "Senior Lead Analytics Consultant (Executive Director)",
         "company": "Wells Fargo",
         "period": "Jun 2022 - Jul 2025",
-        "location": "Chandler, Arizona - Hybrid",
+        "location": "Chandler, Arizona (Phoenix area) - Hybrid",
         "bullets": [
             "Team's resident expert in GenAI and Agentic AI frameworks "
             "including Google ADK and Pydantic-AI",
@@ -37,7 +37,7 @@ ROLES = [
         "title": "Lead Analytics Consultant (AVP)",
         "company": "Wells Fargo",
         "period": "Jan 2018 - Jun 2022",
-        "location": "Chandler, Arizona",
+        "location": "Chandler, Arizona (Phoenix area)",
         "bullets": [
             "Delivered analytics solutions and CI/CD workflow automation",
             "Onboarded applications to Cloud Foundry with Splunk logging "

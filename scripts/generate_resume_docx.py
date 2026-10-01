@@ -259,8 +259,8 @@ add_section_heading("Professional Experience")
 
 add_role(
     "Principal Engineer (Executive Director)",
-    "Wells Fargo, Phoenix, Arizona",
-    "Jun 2025 \u2013 Present",
+    "Wells Fargo, Chandler, Arizona (Phoenix area)",
+    "Jul 2025 \u2013 Present",
     "Leader in implementing cutting-edge AI solutions for business needs, "
     "presented to CTO weekly. Creating documentation and frameworks to "
     "accelerate developer onboarding and production rollouts.",
@@ -280,8 +280,8 @@ add_role(
 
 add_role(
     "Senior Lead Analytics Consultant (Executive Director)",
-    "Wells Fargo, Phoenix, Arizona",
-    "Jun 2022 \u2013 Jun 2025",
+    "Wells Fargo, Chandler, Arizona (Phoenix area)",
+    "Jun 2022 \u2013 Jul 2025",
     "Individual contributor and team's resident expert in GenAI and Agentic AI "
     "frameworks. Focused on proof of concepts and production-ready AI implementations.",
     [
@@ -300,7 +300,7 @@ add_role(
 
 add_role(
     "Lead Analytics Consultant (AVP)",
-    "Wells Fargo, Phoenix, Arizona",
+    "Wells Fargo, Chandler, Arizona (Phoenix area)",
     "Jan 2018 \u2013 Jun 2022",
     "T-shaped role providing leadership, oversight, and direct development "
     "in ETL, visualization, and advanced analytics workstreams.",
