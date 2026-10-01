@@ -98,6 +98,12 @@ app = rx.App(
             title="alberto.codes",
             href=FEED_URL,
         ),
+        # App icons (#82). favicon.ico stays for browsers without SVG
+        # favicons; regenerate the PNGs with scripts/generate_icons.py.
+        rx.el.link(rel="icon", href="/favicon.ico", sizes="any"),
+        rx.el.link(rel="icon", href="/favicon.svg", type="image/svg+xml"),
+        rx.el.link(rel="apple-touch-icon", href="/apple-touch-icon.png"),
+        rx.el.link(rel="manifest", href="/site.webmanifest"),
     ],
     stylesheets=["/a11y.css"],
 )
