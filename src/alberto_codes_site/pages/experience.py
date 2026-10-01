@@ -2,6 +2,8 @@
 
 import reflex as rx
 
+from alberto_codes_site.tenure import years_at_wells_fargo
+
 ROLES = [
     {
         "title": "Principal Engineer (Executive Director)",
@@ -12,7 +14,7 @@ ROLES = [
             "Lead generative AI engineering initiatives presented to CTO weekly",
             "Created AI agent framework to automate line-of-business operations",
             "Built video processing pipeline handling thousands of videos daily",
-            "Co-inventor on patent application",
+            "Co-inventor on two pending patent applications",
             "Open source: shipped gepa-adk, docvet, adk-secure-sessions, "
             "saucier, vramfit, turboquant-vllm, typevet, and judgevet to PyPI",
         ],
@@ -166,8 +168,8 @@ def experience_page() -> rx.Component:
             rx.heading("Experience", size="8", weight="bold"),
             rx.separator(size="4", color_scheme="blue"),
             rx.text(
-                "From banking operations to enterprise AI "
-                "\u2014 a 25-year career built at Wells Fargo.",
+                "From banking operations to enterprise AI \u2014 a "
+                f"{years_at_wells_fargo()}-year career built at Wells Fargo.",
                 size="3",
                 color=rx.color("slate", 10),
             ),

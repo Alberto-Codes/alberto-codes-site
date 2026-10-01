@@ -31,6 +31,7 @@ from alberto_codes_site.pages import (
     publications_page,
 )
 from alberto_codes_site.pages.blog import _load_posts
+from alberto_codes_site.tenure import years_at_wells_fargo
 
 
 def layout(page: rx.Component) -> rx.Component:
@@ -67,8 +68,9 @@ app.add_page(
     route="/",
     title="Alberto Nieto | Generative AI Principal Engineer",
     description=(
-        "Alberto Nieto is a Generative AI Principal Engineer at Wells Fargo "
-        "with 25+ years in financial services technology."
+        "Alberto Nieto is a Generative AI Principal Engineer at Wells Fargo, "
+        f"where he has spent {years_at_wells_fargo()} years in financial "
+        "services technology."
     ),
 )
 app.add_page(
@@ -77,7 +79,7 @@ app.add_page(
     title="About | Alberto Nieto",
     description=(
         "Learn about Alberto Nieto's career journey from customer service "
-        "to Principal Engineer, patent co-inventor, and AI leader."
+        "to Principal Engineer, co-inventor on two pending patents, and AI leader."
     ),
 )
 app.add_page(
@@ -85,8 +87,9 @@ app.add_page(
     route="/experience",
     title="Experience | Alberto Nieto",
     description=(
-        "25+ years of progressive career growth at Wells Fargo spanning "
-        "customer service, analytics, and AI engineering leadership."
+        f"{years_at_wells_fargo()} years of progressive career growth at "
+        "Wells Fargo spanning customer service, analytics, and AI "
+        "engineering leadership."
     ),
 )
 app.add_page(
