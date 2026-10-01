@@ -123,7 +123,7 @@ def timeline_item(role: dict) -> rx.Component:
                     flex_direction=["column", "column", "row", "row", "row"],
                     gap="2",
                 ),
-                rx.text(role["company"], size="2", color=rx.color("slate", 9)),
+                rx.text(role["company"], size="2", color=rx.color("slate", 11)),
                 *(
                     [
                         rx.text(
@@ -140,7 +140,7 @@ def timeline_item(role: dict) -> rx.Component:
                         rx.hstack(
                             rx.text(
                                 "\u2022",
-                                color=rx.color("blue", 9),
+                                color=rx.color("blue", 11),
                                 flex_shrink="0",
                             ),
                             rx.text(bullet, size="2", color=rx.color("slate", 11)),
@@ -171,7 +171,7 @@ def experience_page() -> rx.Component:
                 "From banking operations to enterprise AI \u2014 a "
                 f"{years_at_wells_fargo()}-year career built at Wells Fargo.",
                 size="3",
-                color=rx.color("slate", 10),
+                color=rx.color("slate", 11),
             ),
             rx.box(height="1em"),
             rx.vstack(
@@ -196,7 +196,7 @@ def experience_page() -> rx.Component:
                     rx.text(
                         "1998 - 2003",
                         size="2",
-                        color=rx.color("slate", 9),
+                        color=rx.color("slate", 11),
                     ),
                     spacing="1",
                 ),

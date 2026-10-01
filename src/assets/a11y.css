@@ -1,0 +1,62 @@
+/*
+ * Site-wide accessibility overrides (issue #71), loaded through
+ * rx.App(stylesheets=...). Text colours that pages set themselves use the
+ * Radix step-11 tokens (slate 11 for secondary text, blue 11 for links),
+ * which clear 4.5:1 in both themes. The rules here cover Radix component
+ * defaults a page cannot reach with a colour prop.
+ */
+
+/* Skip link: the first focusable element; hidden until keyboard focus. */
+.skip-link {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link:focus {
+  position: fixed;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 100;
+  width: auto;
+  height: auto;
+  clip-path: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-2);
+  background: var(--gray-1);
+  color: var(--accent-11);
+  font-weight: 500;
+  outline: 2px solid var(--accent-8);
+}
+
+/* The main landmark takes focus from the skip link; no ring on the region. */
+main:focus {
+  outline: none;
+}
+
+/*
+ * Solid buttons: white text on blue 9 is 3.3:1. Darken the fill, same hue,
+ * to about 5:1 in both themes; hover darkens a little further.
+ */
+.rt-Button.rt-variant-solid {
+  background-color: color-mix(in srgb, var(--accent-9), black 22%);
+}
+
+@media (hover: hover) {
+  .rt-Button.rt-variant-solid:hover {
+    background-color: color-mix(in srgb, var(--accent-9), black 30%);
+  }
+}
+
+/*
+ * Light theme only: tinted badge and inline-code text (accent 11 on an
+ * accent 2-3 fill) lands between 4.2 and 4.5:1. Darken the text, same hue.
+ * Dark theme already passes.
+ */
+html:not(.dark) .rt-Badge.rt-variant-surface,
+html:not(.dark) .rt-Code.rt-variant-soft {
+  color: color-mix(in srgb, var(--accent-11), black 15%);
+}
