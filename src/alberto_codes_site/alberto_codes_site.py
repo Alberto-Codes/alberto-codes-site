@@ -33,6 +33,7 @@ from alberto_codes_site.pages import (
     publications_page,
 )
 from alberto_codes_site.pages.blog import _load_posts
+from alberto_codes_site.sitemap import post_lastmod, sitemap_context
 from alberto_codes_site.social import (
     SITE_IMAGE,
     blog_posting_data,
@@ -111,6 +112,7 @@ def add_page(
     image: str = SITE_IMAGE,
     og_type: str = "website",
     structured_data: dict | None = None,
+    lastmod: str | None = None,
 ) -> None:
     """Register a laid-out page with its share tags and canonical link.
 
@@ -123,6 +125,7 @@ def add_page(
         image: The card PNG under `src/assets/og/`; the site card by default.
         og_type: `article` for posts, `website` otherwise.
         structured_data: A schema.org object to emit as JSON-LD, if any.
+        lastmod: The page's `YYYY-MM-DD` ``<lastmod>`` in the sitemap, if any.
     """
     social = page_meta(
         route=route,
@@ -137,6 +140,7 @@ def add_page(
         route=route,
         title=title,
         description=description,
+        context=sitemap_context(lastmod),
         **social,
     )
 
@@ -218,6 +222,7 @@ for _meta, _ in _load_posts():
             image=post_image(_slug),
             updated=_meta.get("updated"),
         ),
+        lastmod=post_lastmod(_meta),
     )
 
 add_page(
