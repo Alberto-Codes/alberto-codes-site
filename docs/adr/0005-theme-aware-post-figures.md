@@ -236,6 +236,45 @@ strong-versus-pale distinction. The saucier figures map their orange to
 Mermaid figures render at their own `max-width` instead of being stretched to
 the column as `<img>` did, and the page now centres them.
 
+## Amendment 2026-10-01: a minimum width for small labels (#117)
+
+An inlined figure scales to the column, so on a phone (a 358px column at a
+390px viewport) an 840-wide figure drew its 12px labels at about 5px. Issue
+#117 weighed a tap to open full size, redrawing, real code blocks for the
+saucier listings, and scrolling sideways as tables do (#67). Scrolling won: it
+needs no figure edits, keeps the figure's own text and data, and reuses a
+pattern readers already meet in the same posts.
+
+**The rule.** `figure_min_width` in `src/alberto_codes_site/figures.py` reads
+the SVG at render time and returns
+`ceil(viewBox_width * LABEL_MIN_PX / smallest_font_px)`, with
+`LABEL_MIN_PX = 11`. Font sizes come from attributes and CSS alike; Mermaid's
+`mermaidTooltip` rule is skipped because a static figure never shows it. When
+the width fits the phone column the figure is left alone. Otherwise its wrapper
+gets the class `post-figure-wide` and `--fig-min-width`, the page CSS puts that
+on the `<svg>` as `min-width`, and the post renderer wraps it in the same
+Radix scroll area, with the same visible scrollbar, as a table.
+
+**Desktop.** If the figure's smallest label already reads at 10px across the
+880px post column, the width is capped at 880, so desktop never gains a
+scrollbar for a figure that reads there. Four figures do not meet that and
+scroll on desktop too: both boto3 figures, `saucier-mornay-procedure` (10px
+labels in a 980 viewBox) and `vramfit-24gib-recipe` (7.5px labels). Every
+other figure renders at its old desktop size, except that three vramfit
+figures whose smallest label was under 11px grow a little past their natural
+760px, within the column.
+
+**Not done.** No figure is rasterised, redrawn or converted, and no post body
+changes. A link to open the raw SVG was left out: the wrapper is
+`role="img"`, which hides a nested link from assistive technology, and the
+scroll area already makes every label readable.
+
+`vramfit-16gib-budget`'s "0.224 GiB runtime reserve" caption sat on the card
+bar's bottom border. Its `y` moved from 106 to 115, into the gap between the
+bars. The text, its token class and the leader line are unchanged; the figure
+is hand-drawn, so there is no `.mmd` render to repeat and the SVG was edited
+directly.
+
 ## References
 
 - [ADR-0003: Blog Infrastructure and Rendering](0003-blog-infrastructure.md)

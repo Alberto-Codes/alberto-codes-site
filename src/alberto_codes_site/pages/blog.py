@@ -16,7 +16,11 @@ import reflex as rx
 from reflex.vars import Var
 
 from alberto_codes_site.components.meta_label import meta_label
-from alberto_codes_site.figures import figure_page_style, split_figures
+from alberto_codes_site.figures import (
+    WIDE_FIGURE_CLASS,
+    figure_page_style,
+    split_figures,
+)
 from alberto_codes_site.headings import (
     Slugger,
     fragment_link,
@@ -418,6 +422,25 @@ def _table(*children, **props) -> rx.Component:
     )
 
 
+def _figure(markup: str) -> rx.Component:
+    """Render an inlined figure; a wide one scrolls sideways like a table."""
+    if WIDE_FIGURE_CLASS not in markup:
+        return rx.html(markup)
+    return rx.scroll_area(
+        rx.html(markup),
+        type="auto",
+        scrollbars="horizontal",
+        width="100%",
+        margin_y="1.5em",
+        class_name="figure-scroll",
+        style={
+            "& .post-figure": {"margin": "0"},
+            "& .rt-ScrollAreaScrollbar": {"background": rx.color("gray", 4)},
+            "& .rt-ScrollAreaThumb": {"background": rx.color("gray", 11)},
+        },
+    )
+
+
 # A post gets a table of contents once it has this many H2 sections (#75).
 TOC_MIN_SECTIONS = 4
 
@@ -438,7 +461,7 @@ def _post_body(body: str) -> tuple[list[rx.Component], list[TocEntry]]:
     outline: list[TocEntry] = []
     for kind, content in split_figures(body):
         if kind == "figure":
-            components.append(rx.html(content))
+            components.append(_figure(content))
             continue
         ids = heading_ids(content, slugger)
         outline.extend(

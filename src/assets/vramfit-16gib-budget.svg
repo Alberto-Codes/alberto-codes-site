@@ -20,7 +20,7 @@
 
   <rect x="716" y="120" width="8" height="38" rx="2" stroke-width="1.4" style="fill:var(--fig-accent-2-soft);stroke:var(--fig-accent-2)"/>
   <path d="M720,114 L720,102 L640,102" fill="none" stroke-width="1.2" stroke-dasharray="3 3" style="stroke:var(--fig-accent-2)"/>
-  <text x="634" y="106" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" style="fill:var(--fig-accent-2)">0.224 GiB runtime reserve &#8212; KV cache, recurrent state, compute</text>
+  <text x="634" y="115" text-anchor="end" font-family="ui-sans-serif, system-ui, sans-serif" font-size="11" style="fill:var(--fig-accent-2)">0.224 GiB runtime reserve &#8212; KV cache, recurrent state, compute</text>
 
   <!-- the packed file -->
   <rect x="24" y="176" width="689" height="38" rx="4" stroke-width="1.8" style="fill:var(--fig-good-soft);stroke:var(--fig-good)"/>

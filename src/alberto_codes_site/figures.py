@@ -17,6 +17,7 @@ To migrate a figure, see ``scripts/theme_figure.py`` and ADR-0005.
 """
 
 import html
+import math
 import re
 from pathlib import Path
 
@@ -76,6 +77,23 @@ SOFT_TOKENS = (
 
 TOKEN_BLOCK_MARKER = "fig-tokens v1"
 
+# Readable label size, in CSS px, for an inlined figure (#117). A figure whose
+# smallest label would render below LABEL_MIN_PX at the phone column gets a
+# minimum rendered width and scrolls sideways there, like a wide table. On the
+# desktop post column (POST_COLUMN_PX) a label of DESKTOP_LABEL_MIN_PX is
+# accepted, so a figure that already reads there does not gain a scrollbar on
+# desktop just to reach the phone target.
+LABEL_MIN_PX = 11
+DESKTOP_LABEL_MIN_PX = 10
+PHONE_COLUMN_PX = 358
+POST_COLUMN_PX = 880
+WIDE_FIGURE_CLASS = "post-figure-wide"
+
+_VIEWBOX = re.compile(r"<svg\b[^>]*?\bviewBox=\"\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)")
+# Mermaid's stylesheet sizes a hover tooltip that a static figure never shows.
+_UNSHOWN_RULE = re.compile(r"[^{}]*mermaidTooltip[^{}]*\{[^}]*\}")
+_FONT_SIZE = re.compile(r"font-size\s*(?:=\s*[\"']|:)\s*([\d.]+)(?:px)?\b")
+
 _FIGURE_LINE = re.compile(r"^!\[(?P<alt>.*)\]\(/(?P<name>[\w.-]+\.svg)\)\s*$")
 _FENCE = re.compile(r"^\s*(```|~~~)")
 
@@ -109,6 +127,8 @@ def figure_page_style() -> dict:
             "margin": "1.5em 0",
         },
         ".dark & .post-figure": as_vars("dark"),
+        # A wide figure keeps its labels readable and scrolls sideways (#117).
+        f"& .{WIDE_FIGURE_CLASS} svg": {"min_width": "var(--fig-min-width)"},
         "& .post-figure svg": {
             "display": "block",
             "max_width": "100%",
@@ -124,8 +144,40 @@ def uses_tokens(svg_text: str) -> bool:
     return token_style_block() in svg_text
 
 
+def figure_min_width(svg_text: str) -> int | None:
+    """Return the width, in CSS px, a figure needs for readable labels.
+
+    The figure scales with its ``viewBox``, so its smallest ``font-size``
+    renders at ``font_size * rendered_width / viewbox_width``. Holding that at
+    ``LABEL_MIN_PX`` needs ``viewbox_width * LABEL_MIN_PX / font_size``. When
+    the figure already reads at ``DESKTOP_LABEL_MIN_PX`` across the desktop
+    post column, the width is capped at that column so desktop never scrolls.
+
+    Returns:
+        The minimum width, or None when the figure fits the phone column at a
+        readable size or carries no ``viewBox`` or ``font-size`` to measure.
+    """
+    viewbox = _VIEWBOX.search(svg_text)
+    shown = _UNSHOWN_RULE.sub("", svg_text)
+    sizes = [float(size) for size in _FONT_SIZE.findall(shown)]
+    if viewbox is None or not sizes or min(sizes) <= 0:
+        return None
+    width, smallest = float(viewbox[1]), min(sizes)
+    needed = math.ceil(width * LABEL_MIN_PX / smallest)
+    if needed <= PHONE_COLUMN_PX:
+        return None
+    if width * DESKTOP_LABEL_MIN_PX / smallest <= POST_COLUMN_PX:
+        needed = min(needed, POST_COLUMN_PX)
+    return needed
+
+
 def inline_figure_html(name: str, alt: str) -> str | None:
-    """Return the inlined markup for a token-carrying figure, else None."""
+    """Return the inlined markup for a token-carrying figure, else None.
+
+    A figure that needs more than the phone column to keep its labels readable
+    carries ``WIDE_FIGURE_CLASS`` and its width in ``--fig-min-width``; the
+    post renderer gives it a sideways scroll area.
+    """
     path = ASSETS_DIR / name
     if not path.is_file():
         return None
@@ -134,7 +186,15 @@ def inline_figure_html(name: str, alt: str) -> str | None:
         return None
     svg = re.sub(r"^\s*<\?xml[^>]*\?>\s*", "", svg)
     label = html.escape(alt, quote=True)
-    return f'<div class="post-figure" role="img" aria-label="{label}">{svg}</div>'
+    min_width = figure_min_width(svg)
+    if min_width is None:
+        attrs = 'class="post-figure"'
+    else:
+        attrs = (
+            f'class="post-figure {WIDE_FIGURE_CLASS}" '
+            f'style="--fig-min-width: {min_width}px"'
+        )
+    return f'<div {attrs} role="img" aria-label="{label}">{svg}</div>'
 
 
 def split_figures(body: str) -> list[tuple[str, str]]:
