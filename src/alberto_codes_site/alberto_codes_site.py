@@ -17,6 +17,8 @@ See Also:
     :py:func:`footer` : Footer component
 """
 
+from datetime import date
+
 import reflex as rx
 from reflex.components.el.elements.inline import a as html_a
 
@@ -32,7 +34,7 @@ from alberto_codes_site.pages import (
     projects_page,
     publications_page,
 )
-from alberto_codes_site.pages.blog import _load_posts
+from alberto_codes_site.pages.blog import _load_posts, published_posts
 from alberto_codes_site.sitemap import post_lastmod, sitemap_context
 from alberto_codes_site.social import (
     SITE_IMAGE,
@@ -200,30 +202,43 @@ add_page(
     title="Blog | Alberto Nieto",
     description="Thoughts on AI engineering, career growth, and technical leadership.",
 )
-# Register individual blog post routes
-for _meta, _ in _load_posts():
-    _slug = _meta.get("slug", "")
-    _title = _meta.get("title", "Blog Post")
-    _summary = _meta.get("summary", "")
-    _route = f"/blog/{_slug}"
-    add_page(
-        blog_post_page(_slug),
-        route=_route,
-        title=f"{_title} | Alberto Nieto",
-        description=_summary,
-        share_title=_title,
-        image=post_image(_slug),
-        og_type="article",
-        structured_data=blog_posting_data(
-            route=_route,
-            title=_title,
-            description=_summary,
-            date=_meta.get("date", ""),
-            image=post_image(_slug),
-            updated=_meta.get("updated"),
-        ),
-        lastmod=post_lastmod(_meta),
-    )
+
+
+def add_post_pages(today: date | None = None) -> None:
+    """Register a route for each published post.
+
+    A post dated after ``today`` gets no route, so it is also absent from
+    the sitemap, which Reflex builds from the registered routes.
+
+    Args:
+        today: The build date; defaults to the current date.
+    """
+    for meta, _ in published_posts(_load_posts(), today=today):
+        slug = meta.get("slug", "")
+        title = meta.get("title", "Blog Post")
+        summary = meta.get("summary", "")
+        route = f"/blog/{slug}"
+        add_page(
+            blog_post_page(slug, today=today),
+            route=route,
+            title=f"{title} | Alberto Nieto",
+            description=summary,
+            share_title=title,
+            image=post_image(slug),
+            og_type="article",
+            structured_data=blog_posting_data(
+                route=route,
+                title=title,
+                description=summary,
+                date=meta.get("date", ""),
+                image=post_image(slug),
+                updated=meta.get("updated"),
+            ),
+            lastmod=post_lastmod(meta),
+        )
+
+
+add_post_pages()
 
 add_page(
     contact_page(),

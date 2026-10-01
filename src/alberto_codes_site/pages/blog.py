@@ -1,6 +1,14 @@
-"""Blog page with markdown post rendering and individual post routes."""
+"""Blog page with markdown post rendering and individual post routes.
+
+A post is published once its frontmatter ``date`` is on or before the build
+date (``published_posts``). The blog index, home's "Latest writing", the post
+routes (and so the sitemap) and the RSS feed all apply that one rule. Pages
+are built when the app module is imported, so a future-dated post stays
+hidden until the first build on or after its date; deploys rebuild.
+"""
 
 import math
+from datetime import date
 from pathlib import Path
 
 import reflex as rx
@@ -69,7 +77,9 @@ def _load_posts() -> list[tuple[dict, str]]:
     """Load all markdown posts sorted by date descending.
 
     Files named `draft-*.md` are work in progress and never render. Rename a
-    draft to `YYYY-MM-DD-slug.md` to publish it.
+    draft to `YYYY-MM-DD-slug.md` to publish it. Future-dated posts are still
+    returned here (their share cards are committed ahead of time); pass the
+    result through ``published_posts`` before showing it.
     """
     posts = []
     if POSTS_DIR.exists():
@@ -81,6 +91,43 @@ def _load_posts() -> list[tuple[dict, str]]:
             meta["reading_time"] = _reading_time(body)
             posts.append((meta, body))
     return posts
+
+
+def post_date(meta: dict) -> date | None:
+    """Return a post's frontmatter date, or None when it is missing or malformed.
+
+    Args:
+        meta: The post's frontmatter.
+
+    Returns:
+        The parsed `YYYY-MM-DD` date, or None.
+    """
+    try:
+        return date.fromisoformat(str(meta.get("date", "")).strip())
+    except ValueError:
+        return None
+
+
+def published_posts(
+    posts: list[tuple[dict, str]], *, today: date | None = None
+) -> list[tuple[dict, str]]:
+    """Keep only posts whose date has arrived.
+
+    ``_load_posts`` already drops `draft-*.md` files; this also drops posts
+    dated after ``today`` and posts without a valid date.
+
+    Args:
+        posts: ``(meta, body)`` pairs from ``_load_posts``.
+        today: The build date; defaults to the current date.
+
+    Returns:
+        The published posts, newest first.
+    """
+    today = today or date.today()
+    dated = [(post_date(m), m, b) for m, b in posts]
+    kept = [(d, m, b) for d, m, b in dated if d is not None and d <= today]
+    kept.sort(key=lambda item: item[0], reverse=True)
+    return [(m, b) for _, m, b in kept]
 
 
 def _type_badge(post_type: str) -> rx.Component:
@@ -281,9 +328,16 @@ def _render_post(meta: dict, body: str) -> rx.Component:
     )
 
 
-def blog_page() -> rx.Component:
-    """Render the blog index page listing all posts."""
-    posts = _load_posts()
+def blog_page(today: date | None = None) -> rx.Component:
+    """Render the blog index page listing the published posts.
+
+    Args:
+        today: The build date; posts dated after it are left out.
+
+    Returns:
+        The blog index, or a placeholder when nothing is published yet.
+    """
+    posts = published_posts(_load_posts(), today=today)
 
     if not posts:
         return rx.container(
@@ -364,9 +418,17 @@ def blog_page() -> rx.Component:
     )
 
 
-def blog_post_page(slug: str) -> rx.Component:
-    """Render an individual blog post by slug."""
-    posts = _load_posts()
+def blog_post_page(slug: str, today: date | None = None) -> rx.Component:
+    """Render an individual blog post by slug.
+
+    Args:
+        slug: The post's slug.
+        today: The build date; a post dated after it renders as not found.
+
+    Returns:
+        The post page, or a not-found page.
+    """
+    posts = published_posts(_load_posts(), today=today)
     for meta, body in posts:
         if meta.get("slug") == slug:
             return rx.container(
