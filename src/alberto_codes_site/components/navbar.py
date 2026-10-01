@@ -17,6 +17,17 @@ THEME_TOGGLE_LABEL = "Toggle light and dark theme"
 
 MENU_TITLE = "Menu"
 
+# Radix space tokens as CSS variables. A bare "4" on a box's style props is
+# emitted as unitless CSS that browsers drop, leaving the bars flush with the
+# screen edges; the header and footer share this so their edges line up.
+SIDE_PADDING = [
+    "var(--space-4)",
+    "var(--space-4)",
+    "var(--space-6)",
+    "var(--space-8)",
+    "var(--space-8)",
+]
+
 # Black at half opacity dims the page in either theme: on the light page it
 # reads as a shade, on the dark one it still pushes the content back.
 MENU_BACKDROP = "rgba(0, 0, 0, 0.5)"
@@ -186,8 +197,8 @@ def navbar() -> rx.Component:
             aria_label="Main",
             width="100%",
         ),
-        padding_x=["4", "4", "6", "8", "8"],
-        padding_y="4",
+        padding_x=SIDE_PADDING,
+        padding_y="var(--space-4)",
         border_bottom=f"1px solid {rx.color('gray', 4)}",
         background_color=rx.color("gray", 2),
         position="sticky",
