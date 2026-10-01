@@ -199,7 +199,7 @@ def home_page() -> rx.Component:
             #   2 Patents Pending   the current role in pages/experience.py,
             #                       "Co-inventor on two pending patent
             #                       applications". Two applications filed, none
-            #                       granted; the About page says the same twice
+            #                       granted; the About bio says the same
             #   N Years             years_at_wells_fargo() in tenure.py, whole
             #                       years since the 2000-08-14 start date,
             #                       recomputed on every build. The paragraph
@@ -234,7 +234,12 @@ def home_page() -> rx.Component:
                     align="center",
                 ),
                 spacing="5",
-                flex_direction=["column", "column", "row", "row", "row"],
+                # Two by two on phones, so the badges take two rows rather than
+                # four and "Latest writing" stays near the top (issue #84).
+                display=["grid", "grid", "flex", "flex", "flex"],
+                grid_template_columns="repeat(2, auto)",
+                row_gap="var(--space-3)",
+                justify_content="center",
                 align="center",
             ),
             rx.hstack(
