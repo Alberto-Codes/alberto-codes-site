@@ -12,6 +12,7 @@ from datetime import date
 from pathlib import Path
 
 import reflex as rx
+from reflex.vars import Var
 
 from alberto_codes_site.figures import figure_page_style, split_figures
 from alberto_codes_site.headings import Slugger, heading_component_map, heading_ids
@@ -178,26 +179,139 @@ def _post_card(meta: dict) -> rx.Component:
     )
 
 
-def _code_block(value: object, **props) -> rx.Component:
-    """Keep console columns intact with a scrollbar independent of OS settings."""
-    return rx.scroll_area(
-        rx.code_block(
-            value,
-            **props,
-            wrap_long_lines=False,
-            min_width="100%",
-            width="max-content",
+COPY_FEEDBACK_MS = 2000
+
+
+def _copy_handler(code: Var) -> Var:
+    """Return a client-side click handler that copies ``code``.
+
+    The export has no backend, so the copy runs in the browser. On success the
+    button carries ``data-copied`` for two seconds, which swaps its icon to a
+    check, and the block's live region announces "Copied".
+    """
+    return Var(
+        "(e) => { const button = e.currentTarget;"
+        f" navigator.clipboard.writeText({code}).then(() => {{"
+        " const status = button.parentElement.querySelector('[role=status]');"
+        " button.dataset.copied = 'true'; status.textContent = 'Copied';"
+        " clearTimeout(button._copiedTimer);"
+        " button._copiedTimer = setTimeout(() => {"
+        " delete button.dataset.copied; status.textContent = ''; }"
+        f", {COPY_FEEDBACK_MS}); }}); }}"
+    )
+
+
+def _code_toolbar(code: Var, language: object) -> rx.Component:
+    """Render the bar above a code block: fenced language and a copy button.
+
+    The bar sits above the code rather than over it, so the button never
+    covers code text on a phone. A block fenced without a language gets no
+    label; the button is always there.
+    """
+    language = Var.create(language if language is not None else "")
+    return rx.el.div(
+        rx.cond(
+            language,
+            rx.el.span(language, class_name="code-language"),
+            rx.el.span(),
         ),
-        type="auto",
-        scrollbars="horizontal",
+        rx.el.button(
+            rx.icon("copy", size=14, class_name="code-copy-idle"),
+            rx.icon("check", size=14, class_name="code-copy-done"),
+            type="button",
+            aria_label="Copy code",
+            title="Copy code",
+            class_name="code-copy",
+            custom_attrs={"onClick": _copy_handler(code)},
+        ),
+        rx.el.span(role="status", aria_live="polite", class_name="code-copy-status"),
+        class_name="code-toolbar",
+    )
+
+
+def _code_block(value: object, **props) -> rx.Component:
+    """Keep console columns intact with a scrollbar independent of OS settings.
+
+    A toolbar above the block shows the fenced language and a copy button.
+    """
+    code = Var.create(value)
+    return rx.box(
+        _code_toolbar(code, props.get("language")),
+        rx.scroll_area(
+            rx.code_block(
+                value,
+                **props,
+                wrap_long_lines=False,
+                min_width="100%",
+                width="max-content",
+            ),
+            type="auto",
+            scrollbars="horizontal",
+            width="100%",
+            style={
+                # Syntax-highlighter themes set these inline; only the viewport
+                # scrolls.
+                "& pre": {
+                    "margin": "0 !important",
+                    "overflow": "visible !important",
+                    "border_radius": "0 !important",
+                },
+                "& .rt-ScrollAreaScrollbar": {"background": rx.color("gray", 4)},
+                "& .rt-ScrollAreaThumb": {"background": rx.color("gray", 11)},
+            },
+        ),
+        class_name="code-figure",
         width="100%",
         margin_y="1em",
         border_radius="var(--radius-2)",
+        position="relative",
+        overflow="hidden",
+        border=f"1px solid {rx.color('gray', 5)}",
         style={
-            # Syntax-highlighter themes set these inline; only the viewport scrolls.
-            "& pre": {"margin": "0 !important", "overflow": "visible !important"},
-            "& .rt-ScrollAreaScrollbar": {"background": rx.color("gray", 4)},
-            "& .rt-ScrollAreaThumb": {"background": rx.color("gray", 11)},
+            "& .code-toolbar": {
+                "display": "flex",
+                "align_items": "center",
+                "justify_content": "space-between",
+                "gap": "0.5em",
+                "padding": "0.25em 0.25em 0.25em 0.75em",
+                "background": rx.color("gray", 3),
+                "border_bottom": f"1px solid {rx.color('gray', 5)}",
+            },
+            "& .code-language": {
+                "font_family": "var(--code-font-family)",
+                "font_size": "var(--font-size-1)",
+                "color": rx.color("gray", 11),
+            },
+            "& .code-copy": {
+                "display": "inline-flex",
+                "align_items": "center",
+                "justify_content": "center",
+                "min_width": "32px",
+                "min_height": "32px",
+                "padding": "0",
+                "border": "none",
+                "border_radius": "var(--radius-2)",
+                "background": "transparent",
+                "color": rx.color("gray", 11),
+                "cursor": "pointer",
+            },
+            "& .code-copy:hover": {"background": rx.color("gray", 5)},
+            "& .code-copy:focus-visible": {
+                "outline": f"2px solid {rx.color('blue', 8)}",
+                "outline_offset": "1px",
+            },
+            # Announced to screen readers only.
+            "& .code-copy-status": {
+                "position": "absolute",
+                "width": "1px",
+                "height": "1px",
+                "overflow": "hidden",
+                "clip_path": "inset(50%)",
+                "white_space": "nowrap",
+            },
+            "& .code-copy-done": {"display": "none", "color": rx.color("green", 11)},
+            "& .code-copy[data-copied] .code-copy-idle": {"display": "none"},
+            "& .code-copy[data-copied] .code-copy-done": {"display": "block"},
         },
     )
 
