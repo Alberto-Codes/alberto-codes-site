@@ -20,6 +20,7 @@ See Also:
 import reflex as rx
 
 from alberto_codes_site.components import footer, navbar
+from alberto_codes_site.feed import FEED_URL, write_feed
 from alberto_codes_site.pages import (
     about_page,
     blog_page,
@@ -63,7 +64,20 @@ def layout(page: rx.Component) -> rx.Component:
 app = rx.App(
     overlay_component=rx.fragment,
     enable_state=False,
+    head_components=[
+        # Feed autodiscovery on every page (#41).
+        rx.el.link(
+            rel="alternate",
+            type="application/rss+xml",
+            title="alberto.codes",
+            href=FEED_URL,
+        ),
+    ],
 )
+
+# Rebuilt on every import so `reflex run` and `reflex export` both ship a
+# feed that matches today's date; Reflex copies src/assets/ afterwards.
+write_feed(_load_posts())
 
 
 def add_page(
