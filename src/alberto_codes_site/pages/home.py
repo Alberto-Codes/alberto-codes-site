@@ -1,6 +1,13 @@
-"""Home page with hero section and areas of expertise."""
+"""Home page with hero, latest writing, current projects and areas of expertise."""
+
+from datetime import date
 
 import reflex as rx
+
+from alberto_codes_site.pages.blog import _load_posts
+from alberto_codes_site.tenure import years_at_wells_fargo
+
+LATEST_POST_COUNT = 3
 
 EXPERTISE_TAGS = [
     "Generative AI & Agents",
@@ -13,9 +20,138 @@ EXPERTISE_TAGS = [
     "Technical Leadership",
 ]
 
+# Each proof line is a measured result from the post it links to, so the
+# figures are only as current as that post; refresh them from there, not from
+# this page. typevet's 6 of 6 is the wrong-total row of the results table in
+# the 2026-09-29 post. vramfit's 86,016 tokens on a 24 GiB card is the
+# text-only row of the 2026-09-02 post. saucier's 151 sauces and 1909 printing
+# are the v0.7.0 README census, also quoted on the saucier card in
+# pages/projects.py, so the two move together.
+BUILDING = [
+    {
+        "title": "typevet",
+        "proof": (
+            "Typed answers from open models, about text and photos. With a "
+            "receipt photo attached, Gemma 4 caught 6 of 6 wrong totals it had "
+            "passed as text."
+        ),
+        "href": "/blog/2026-09-29-gemma-was-sure-the-total-matched-it-had-not-seen-the-receipt",
+    },
+    {
+        "title": "vramfit",
+        "proof": (
+            "Fits large open models onto one GPU. Gemma 4 31B on a 24 GiB "
+            "card, serving 86,016 tokens of context."
+        ),
+        "href": "/blog/2026-09-02-googles-4-bit-gemma-already-fit-my-card",
+    },
+    {
+        "title": "saucier",
+        "proof": (
+            "Reads two printings of a 1909 cookbook and catalogues 151 sauces, "
+            "every claim traced to the line it came from."
+        ),
+        "href": "/blog/2026-09-08-the-scan-lost-one-letter-and-crowned-a-derivative",
+    },
+]
+
+
+def _latest_posts(today: date | None = None) -> list[dict]:
+    """Return the newest published posts, skipping any dated after ``today``.
+
+    The blog loader renders future-dated files as well, so the home page
+    filters them itself rather than announce a post before its date.
+
+    Args:
+        today: The date to treat as now. Defaults to the build date.
+
+    Returns:
+        Up to ``LATEST_POST_COUNT`` post metadata dicts, newest first.
+
+    Examples:
+        ```python
+        _latest_posts(date(2026, 10, 1))[0]["slug"]
+        ```
+    """
+    cutoff = (today or date.today()).isoformat()
+    published = [
+        meta for meta, _body in _load_posts() if meta.get("date", "") <= cutoff
+    ]
+    return published[:LATEST_POST_COUNT]
+
+
+def _section_heading(title: str, link_text: str, href: str) -> rx.Component:
+    """Render a section heading with a trailing link to the full listing."""
+    return rx.flex(
+        rx.heading(title, size="5", weight="medium"),
+        rx.link(link_text, href=href, size="2", weight="medium"),
+        justify="between",
+        align="baseline",
+        wrap="wrap",
+        gap="2",
+        width="100%",
+    )
+
+
+def _latest_post_card(meta: dict) -> rx.Component:
+    """Render a compact post card: date, title and a two-line summary."""
+    return rx.link(
+        rx.card(
+            rx.vstack(
+                rx.text(meta.get("date", ""), size="1", color=rx.color("slate", 9)),
+                rx.heading(meta.get("title", "Untitled"), size="3", weight="bold"),
+                rx.text(
+                    meta.get("summary", ""),
+                    size="2",
+                    color=rx.color("slate", 10),
+                    style={
+                        "display": "-webkit-box",
+                        "-webkit-line-clamp": "2",
+                        "-webkit-box-orient": "vertical",
+                        "overflow": "hidden",
+                    },
+                ),
+                spacing="1",
+            ),
+            width="100%",
+            _hover={"box_shadow": "0 2px 8px rgba(0,0,0,0.1)"},
+        ),
+        href=f"/blog/{meta.get('slug', '')}",
+        underline="none",
+        width="100%",
+    )
+
+
+def _building_card(project: dict) -> rx.Component:
+    """Render a project card with its one-line proof, linking to the writeup."""
+    return rx.link(
+        rx.card(
+            rx.vstack(
+                rx.heading(project["title"], size="4", weight="bold"),
+                rx.text(project["proof"], size="2", color=rx.color("slate", 10)),
+                rx.spacer(),
+                rx.text(
+                    "Read the writeup \u2192",
+                    size="2",
+                    weight="medium",
+                    color=rx.color("blue", 11),
+                ),
+                spacing="2",
+                height="100%",
+            ),
+            width="100%",
+            height="100%",
+            _hover={"box_shadow": "0 2px 8px rgba(0,0,0,0.1)"},
+        ),
+        href=project["href"],
+        underline="none",
+        width="100%",
+    )
+
 
 def home_page() -> rx.Component:
-    """Render the home page with hero section and expertise tags."""
+    """Render the home page: hero, latest writing, projects and expertise."""
+    years = years_at_wells_fargo()
     return rx.container(
         rx.vstack(
             rx.box(height="6em"),
@@ -43,9 +179,10 @@ def home_page() -> rx.Component:
             ),
             rx.text(
                 "I started as a teller, taught myself to code, and spent "
-                "25 years building my way to Principal Engineer. Now I "
-                "design AI systems, ship open source tools, and bridge "
-                "the gap between business problems and technical solutions.",
+                f"{years} years building my way to Principal Engineer. Now I "
+                "design AI systems at work, and on my own time I build open "
+                "source tools that test what models actually do, then publish "
+                "the evidence.",
                 size="3",
                 color=rx.color("slate", 10),
                 max_width=["100%", "100%", "36em", "36em", "36em"],
@@ -58,12 +195,15 @@ def home_page() -> rx.Component:
             #   2x Top Performer    the 2006-2018 role in pages/experience.py,
             #                       "Two-time Top Performer award recipient
             #                       (2014, 2018)"
-            #   Patent Co-Inventor  the current role in pages/experience.py,
-            #                       "Co-inventor on patent application"
-            #   25+ Years           the earliest role in pages/experience.py
-            #                       begins in 1999. The same tenure is worded
-            #                       twice more, in the paragraph above and on
-            #                       the About page, so all three move together
+            #   2 Patents Pending   the current role in pages/experience.py,
+            #                       "Co-inventor on two pending patent
+            #                       applications". Two applications filed, none
+            #                       granted; the About page says the same twice
+            #   N Years             years_at_wells_fargo() in tenure.py, whole
+            #                       years since the 2000-08-14 start date,
+            #                       recomputed on every build. The paragraph
+            #                       above, the About and Experience pages and
+            #                       the meta descriptions read the same helper
             #   N PyPI Packages     the comment above PROJECTS in
             #                       pages/projects.py, which owns this figure
             #                       and names every page that repeats it
@@ -76,15 +216,13 @@ def home_page() -> rx.Component:
                 ),
                 rx.hstack(
                     rx.icon("file-check", size=16, color=rx.color("blue", 9)),
-                    rx.text(
-                        "Patent Co-Inventor", size="2", color=rx.color("slate", 10)
-                    ),
+                    rx.text("2 Patents Pending", size="2", color=rx.color("slate", 10)),
                     spacing="1",
                     align="center",
                 ),
                 rx.hstack(
                     rx.icon("building", size=16, color=rx.color("blue", 9)),
-                    rx.text("25+ Years", size="2", color=rx.color("slate", 10)),
+                    rx.text(f"{years} Years", size="2", color=rx.color("slate", 10)),
                     spacing="1",
                     align="center",
                 ),
@@ -111,6 +249,27 @@ def home_page() -> rx.Component:
                 ),
                 spacing="4",
             ),
+            rx.box(height="2em"),
+            rx.vstack(
+                _section_heading("Latest writing", "All posts \u2192", "/blog"),
+                *[_latest_post_card(meta) for meta in _latest_posts()],
+                spacing="3",
+                width="100%",
+            ),
+            rx.box(height="1em"),
+            rx.vstack(
+                _section_heading(
+                    "What I'm building", "View all projects \u2192", "/projects"
+                ),
+                rx.grid(
+                    *[_building_card(project) for project in BUILDING],
+                    columns=rx.breakpoints(initial="1", sm="3"),
+                    spacing="3",
+                    width="100%",
+                ),
+                spacing="3",
+                width="100%",
+            ),
             rx.box(height="1em"),
             rx.heading("Areas of Expertise", size="3", weight="medium"),
             rx.flex(
@@ -124,6 +283,7 @@ def home_page() -> rx.Component:
             align="center",
             min_height="85vh",
             max_width="48em",
+            width="100%",
         ),
         size="3",
         padding_x=["4", "4", "0", "0", "0"],

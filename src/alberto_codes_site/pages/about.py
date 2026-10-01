@@ -2,12 +2,14 @@
 
 import reflex as rx
 
+from alberto_codes_site.tenure import years_at_wells_fargo
+
 
 def stat_card(value: str, label: str) -> rx.Component:
     """Render a stat card with a highlighted value and label.
 
     Args:
-        value: The highlighted stat value (e.g. "25+").
+        value: The highlighted stat value (e.g. "2").
         label: Description below the value (e.g. "Years of Experience").
 
     Returns:
@@ -15,7 +17,7 @@ def stat_card(value: str, label: str) -> rx.Component:
 
     Examples:
         ```python
-        stat_card("25+", "Years at Wells Fargo")
+        stat_card("2", "Patents Pending")
         ```
     """
     return rx.card(
@@ -52,7 +54,8 @@ def about_page() -> rx.Component:
                 rx.vstack(
                     rx.text(
                         "I'm Alberto Nieto, a Generative AI Principal Engineer at "
-                        "Wells Fargo with over 25 years at the company. My career "
+                        f"Wells Fargo with {years_at_wells_fargo()} years at the "
+                        "company. My career "
                         "journey started in customer service and banking operations, "
                         "and through continuous learning and a passion for technology, "
                         "I've grown into a principal-level engineering role leading "
@@ -64,8 +67,8 @@ def about_page() -> rx.Component:
                     rx.text(
                         "I hold a Bachelor of Science in Accounting Information "
                         "Systems from DeVry University, which gives me a perspective "
-                        "that bridges business and technology. I was recently named "
-                        "as a co-inventor on my first patent application, I'm a "
+                        "that bridges business and technology. I'm a co-inventor on "
+                        "two pending patent applications, I'm a "
                         "two-time Top Performer award recipient, and I'm bilingual "
                         "in English and Spanish.",
                         size="3",
@@ -95,8 +98,8 @@ def about_page() -> rx.Component:
             rx.box(height="2em"),
             rx.heading("By the Numbers", size="5", weight="medium"),
             rx.grid(
-                stat_card("25+", "Years at Wells Fargo"),
-                stat_card("Patent", "Co-Inventor"),
+                stat_card(str(years_at_wells_fargo()), "Years at Wells Fargo"),
+                stat_card("2", "Patents Pending"),
                 stat_card("2x", "Top Performer Award"),
                 stat_card("Principal", "Engineer Level"),
                 columns=rx.breakpoints(initial="2", md="4"),
