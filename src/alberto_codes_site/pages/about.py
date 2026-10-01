@@ -1,4 +1,4 @@
-"""About page with professional summary and key stats."""
+"""About page with a professional summary."""
 
 import reflex as rx
 
@@ -6,40 +6,8 @@ from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
 from alberto_codes_site.tenure import years_at_wells_fargo
 
 
-def stat_card(value: str, label: str) -> rx.Component:
-    """Render a stat card with a highlighted value and label.
-
-    Args:
-        value: The highlighted stat value (e.g. "2").
-        label: Description below the value (e.g. "Years of Experience").
-
-    Returns:
-        A card component displaying the stat.
-
-    Examples:
-        ```python
-        stat_card("2", "Patents Pending")
-        ```
-    """
-    return rx.card(
-        rx.vstack(
-            rx.heading(
-                rx.el.p(value),
-                as_child=True,
-                size="7",
-                weight="bold",
-                color=rx.color("blue", 9),
-            ),
-            rx.text(label, size="2", color=rx.color("slate", 11)),
-            align="center",
-            spacing="1",
-        ),
-        width="100%",
-    )
-
-
 def about_page() -> rx.Component:
-    """Render the about page with professional summary and stats."""
+    """Render the about page with a headshot and professional summary."""
     return rx.container(
         rx.vstack(
             rx.box(height="4em"),
@@ -100,17 +68,6 @@ def about_page() -> rx.Component:
                 ),
                 spacing="6",
                 align="start",
-                width="100%",
-            ),
-            rx.box(height="2em"),
-            rx.heading("By the Numbers", as_="h2", size="5", weight="medium"),
-            rx.grid(
-                stat_card(str(years_at_wells_fargo()), "Years at Wells Fargo"),
-                stat_card("2", "Patents Pending"),
-                stat_card("2x", "Top Performer Award"),
-                stat_card("Principal", "Engineer Level"),
-                columns=rx.breakpoints(initial="2", md="4"),
-                spacing="4",
                 width="100%",
             ),
             spacing="4",
