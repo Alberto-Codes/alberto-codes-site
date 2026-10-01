@@ -15,6 +15,34 @@ NAV_LINKS = [
 
 THEME_TOGGLE_LABEL = "Toggle light and dark theme"
 
+MENU_TITLE = "Menu"
+
+# Black at half opacity dims the page in either theme: on the light page it
+# reads as a shade, on the dark one it still pushes the content back.
+MENU_BACKDROP = "rgba(0, 0, 0, 0.5)"
+
+# Vaul slides the panel and fades the backdrop in; skip both for readers who
+# have asked their system for less motion.
+REDUCED_MOTION = {
+    "@media (prefers-reduced-motion: reduce)": {
+        "transition": "none !important",
+        "animation": "none !important",
+    },
+}
+
+# Out of sight but still announced: the menu dialog's accessible name.
+VISUALLY_HIDDEN = {
+    "position": "absolute",
+    "width": "1px",
+    "height": "1px",
+    "padding": "0",
+    "margin": "-1px",
+    "overflow": "hidden",
+    "clip": "rect(0, 0, 0, 0)",
+    "white_space": "nowrap",
+    "border": "0",
+}
+
 
 def _resume_link(*, icon_size: int, size: str, **props) -> rx.Component:
     """Render the resume download as a link styled like an outline button.
@@ -43,6 +71,73 @@ def _resume_link(*, icon_size: int, size: str, **props) -> rx.Component:
         size=size,
         variant="outline",
         **props,
+    )
+
+
+def _mobile_menu() -> rx.Component:
+    """Render the hamburger button and the drawer it opens on small screens.
+
+    The drawer is Vaul's, built on the Radix dialog, so the backdrop, the
+    close on a tap outside or on Escape, and the focus trap all run in the
+    browser with no backend, which the static export does not have. The
+    backdrop lives in the portal beside the panel so it covers the whole page
+    rather than only the sticky header's stacking context. Each entry is
+    wrapped in a drawer close, so following a link also shuts the menu.
+
+    Returns:
+        The drawer root holding the trigger, backdrop and menu panel.
+    """
+    return rx.drawer.root(
+        rx.drawer.trigger(
+            rx.icon_button(
+                rx.icon("menu"),
+                aria_label="Open menu",
+                variant="ghost",
+                size="2",
+                display=["flex", "flex", "none", "none", "none"],
+            ),
+        ),
+        rx.drawer.portal(
+            rx.drawer.overlay(background=MENU_BACKDROP, style=REDUCED_MOTION),
+            rx.drawer.content(
+                rx.drawer.title(MENU_TITLE, style=VISUALLY_HIDDEN),
+                rx.el.nav(
+                    rx.vstack(
+                        *[
+                            rx.drawer.close(
+                                rx.link(
+                                    label,
+                                    href=href,
+                                    size="4",
+                                    underline="none",
+                                    color=rx.color("slate", 11),
+                                ),
+                            )
+                            for label, href in NAV_LINKS
+                        ],
+                        rx.drawer.close(
+                            _resume_link(icon_size=16, size="2", width="100%"),
+                        ),
+                        rx.color_mode.button(size="2", aria_label=THEME_TOGGLE_LABEL),
+                        spacing="4",
+                        padding="1.5em",
+                    ),
+                    aria_label="Main menu",
+                    width="100%",
+                ),
+                top="auto",
+                left="auto",
+                height="100%",
+                width="16em",
+                background_color=rx.color("gray", 2),
+                border_left=f"1px solid {rx.color('gray', 4)}",
+                style=REDUCED_MOTION,
+            ),
+        ),
+        direction="right",
+        # Vaul leaves focus on the trigger unless asked, which lets Tab walk
+        # the hidden page behind the backdrop; move it into the panel instead.
+        custom_attrs={"autoFocus": True},
     )
 
 
@@ -84,50 +179,7 @@ def navbar() -> rx.Component:
                     align="center",
                     display=["none", "none", "flex", "flex", "flex"],
                 ),
-                # Mobile menu
-                rx.drawer.root(
-                    rx.drawer.trigger(
-                        rx.icon_button(
-                            rx.icon("menu"),
-                            aria_label="Open menu",
-                            variant="ghost",
-                            size="2",
-                            display=["flex", "flex", "none", "none", "none"],
-                        ),
-                    ),
-                    rx.drawer.overlay(),
-                    rx.drawer.portal(
-                        rx.drawer.content(
-                            rx.el.nav(
-                                rx.vstack(
-                                    *[
-                                        rx.link(
-                                            label,
-                                            href=href,
-                                            size="4",
-                                            underline="none",
-                                            color=rx.color("slate", 11),
-                                        )
-                                        for label, href in NAV_LINKS
-                                    ],
-                                    _resume_link(icon_size=16, size="2", width="100%"),
-                                    rx.color_mode.button(
-                                        size="2", aria_label=THEME_TOGGLE_LABEL
-                                    ),
-                                    spacing="4",
-                                    padding="6",
-                                ),
-                                aria_label="Main menu",
-                            ),
-                            top="auto",
-                            left="auto",
-                            height="100%",
-                            width="16em",
-                            background_color=rx.color("gray", 2),
-                        ),
-                    ),
-                    direction="right",
-                ),
+                _mobile_menu(),
                 width="100%",
                 align="center",
             ),
