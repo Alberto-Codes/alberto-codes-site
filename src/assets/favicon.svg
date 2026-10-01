@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <style>
+    .tile { fill: #18191b; }
+    .mark { fill: #70b8ff; }
+    .dot { fill: #edeef0; }
+    @media (prefers-color-scheme: dark) {
+      .tile { fill: #edeef0; }
+      .mark { fill: #0d74ce; }
+      .dot { fill: #18191b; }
+    }
+  </style>
+  <rect class="tile" width="64" height="64" rx="14"/>
+  <path class="mark" fill-rule="evenodd" d="M8 51 L21.5 13 H30.5 L44 51 H35.6 L32.9 42.5 H19.1 L16.4 51 Z M21.3 35.5 H30.7 L26 20.6 Z"/>
+  <rect class="dot" x="47" y="43" width="8" height="8" rx="1.5"/>
+</svg>
