@@ -9,6 +9,7 @@ tags:
   - python
   - ai
   - open source
+series: docvet and docstring quality
 ---
 
 ## The experiment

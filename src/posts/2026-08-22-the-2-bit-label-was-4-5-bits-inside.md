@@ -11,6 +11,7 @@ tags:
   - evaluation
   - vramfit
   - open source
+series: vramfit
 ---
 
 I wanted [NVIDIA's Nemotron 3.5 Lightning](https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16) — a 30-billion-parameter mixture-of-experts model — running entirely on a 16 GiB card. The smallest GGUF on the shelf is labeled `IQ2_XXS`, a 2-bit-class quantization, about as aggressively crushed as llama.cpp gets.

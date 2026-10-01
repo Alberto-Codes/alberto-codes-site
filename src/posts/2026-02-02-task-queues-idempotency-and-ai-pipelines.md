@@ -8,6 +8,7 @@ tags:
   - ai pipelines
   - task queues
   - idempotency
+series: AI pipeline plumbing
 ---
 
 If you run AI workloads through a task queue, duplicates are not a bug. They are a feature of the delivery guarantee you almost certainly chose. Understanding why they happen, and designing for them, is the difference between a pipeline that wastes money on redundant LLM calls and one that shrugs off failures gracefully.

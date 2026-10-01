@@ -19,7 +19,11 @@ from alberto_codes_site.alberto_codes_site import app
 from alberto_codes_site.headings import Slugger, heading_ids, heading_lines
 
 PAGES = {page.route: page.component for page in app._unevaluated_pages.values()}
-POST_ROUTES = sorted(route for route in PAGES if route.startswith("blog/"))
+POST_ROUTES = sorted(
+    route
+    for route in PAGES
+    if route.startswith("blog/") and not route.startswith("blog/series/")
+)
 
 
 def _level(heading: Heading) -> str:

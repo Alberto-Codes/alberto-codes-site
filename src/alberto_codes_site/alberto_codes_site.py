@@ -35,7 +35,8 @@ from alberto_codes_site.pages import (
     projects_page,
     publications_page,
 )
-from alberto_codes_site.pages.blog import _load_posts, published_posts
+from alberto_codes_site.pages.blog import _load_posts, published_posts, series_page
+from alberto_codes_site.series import build_series, series_of
 from alberto_codes_site.sitemap import post_lastmod, sitemap_context
 from alberto_codes_site.social import (
     SITE_IMAGE,
@@ -222,8 +223,11 @@ def add_post_pages(today: date | None = None) -> None:
     Args:
         today: The build date; defaults to the current date.
     """
-    for meta, _ in published_posts(_load_posts(), today=today):
+    posts = published_posts(_load_posts(), today=today)
+    all_series = build_series(posts)
+    for meta, _ in posts:
         slug = meta.get("slug", "")
+        series = series_of(meta, all_series)
         title = meta.get("title", "Blog Post")
         summary = meta.get("summary", "")
         route = f"/blog/{slug}"
@@ -242,12 +246,38 @@ def add_post_pages(today: date | None = None) -> None:
                 date=meta.get("date", ""),
                 image=post_image(slug),
                 updated=meta.get("updated"),
+                series=(series.title, series.route) if series else None,
             ),
             lastmod=post_lastmod(meta),
         )
 
 
+def add_series_pages(today: date | None = None) -> None:
+    """Register a `/blog/series/<slug>` page for each series (issue #51).
+
+    A series is listed from its published parts only, so a series whose
+    parts are all future-dated gets no page yet. Its sitemap ``<lastmod>``
+    is the newest part's date.
+
+    Args:
+        today: The build date; defaults to the current date.
+    """
+    for series in build_series(published_posts(_load_posts(), today=today)):
+        count = len(series)
+        parts = "1 part" if count == 1 else f"{count} parts"
+        add_page(
+            series_page(series.slug, today=today),
+            route=series.route,
+            title=f"{series.title} series | Alberto Nieto",
+            description=(
+                f"The {series.title} series on alberto.codes: {parts}, in order."
+            ),
+            lastmod=series.last_date,
+        )
+
+
 add_post_pages()
+add_series_pages()
 
 add_page(
     contact_page(),

@@ -11,6 +11,7 @@ tags:
   - evaluation
   - typevet
   - open source
+series: Measuring model confidence
 ---
 
 The claim said the receipt came to 646,329. The receipt says 664,329. Two

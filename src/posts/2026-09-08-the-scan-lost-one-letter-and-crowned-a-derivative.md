@@ -10,6 +10,7 @@ tags:
   - ai pipelines
   - saucier
   - open source
+series: Saucier
 ---
 
 Here is what `saucier tree` printed for the Espagnole family in the 1907

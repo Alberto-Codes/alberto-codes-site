@@ -61,7 +61,8 @@ def problems(route: str, outline: list[tuple[int, str | None]]) -> list[str]:
     for before, after in zip(levels, levels[1:], strict=False):
         if after > before + 1:
             found.append(f"h{before} followed by h{after}")
-    if route.startswith("/blog/"):
+    # Posts, not series pages: a series page lists parts as card headings.
+    if route.startswith("/blog/") and not route.startswith("/blog/series/"):
         ids = [heading_id for level, heading_id in outline if level > 1]
         if not all(ids):
             found.append(f"{ids.count(None)} body headings without an id")

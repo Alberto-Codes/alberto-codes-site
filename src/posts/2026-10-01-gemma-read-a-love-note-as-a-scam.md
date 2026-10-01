@@ -11,6 +11,7 @@ tags:
   - typevet
   - gepa
   - open source
+series: Measuring model confidence
 ---
 
 "I want to show you the world, princess :) how about europe?"

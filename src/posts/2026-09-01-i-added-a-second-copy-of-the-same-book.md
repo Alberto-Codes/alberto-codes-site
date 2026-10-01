@@ -10,6 +10,7 @@ tags:
   - ai pipelines
   - saucier
   - open source
+series: Saucier
 ---
 
 I put a second copy of Escoffier into the corpus this week. The project had

@@ -154,6 +154,7 @@ def blog_posting_data(
     date: str,
     image: str,
     updated: str | None = None,
+    series: tuple[str, str] | None = None,
 ) -> dict:
     """Return the schema.org `BlogPosting` for a post.
 
@@ -164,9 +165,11 @@ def blog_posting_data(
         date: The frontmatter ``date``, `YYYY-MM-DD`.
         image: The post's card PNG file name under `src/assets/og/`.
         updated: The frontmatter ``updated`` date, when the post has one.
+        series: ``(title, route)`` of the post's series, when it is a part.
 
     Returns:
-        A JSON-LD object; ``dateModified`` appears only with ``updated``.
+        A JSON-LD object; ``dateModified`` appears only with ``updated``,
+        and ``isPartOf`` (a `CreativeWorkSeries`) only with ``series``.
     """
     url = canonical_url(route)
     data = {
@@ -182,6 +185,13 @@ def blog_posting_data(
     }
     if updated:
         data["dateModified"] = updated
+    if series:
+        series_title, series_route = series
+        data["isPartOf"] = {
+            "@type": "CreativeWorkSeries",
+            "name": series_title,
+            "url": canonical_url(series_route),
+        }
     return data
 
 

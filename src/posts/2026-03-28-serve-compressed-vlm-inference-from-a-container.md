@@ -10,6 +10,7 @@ tags:
   - vision-language-model
   - inference-optimization
   - vllm
+series: TurboQuant on vision models
 ---
 
 The [first turboquant-vllm release](/blog/2026-03-27-paper-to-pypi-in-72-hours-building-the-first-turboquant-vllm-plugin) proved the algorithm works — `pip install`, one flag, 3.76x KV cache compression. But if you've ever set up a GPU inference environment from scratch, you know the real friction isn't the model or the framework. It's the CUDA toolkit version, the driver compatibility matrix, the pip packages that refuse to coexist.

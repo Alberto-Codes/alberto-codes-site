@@ -10,6 +10,7 @@ tags:
   - code quality
   - developer tools
   - open source
+series: docvet and docstring quality
 ---
 
 You're pair-programming with an AI agent. It reads your codebase, finds the function you're extending, checks the docstring, and generates code that calls it with the old parameter names. You debug for twenty minutes before realizing the docstring was updated six months ago—wait, no. The *function* was updated six months ago. The docstring still describes the version before the refactor.

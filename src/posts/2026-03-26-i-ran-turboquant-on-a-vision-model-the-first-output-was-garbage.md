@@ -9,6 +9,7 @@ tags:
   - quantization
   - performance
   - open source
+series: TurboQuant on vision models
 ---
 
 ## The paper

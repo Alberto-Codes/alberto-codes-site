@@ -23,10 +23,15 @@ from alberto_codes_site.pages.blog import (
     published_posts,
     related_posts,
 )
+from alberto_codes_site.series import build_series, series_of
 from alberto_codes_site.social import AUTHOR_SAME_AS
 
 PAGES = {page.route: page.component for page in app._unevaluated_pages.values()}
-POST_ROUTES = sorted(route for route in PAGES if route.startswith("blog/"))
+POST_ROUTES = sorted(
+    route
+    for route in PAGES
+    if route.startswith("blog/") and not route.startswith("blog/series/")
+)
 
 
 def _walk(component: Component):
@@ -91,21 +96,31 @@ def test_every_post_ends_with_the_section(route):
 
 @pytest.mark.parametrize("route", POST_ROUTES)
 def test_older_and_newer_follow_the_published_order(route):
-    """Older/newer point at the adjacent published posts, none at the ends."""
+    """Older/newer point at the adjacent published posts, none at the ends.
+
+    A Newer link that would repeat the series' "Next in" part is dropped.
+    """
     posts = published_posts(_load_posts())
     slugs = [m["slug"] for m, _ in posts]
-    i = slugs.index(route.removeprefix("blog/"))
+    slug = route.removeprefix("blog/")
+    i = slugs.index(slug)
+    series = series_of(posts[i][0], build_series(posts))
+    following = series.neighbours(slug)[1] if series is not None else None
+    has_older = i + 1 < len(slugs)
+    has_newer = i > 0 and not (
+        following is not None and following["slug"] == slugs[i - 1]
+    )
     expected = []
-    if i + 1 < len(slugs):
+    if has_older:
         expected.append(f"/blog/{slugs[i + 1]}")
-    if i > 0:
+    if has_newer:
         expected.append(f"/blog/{slugs[i - 1]}")
     nav = _nav(_post_end(PAGES[route]), "Older and newer posts")
     assert (_hrefs(nav) if nav is not None else []) == expected
     # The compiled JSX escapes the arrows.
     jsx = str(nav)
-    assert (json.dumps("← Older")[1:-1] in jsx) == (i + 1 < len(slugs))
-    assert (json.dumps("Newer →")[1:-1] in jsx) == (i > 0)
+    assert (json.dumps("← Older")[1:-1] in jsx) == has_older
+    assert (json.dumps("Newer →")[1:-1] in jsx) == has_newer
 
 
 @pytest.mark.parametrize("route", POST_ROUTES)
