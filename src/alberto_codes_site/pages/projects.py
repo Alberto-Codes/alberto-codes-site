@@ -2,6 +2,8 @@
 
 import reflex as rx
 
+from alberto_codes_site.components.button_link import button_link
+
 # This site is a static build with no runtime fetch, so the figures below
 # cannot read themselves and will rot silently unless re-read. The open-source
 # project figures are hand-copied from other repositories:
@@ -386,22 +388,15 @@ def projects_page() -> rx.Component:
                     ),
                     rx.spacer(),
                     rx.hstack(
-                        rx.link(
-                            rx.button(
-                                rx.icon("github", size=16),
-                                "GitHub",
-                                size="2",
-                                variant="outline",
-                            ),
+                        button_link(
+                            rx.icon("github", size=16),
+                            "GitHub",
                             href="https://github.com/Alberto-Codes",
                             is_external=True,
-                            underline="none",
+                            size="2",
+                            variant="outline",
                         ),
-                        rx.link(
-                            rx.button("Contact Me", size="2"),
-                            href="/contact",
-                            underline="none",
-                        ),
+                        button_link("Contact Me", href="/contact", size="2"),
                         spacing="3",
                     ),
                     width="100%",
