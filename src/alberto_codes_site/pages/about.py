@@ -78,9 +78,10 @@ def about_page() -> rx.Component:
                         "quality, adk-secure-sessions for encrypted AI agent "
                         "storage, gepa-adk for evolutionary prompt optimization, "
                         "saucier for provenance-traced recipe extraction, "
-                        "vramfit for fitting large models onto one GPU, and "
-                        "turboquant-vllm for KV cache compression. "
-                        "All six are on PyPI.",
+                        "vramfit for fitting large models onto one GPU, "
+                        "turboquant-vllm for KV cache compression, typevet "
+                        "for typed answers from open models, and judgevet "
+                        "for TypeSafe's Jev. All eight are on PyPI.",
                         size="3",
                         color=rx.color("slate", 11),
                         line_height="1.8",

@@ -24,8 +24,9 @@ import reflex as rx
 # Two figures do not come from a project's own repository:
 #
 #   pypi packages    the number of packages published under this author on
-#                    PyPI, six today: docvet, gepa-adk, adk-secure-sessions,
-#                    saucier, vramfit, and turboquant-vllm. Re-derive it by
+#                    PyPI, eight today: docvet, gepa-adk, adk-secure-sessions,
+#                    saucier, vramfit, turboquant-vllm, typevet, and
+#                    judgevet. Re-derive it by
 #                    querying https://pypi.org/pypi/<name>/json for each and
 #                    confirming a 200 with author "Alberto-Codes". Do not
 #                    count the cards below: the grid is curated, and
@@ -33,7 +34,7 @@ import reflex as rx
 #                    figure appears as "N PyPI Packages" on the home page,
 #                    and the full list is spelled out on the About page and
 #                    in the current-role bullet in pages/experience.py, so a
-#                    seventh package means editing those three. The /projects
+#                    ninth package means editing those three. The /projects
 #                    meta description in alberto_codes_site.py names only a
 #                    representative few and carries no count, so it stands
 #                    whatever the list becomes.
@@ -97,12 +98,42 @@ PROJECTS = [
         "model": "https://huggingface.co/Alberto-Codes",
     },
     {
+        "title": "typevet",
+        "description": (
+            "Asks an open model typed questions about text and images: yes "
+            "or no, pick one label, or pick a rubric level. Each answer is "
+            "read as a probability from the model's next-token distribution, "
+            "never parsed from written text. Runs Gemma 4 31B on one 24 GiB "
+            "card with llama.cpp, and the same code on vLLM. With a receipt "
+            "photo attached it caught 6 of 6 swapped totals it had passed as "
+            "text alone. 7 releases. MIT."
+        ),
+        "tags": ["Generative AI", "Multimodal", "LLM", "Python", "PyPI"],
+        "link": "https://pypi.org/project/typevet/",
+        "docs": "https://alberto-codes.github.io/typevet/",
+        "github": "https://github.com/Alberto-Codes/typevet",
+    },
+    {
+        "title": "judgevet",
+        "description": (
+            "Typed Python client, CLI and MCP server for TypeSafe's Jev, a "
+            "hosted model that answers yes-or-no, pick-one and rubric "
+            "questions with a probability for each answer. The client behind "
+            "the Jev calibration study on public scam and bank-support "
+            "messages. 19 releases. MIT."
+        ),
+        "tags": ["Generative AI", "Evaluation", "Python", "CLI", "PyPI"],
+        "link": "https://pypi.org/project/judgevet/",
+        "docs": "https://alberto-codes.github.io/judgevet/",
+        "github": "https://github.com/Alberto-Codes/judgevet",
+    },
+    {
         "title": "gepa-adk",
         "description": (
             "Evolves AI agent instructions automatically using genetic "
             "algorithms. Async-first engine built on Google ADK with "
             "hexagonal architecture and protocol-based interfaces. "
-            "17 releases, ~4,900 downloads. Apache-2.0."
+            "22 releases, ~4,900 downloads. Apache-2.0."
         ),
         "tags": ["Generative AI", "Google ADK", "Python", "PyPI"],
         "link": "https://pypi.org/project/gepa-adk/",
