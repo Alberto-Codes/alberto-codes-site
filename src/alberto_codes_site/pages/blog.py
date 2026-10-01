@@ -305,7 +305,20 @@ def blog_page() -> rx.Component:
     return rx.container(
         rx.vstack(
             rx.box(height="4em"),
-            rx.heading("Blog", size="8", weight="bold"),
+            rx.hstack(
+                rx.heading("Blog", size="8", weight="bold"),
+                rx.link(
+                    "RSS",
+                    href="/feed.xml",
+                    # A file, not a route: skip client-side navigation.
+                    reload_document=True,
+                    size="2",
+                    color=rx.color("blue", 9),
+                ),
+                align="baseline",
+                justify="between",
+                width="100%",
+            ),
             rx.separator(size="4", color_scheme="blue"),
             rx.box(height="1em"),
             rx.text(
