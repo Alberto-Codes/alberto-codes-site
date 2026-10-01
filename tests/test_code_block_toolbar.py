@@ -60,7 +60,7 @@ def test_copy_feedback_swaps_the_icon_and_announces():
 
 def test_post_markdown_renders_code_through_the_toolbar():
     """A post's fenced code compiles through the toolbar renderer."""
-    (wrapper,) = _post_body("```python\nprint(1)\n```\n")
+    (wrapper,), _outline = _post_body("```python\nprint(1)\n```\n")
     (markdown,) = wrapper.children
     assert isinstance(markdown, Markdown)
     pre = str(markdown.format_component_map()["pre"])

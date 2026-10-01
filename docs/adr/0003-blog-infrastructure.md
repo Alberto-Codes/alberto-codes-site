@@ -124,6 +124,31 @@ every other page now centres, and the containers' vertical padding, which was
 a bare Radix step (`"6"`) that browsers dropped and is now `var(--space-6)`.
 `tests/test_page_widths.py` checks the compiled styles.
 
+## Amendment, 2026-10-01: table of contents and heading links
+
+A post with four or more H2s (`TOC_MIN_SECTIONS` in `pages/blog.py`) gets an
+"On this page" block between the header and the body (issue #75); a shorter
+post gets none. It lists the H2s in order with any H3s nested under their H2,
+sits in the reading column, and is a `<details>` element, open on load, inside
+`<nav aria-label="On this page">`. Its label is the `<summary>`, not a
+heading, so the heading outline that `tests/test_heading_structure.py` checks
+is unchanged. There is no scroll-spy and no sticky sidebar.
+
+Every body heading also gets a link to its own fragment, labelled "Link to
+section: <heading text>". It is a sibling of the heading inside a wrapper, not
+a child, so the heading's accessible name stays its own text, and it follows
+the heading in tab order. It is hidden until the heading is hovered or the link
+has keyboard focus; on a device without hover (`@media (hover: none)`) it
+always shows, in muted grey.
+
+The TOC entries come from the same `Slugger` pass that gives the headings their
+ids (`headings.py`, from #97), so they cannot disagree;
+`tests/test_table_of_contents.py` checks that for every post. Both kinds of link
+are React Router links (`rx.el.a`): a plain `<a>` jump creates a history entry
+the router did not make, and its scroll restoration puts the page back where it
+was. Headings carry `scroll-margin-top: 5rem`, so a fragment lands below the
+sticky header (about 57px), whether it is clicked or opened as a fresh URL.
+
 ## Consequences
 
 ### Positive

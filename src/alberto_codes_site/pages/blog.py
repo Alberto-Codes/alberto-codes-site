@@ -15,7 +15,16 @@ import reflex as rx
 from reflex.vars import Var
 
 from alberto_codes_site.figures import figure_page_style, split_figures
-from alberto_codes_site.headings import Slugger, heading_component_map, heading_ids
+from alberto_codes_site.headings import (
+    Slugger,
+    fragment_link,
+    heading_anchor_style,
+    heading_component_map,
+    heading_ids,
+    heading_label,
+    heading_labels,
+    heading_lines,
+)
 from alberto_codes_site.layout import (
     PAGE_COLUMN,
     PAGE_PADDING_Y,
@@ -337,36 +346,132 @@ def _table(*children, **props) -> rx.Component:
     )
 
 
-def _post_body(body: str) -> list[rx.Component]:
+# A post gets a table of contents once it has this many H2 sections (#75).
+TOC_MIN_SECTIONS = 4
+
+# One table of contents entry: heading level, plain text, and the heading's id.
+TocEntry = tuple[int, str, str]
+
+
+def _post_body(body: str) -> tuple[list[rx.Component], list[TocEntry]]:
     """Render a post body, inlining theme-aware figures between markdown runs.
 
     A figure carrying the shared token block (ADR-0005) is inlined so the
     site's theme reaches it; every other image stays inside the markdown.
-    Headings get slug ids that are unique across all runs of the post.
+    Headings get slug ids that are unique across all runs of the post, and the
+    same ids are returned, in document order, for the table of contents.
     """
     slugger = Slugger()
-    return [
-        rx.html(content)
-        if kind == "figure"
-        else rx.markdown(
-            content,
-            use_gfm=True,
-            component_map={
-                **heading_component_map(heading_ids(content, slugger)),
-                "pre": _code_block,
-                "table": _table,
-            },
+    components: list[rx.Component] = []
+    outline: list[TocEntry] = []
+    for kind, content in split_figures(body):
+        if kind == "figure":
+            components.append(rx.html(content))
+            continue
+        ids = heading_ids(content, slugger)
+        outline.extend(
+            (level, heading_label(text), ids[line])
+            for line, level, text in heading_lines(content)
         )
-        for kind, content in split_figures(body)
+        components.append(
+            rx.markdown(
+                content,
+                use_gfm=True,
+                component_map={
+                    **heading_component_map(ids, heading_labels(content)),
+                    "pre": _code_block,
+                    "table": _table,
+                },
+            )
+        )
+    return components, outline
+
+
+def _toc_link(entry: TocEntry) -> rx.Component:
+    """Render one table of contents link to a heading's fragment."""
+    _level, text, heading_id = entry
+    return fragment_link(text, href=f"#{heading_id}", class_name="toc-link")
+
+
+def _table_of_contents(outline: list[TocEntry]) -> rx.Component | None:
+    """Render the "On this page" block for a post with enough sections.
+
+    H2s are listed in order, each with its H3s nested beneath it; deeper
+    headings are left out. The block is a ``nav`` named by its label rather
+    than a heading, so the post's heading outline is unchanged. It is a
+    ``details`` element, open on load, that a reader can fold away.
+
+    Args:
+        outline: The post's headings from ``_post_body``.
+
+    Returns:
+        The block, or None when the post has fewer than ``TOC_MIN_SECTIONS``
+        H2s.
+    """
+    sections: list[tuple[TocEntry, list[TocEntry]]] = []
+    for entry in outline:
+        if entry[0] == 2:
+            sections.append((entry, []))
+        elif entry[0] == 3 and sections:
+            sections[-1][1].append(entry)
+    if len(sections) < TOC_MIN_SECTIONS:
+        return None
+    items = [
+        rx.el.li(
+            _toc_link(section),
+            *([rx.el.ol(*[rx.el.li(_toc_link(s)) for s in subs])] if subs else []),
+        )
+        for section, subs in sections
     ]
+    return rx.el.nav(
+        rx.el.details(
+            rx.el.summary("On this page", class_name="toc-summary"),
+            rx.el.ol(*items),
+            open=True,
+        ),
+        aria_label="On this page",
+        class_name="toc",
+        width="100%",
+        style={
+            **READING_COLUMN,
+            "border_left": f"3px solid {rx.color('gray', 6)}",
+            "padding": "0.25em 0 0.25em 1em",
+            "& .toc-summary": {
+                "cursor": "pointer",
+                "font_size": "var(--font-size-2)",
+                "font_weight": "600",
+                "color": rx.color("gray", 11),
+            },
+            "& ol": {"list_style": "none", "margin": "0", "padding": "0"},
+            "& details > ol": {"margin_top": "0.5em"},
+            "& ol ol": {"padding_inline_start": "1em"},
+            "& li": {"margin": "0.25em 0"},
+            "& .toc-link": {
+                "font_size": "var(--font-size-2)",
+                "line_height": "var(--line-height-2)",
+                "color": rx.color("blue", 11),
+                "text_decoration": "none",
+            },
+            "& .toc-link:hover": {"text_decoration": "underline"},
+            "& :is(.toc-link, .toc-summary):focus-visible": {
+                "outline": f"2px solid {rx.color('blue', 8)}",
+                "outline_offset": "2px",
+                "border_radius": "var(--radius-1)",
+            },
+        },
+    )
 
 
 def _render_post(meta: dict, body: str) -> rx.Component:
     """Render a full blog post with metadata header and markdown body.
 
     The header and the body's running text keep to the reading measure, centred
-    in the post column; figures, tables and code blocks use the full column.
+    in the post column; figures, tables and code blocks use the full column. A
+    post with ``TOC_MIN_SECTIONS`` or more H2s gets a table of contents between
+    the header and the body.
     """
+    body_components, outline = _post_body(body)
+    toc = _table_of_contents(outline)
     header = rx.vstack(
         rx.link(
             rx.hstack(
@@ -410,16 +515,21 @@ def _render_post(meta: dict, body: str) -> rx.Component:
     )
     return rx.vstack(
         header,
+        *([toc] if toc is not None else []),
         rx.box(
-            *_post_body(body),
+            *body_components,
             width="100%",
             style={
                 **figure_page_style(),
+                **heading_anchor_style(),
                 # Running text keeps to the measure; a paragraph that holds
-                # an image is a figure and keeps the full width.
+                # an image is a figure and keeps the full width. A heading's
+                # wrapper keeps it too, so its anchor link sits at the edge
+                # of the measure.
                 "& :is(p:not(:has(> img)), h2, h3, h4, h5, h6, blockquote)": (
                     READING_COLUMN
                 ),
+                "& div.heading-wrap": READING_COLUMN,
                 # Lists keep their 1.5rem bullet indent inside the measure.
                 "& :is(ul, ol)": {
                     "max_width": f"calc({READING_WIDTH} - 1.5rem)",
