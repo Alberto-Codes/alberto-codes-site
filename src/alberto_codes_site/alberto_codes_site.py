@@ -31,6 +31,7 @@ from alberto_codes_site.pages import (
     publications_page,
 )
 from alberto_codes_site.pages.blog import _load_posts
+from alberto_codes_site.social import SITE_IMAGE, page_meta, post_image
 from alberto_codes_site.tenure import years_at_wells_fargo
 
 
@@ -63,8 +64,47 @@ app = rx.App(
     overlay_component=rx.fragment,
     enable_state=False,
 )
-app.add_page(
-    layout(home_page()),
+
+
+def add_page(
+    page: rx.Component,
+    *,
+    route: str,
+    title: str,
+    description: str,
+    share_title: str | None = None,
+    image: str = SITE_IMAGE,
+    og_type: str = "website",
+) -> None:
+    """Register a laid-out page with its Open Graph and Twitter card tags.
+
+    Args:
+        page: The page content, wrapped in the shared layout here.
+        route: The page route.
+        title: The browser tab title.
+        description: The meta description, reused for the share card.
+        share_title: The title on the share card; defaults to ``title``.
+        image: The card PNG under `src/assets/og/`; the site card by default.
+        og_type: `article` for posts, `website` otherwise.
+    """
+    social = page_meta(
+        route=route,
+        title=share_title or title,
+        description=description,
+        image=image,
+        og_type=og_type,
+    )
+    app.add_page(
+        layout(page),
+        route=route,
+        title=title,
+        description=description,
+        **social,
+    )
+
+
+add_page(
+    home_page(),
     route="/",
     title="Alberto Nieto | Generative AI Principal Engineer",
     description=(
@@ -73,8 +113,8 @@ app.add_page(
         "services technology."
     ),
 )
-app.add_page(
-    layout(about_page()),
+add_page(
+    about_page(),
     route="/about",
     title="About | Alberto Nieto",
     description=(
@@ -82,8 +122,8 @@ app.add_page(
         "to Principal Engineer, co-inventor on two pending patents, and AI leader."
     ),
 )
-app.add_page(
-    layout(experience_page()),
+add_page(
+    experience_page(),
     route="/experience",
     title="Experience | Alberto Nieto",
     description=(
@@ -92,8 +132,8 @@ app.add_page(
         "engineering leadership."
     ),
 )
-app.add_page(
-    layout(projects_page()),
+add_page(
+    projects_page(),
     route="/projects",
     title="Projects | Alberto Nieto",
     description=(
@@ -101,8 +141,8 @@ app.add_page(
         "open-source Python and AI tooling, and enterprise AI/ML initiatives."
     ),
 )
-app.add_page(
-    layout(publications_page()),
+add_page(
+    publications_page(),
     route="/publications",
     title="Publications | Alberto Nieto",
     description=(
@@ -111,8 +151,8 @@ app.add_page(
         "24 GiB GPU."
     ),
 )
-app.add_page(
-    layout(blog_page()),
+add_page(
+    blog_page(),
     route="/blog",
     title="Blog | Alberto Nieto",
     description="Thoughts on AI engineering, career growth, and technical leadership.",
@@ -122,15 +162,18 @@ for _meta, _ in _load_posts():
     _slug = _meta.get("slug", "")
     _title = _meta.get("title", "Blog Post")
     _summary = _meta.get("summary", "")
-    app.add_page(
-        layout(blog_post_page(_slug)),
+    add_page(
+        blog_post_page(_slug),
         route=f"/blog/{_slug}",
         title=f"{_title} | Alberto Nieto",
         description=_summary,
+        share_title=_title,
+        image=post_image(_slug),
+        og_type="article",
     )
 
-app.add_page(
-    layout(contact_page()),
+add_page(
+    contact_page(),
     route="/contact",
     title="Contact | Alberto Nieto",
     description="Get in touch with Alberto Nieto via email, GitHub, or LinkedIn.",
