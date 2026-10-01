@@ -10,7 +10,7 @@ def footer() -> rx.Component:
             rx.text(
                 "\u00a9 2026 Alberto Nieto. All rights reserved.",
                 size="2",
-                color=rx.color("slate", 9),
+                color=rx.color("slate", 11),
             ),
             rx.spacer(),
             rx.hstack(
@@ -18,13 +18,15 @@ def footer() -> rx.Component:
                     rx.icon("github", size=18),
                     href="https://github.com/Alberto-Codes",
                     is_external=True,
-                    color=rx.color("slate", 9),
+                    aria_label="GitHub",
+                    color=rx.color("slate", 11),
                 ),
                 rx.link(
                     rx.icon("linkedin", size=18),
                     href="https://www.linkedin.com/in/alberto-codes/",
                     is_external=True,
-                    color=rx.color("slate", 9),
+                    aria_label="LinkedIn",
+                    color=rx.color("slate", 11),
                 ),
                 spacing="4",
             ),

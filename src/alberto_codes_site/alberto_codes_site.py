@@ -18,6 +18,7 @@ See Also:
 """
 
 import reflex as rx
+from reflex.components.el.elements.inline import a as html_a
 
 from alberto_codes_site.components import footer, navbar
 from alberto_codes_site.feed import FEED_URL, write_feed
@@ -41,15 +42,23 @@ from alberto_codes_site.social import (
 )
 from alberto_codes_site.tenure import years_at_wells_fargo
 
+MAIN_CONTENT_ID = "main-content"
+
 
 def layout(page: rx.Component) -> rx.Component:
     """Wrap a page component with the shared navbar and footer.
+
+    The first focusable element is a skip link to the ``<main>`` landmark;
+    it stays visually hidden until keyboard focus reaches it (see
+    ``assets/a11y.css``). It is a plain ``<a>``, not ``rx.el.a``: that one
+    is a React Router link, which resolves ``#main-content`` against the
+    route and moves neither scroll nor focus.
 
     Args:
         page: The page content to wrap.
 
     Returns:
-        A vstack with navbar, page content, and footer.
+        A vstack with a skip link, navbar, page content in ``<main>``, and footer.
 
     Examples:
         ```python
@@ -57,8 +66,13 @@ def layout(page: rx.Component) -> rx.Component:
         ```
     """
     return rx.vstack(
+        html_a(
+            "Skip to content",
+            href=f"#{MAIN_CONTENT_ID}",
+            class_name="skip-link",
+        ),
         navbar(),
-        rx.box(page, flex="1", width="100%"),
+        rx.el.main(page, id=MAIN_CONTENT_ID, tab_index=-1, flex="1", width="100%"),
         footer(),
         spacing="0",
         min_height="100vh",
@@ -79,6 +93,7 @@ app = rx.App(
             href=FEED_URL,
         ),
     ],
+    stylesheets=["/a11y.css"],
 )
 
 # Rebuilt on every import so `reflex run` and `reflex export` both ship a

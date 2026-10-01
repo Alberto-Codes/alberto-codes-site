@@ -30,7 +30,7 @@ def contact_link(icon_name: str, label: str, href: str) -> rx.Component:
                         .replace("https://", "")
                         .replace("/Alberto_Nieto_Resume.pdf", "Download PDF"),
                         size="2",
-                        color=rx.color("slate", 9),
+                        color=rx.color("slate", 11),
                     ),
                     spacing="1",
                 ),
@@ -56,7 +56,7 @@ def contact_page() -> rx.Component:
             rx.text(
                 "Feel free to reach out.",
                 size="3",
-                color=rx.color("slate", 10),
+                color=rx.color("slate", 11),
             ),
             rx.box(height="2em"),
             rx.vstack(

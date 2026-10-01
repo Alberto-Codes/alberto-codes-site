@@ -183,7 +183,7 @@ def _attribution_row(label: str, value: rx.Component | str) -> rx.Component:
         rx.text(
             label,
             size="1",
-            color=rx.color("slate", 9),
+            color=rx.color("slate", 11),
             weight="medium",
             width="7em",
             flex_shrink="0",
@@ -220,7 +220,7 @@ def _publication_links(links: list[tuple[str, str, str]]) -> rx.Component:
                 ),
                 href=url,
                 is_external=url.startswith("http"),
-                color=rx.color("blue", 9),
+                color=rx.color("blue", 11),
                 underline="hover",
             )
             for label, icon, url in links
@@ -255,7 +255,7 @@ def publication_card(publication: dict) -> rx.Component:
                     size="1",
                     color_scheme="violet",
                 ),
-                rx.text(publication["date"], size="1", color=rx.color("slate", 9)),
+                rx.text(publication["date"], size="1", color=rx.color("slate", 11)),
                 spacing="2",
                 align="center",
             ),
@@ -274,7 +274,7 @@ def publication_card(publication: dict) -> rx.Component:
                         rx.text(publication["base_model"], size="2"),
                         href=publication["base_model_url"],
                         is_external=True,
-                        color=rx.color("blue", 9),
+                        color=rx.color("blue", 11),
                         underline="hover",
                     ),
                 ),
@@ -329,7 +329,7 @@ def publications_page() -> rx.Component:
                 "names its base model and license, because a derivative work "
                 "is not the same as an original one.",
                 size="3",
-                color=rx.color("slate", 10),
+                color=rx.color("slate", 11),
                 line_height="1.7",
             ),
             rx.box(height="1em"),

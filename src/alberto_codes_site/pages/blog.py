@@ -99,12 +99,12 @@ def _post_card(meta: dict) -> rx.Component:
                     rx.text(
                         meta.get("date", ""),
                         size="1",
-                        color=rx.color("slate", 9),
+                        color=rx.color("slate", 11),
                     ),
                     rx.text(
                         f"{meta.get('reading_time', 1)} min read",
                         size="1",
-                        color=rx.color("slate", 9),
+                        color=rx.color("slate", 11),
                     ),
                     spacing="2",
                     align="center",
@@ -118,7 +118,7 @@ def _post_card(meta: dict) -> rx.Component:
                 rx.text(
                     meta.get("summary", ""),
                     size="2",
-                    color=rx.color("slate", 10),
+                    color=rx.color("slate", 11),
                 ),
                 spacing="2",
             ),
@@ -206,16 +206,16 @@ def _render_post(meta: dict, body: str) -> rx.Component:
             ),
             href="/blog",
             underline="none",
-            color=rx.color("blue", 9),
+            color=rx.color("blue", 11),
         ),
         rx.box(height="1em"),
         rx.hstack(
             _type_badge(meta.get("type", "post")),
-            rx.text(meta.get("date", ""), size="2", color=rx.color("slate", 9)),
+            rx.text(meta.get("date", ""), size="2", color=rx.color("slate", 11)),
             rx.text(
                 f"{meta.get('reading_time', 1)} min read",
                 size="2",
-                color=rx.color("slate", 9),
+                color=rx.color("slate", 11),
             ),
             spacing="2",
             align="center",
@@ -229,7 +229,7 @@ def _render_post(meta: dict, body: str) -> rx.Component:
         rx.text(
             meta.get("summary", ""),
             size="3",
-            color=rx.color("slate", 10),
+            color=rx.color("slate", 11),
             style={"font-style": "italic"},
         ),
         rx.separator(size="4", color_scheme="blue"),
@@ -239,6 +239,9 @@ def _render_post(meta: dict, body: str) -> rx.Component:
             style={
                 **figure_page_style(),
                 "& :not(pre) > code": {"padding_inline_end": "0"},
+                # Body links sit in running text; colour alone is under 3:1
+                # against it in dark mode, so underline them.
+                "& .rt-Link": {"text_decoration_line": "underline"},
                 "& table": {
                     "border_collapse": "collapse",
                 },
@@ -298,7 +301,7 @@ def blog_page() -> rx.Component:
                         "I'm working on sharing thoughts on AI engineering, "
                         "career growth, and technical leadership.",
                         size="3",
-                        color=rx.color("slate", 10),
+                        color=rx.color("slate", 11),
                         text_align="center",
                         max_width="24em",
                     ),
@@ -324,7 +327,7 @@ def blog_page() -> rx.Component:
                     # A file, not a route: skip client-side navigation.
                     reload_document=True,
                     size="2",
-                    color=rx.color("blue", 9),
+                    color=rx.color("blue", 11),
                 ),
                 align="baseline",
                 justify="between",
@@ -336,7 +339,7 @@ def blog_page() -> rx.Component:
                 "Thoughts on AI engineering, Python, career growth, and "
                 "technical leadership — organized using the Diataxis framework.",
                 size="3",
-                color=rx.color("slate", 10),
+                color=rx.color("slate", 11),
             ),
             rx.hstack(
                 *[
@@ -382,9 +385,9 @@ def blog_post_page(slug: str) -> rx.Component:
             rx.box(height="4em"),
             rx.heading("Post Not Found", as_="h1", size="7", weight="bold"),
             rx.text(
-                "Sorry, that post doesn't exist.", size="3", color=rx.color("slate", 10)
+                "Sorry, that post doesn't exist.", size="3", color=rx.color("slate", 11)
             ),
-            rx.link("Back to Blog", href="/blog", color=rx.color("blue", 9)),
+            rx.link("Back to Blog", href="/blog", color=rx.color("blue", 11)),
             spacing="4",
             align="center",
             min_height="60vh",

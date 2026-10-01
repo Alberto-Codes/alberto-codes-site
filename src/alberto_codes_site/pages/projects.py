@@ -244,7 +244,7 @@ def _project_links(
                 ),
                 href=github,
                 is_external=True,
-                color=rx.color("blue", 9),
+                color=rx.color("blue", 11),
                 underline="hover",
             )
         )
@@ -259,7 +259,7 @@ def _project_links(
                 ),
                 href=link,
                 is_external=True,
-                color=rx.color("blue", 9),
+                color=rx.color("blue", 11),
                 underline="hover",
             )
         )
@@ -274,7 +274,7 @@ def _project_links(
                 ),
                 href=docs,
                 is_external=True,
-                color=rx.color("blue", 9),
+                color=rx.color("blue", 11),
                 underline="hover",
             )
         )
@@ -289,7 +289,7 @@ def _project_links(
                 ),
                 href=model,
                 is_external=True,
-                color=rx.color("blue", 9),
+                color=rx.color("blue", 11),
                 underline="hover",
             )
         )
@@ -358,7 +358,7 @@ def projects_page() -> rx.Component:
             rx.text(
                 "Key technical work and initiatives.",
                 size="3",
-                color=rx.color("slate", 10),
+                color=rx.color("slate", 11),
             ),
             rx.box(height="1em"),
             rx.grid(

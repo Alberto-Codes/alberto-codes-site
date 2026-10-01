@@ -29,7 +29,7 @@ def stat_card(value: str, label: str) -> rx.Component:
                 weight="bold",
                 color=rx.color("blue", 9),
             ),
-            rx.text(label, size="2", color=rx.color("slate", 10)),
+            rx.text(label, size="2", color=rx.color("slate", 11)),
             align="center",
             spacing="1",
         ),
