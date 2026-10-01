@@ -19,5 +19,6 @@ from .blog import blog_post_page as blog_post_page
 from .contact import contact_page as contact_page
 from .experience import experience_page as experience_page
 from .home import home_page as home_page
+from .not_found import not_found_page as not_found_page
 from .projects import projects_page as projects_page
 from .publications import publications_page as publications_page

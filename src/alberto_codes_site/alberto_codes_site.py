@@ -31,6 +31,7 @@ from alberto_codes_site.pages import (
     contact_page,
     experience_page,
     home_page,
+    not_found_page,
     projects_page,
     publications_page,
 )
@@ -245,4 +246,14 @@ add_page(
     route="/contact",
     title="Contact | Alberto Nieto",
     description="Get in touch with Alberto Nieto via email, GitHub, or LinkedIn.",
+)
+
+# The not-found page skips `add_page`: it has no canonical URL or share card
+# of its own, and Reflex's sitemap plugin leaves the 404 route out.
+app.add_page(
+    layout(not_found_page()),
+    route="404",
+    title="Page not found | Alberto Nieto",
+    description="This page does not exist on alberto.codes.",
+    meta=[{"name": "robots", "content": "noindex"}],
 )
