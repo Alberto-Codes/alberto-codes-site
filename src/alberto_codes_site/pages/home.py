@@ -4,6 +4,7 @@ from datetime import date
 
 import reflex as rx
 
+from alberto_codes_site.components.button_link import button_link
 from alberto_codes_site.pages.blog import _load_posts, published_posts
 from alberto_codes_site.tenure import years_at_wells_fargo
 
@@ -235,16 +236,8 @@ def home_page() -> rx.Component:
                 align="center",
             ),
             rx.hstack(
-                rx.link(
-                    rx.button("View Projects", size="3"),
-                    href="/projects",
-                    underline="none",
-                ),
-                rx.link(
-                    rx.button("Contact Me", variant="outline", size="3"),
-                    href="/contact",
-                    underline="none",
-                ),
+                button_link("View Projects", href="/projects", size="3"),
+                button_link("Contact Me", href="/contact", variant="outline", size="3"),
                 spacing="4",
             ),
             rx.box(height="2em"),
