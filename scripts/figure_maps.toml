@@ -1,0 +1,680 @@
+# Colour-to-token maps for the post figures migrated by
+# scripts/theme_figure.py (ADR-0005). A key is a colour, normalised to
+# #rrggbb, or 'property:#rrggbb' for one property only. Re-apply a map with
+#   uv run python scripts/theme_figure.py src/assets/NAME.svg --recorded
+# which a Mermaid figure needs after every re-render from its .mmd.
+
+["adk-session-data-flow.svg"]
+card = true
+["adk-session-data-flow.svg".map]
+"#000000" = "ink"
+"#0b0b0b" = "muted"
+"#1e293b" = "ink"
+"#2563eb" = "accent-1"
+"#3b82f6" = "accent-1"
+"#475569" = "grid"
+"#64748b" = "muted-soft"
+"#93c5fd" = "bg"
+"#94a3b8" = "muted"
+"#dbdbdb" = "grid"
+"#dc2626" = "bad"
+"#ef4444" = "bad"
+"#f1f5f9" = "muted-soft"
+"#fca5a5" = "bg"
+"#ffffff" = "ink"
+"background-color:#ffffff" = "bg"
+"fill:#3b82f6" = "accent-1-soft"
+"fill:#ef4444" = "bad-soft"
+
+["bidirectional-verification.svg"]
+card = true
+["bidirectional-verification.svg".map]
+"#000000" = "ink"
+"#0b0b0b" = "muted"
+"#1e293b" = "ink"
+"#2563eb" = "accent-1"
+"#3b82f6" = "accent-1"
+"#64748b" = "muted-soft"
+"#94a3b8" = "muted"
+"#d97706" = "accent-2"
+"#dbdbdb" = "grid"
+"#f1f5f9" = "muted-soft"
+"#f59e0b" = "accent-2"
+"#ffffff" = "ink"
+"background-color:#ffffff" = "bg"
+"fill:#3b82f6" = "accent-1-soft"
+"fill:#f59e0b" = "accent-2-soft"
+
+["blocking-comparison.svg"]
+card = true
+["blocking-comparison.svg".map]
+"#000000" = "ink"
+"#1f2020" = "bg"
+"#201f1f" = "bg"
+"#474949" = "muted-soft"
+"#585858" = "muted-soft"
+"#a44141" = "bad"
+"#cccccc" = "ink"
+"#d3d3d3" = "muted"
+"#dddddd" = "ink"
+"#f9fffe" = "ink"
+"#ffffff" = "grid"
+
+["boto3-architecture-coverage.svg"]
+card = true
+["boto3-architecture-coverage.svg".map]
+"#000000" = "ink"
+"#0b0b0b" = "muted"
+"#16a34a" = "good"
+"#1e293b" = "ink"
+"#22c55e" = "good-soft"
+"#2563eb" = "accent-1"
+"#3b82f6" = "accent-1"
+"#475569" = "grid"
+"#64748b" = "muted-soft"
+"#94a3b8" = "muted"
+"#dbdbdb" = "grid"
+"#dbeafe" = "bg"
+"#f1f5f9" = "muted-soft"
+"#f59e0b" = "accent-2"
+"#fef3c7" = "bg"
+"#ffffff" = "ink"
+"background-color:#ffffff" = "bg"
+"fill:#3b82f6" = "accent-1-soft"
+"fill:#f59e0b" = "accent-2-soft"
+
+["boto3-event-system.svg"]
+card = true
+["boto3-event-system.svg".map]
+"#000000" = "ink"
+"#0b0b0b" = "muted"
+"#16a34a" = "good"
+"#1e293b" = "ink"
+"#22c55e" = "good-soft"
+"#2563eb" = "accent-1"
+"#3b82f6" = "accent-1"
+"#475569" = "grid"
+"#64748b" = "muted-soft"
+"#94a3b8" = "muted"
+"#d97706" = "accent-2"
+"#dbdbdb" = "grid"
+"#dbeafe" = "bg"
+"#f1f5f9" = "muted-soft"
+"#f59e0b" = "accent-2"
+"#fef3c7" = "bg"
+"#ffffff" = "ink"
+"background-color:#ffffff" = "bg"
+"fill:#3b82f6" = "accent-1-soft"
+"fill:#f59e0b" = "accent-2-soft"
+
+["deterministic-vs-probabilistic.svg"]
+card = true
+["deterministic-vs-probabilistic.svg".map]
+"#000000" = "ink"
+"#1f2020" = "bg"
+"#201f1f" = "bg"
+"#474949" = "muted-soft"
+"#585858" = "muted-soft"
+"#a44141" = "bad"
+"#cccccc" = "ink"
+"#d3d3d3" = "muted"
+"#dddddd" = "ink"
+"#f9fffe" = "ink"
+"#ffffff" = "grid"
+
+["docstring-quality-layers.svg"]
+card = true
+["docstring-quality-layers.svg".map]
+"#000000" = "ink"
+"#0b0b0b" = "muted"
+"#1e293b" = "ink"
+"#2563eb" = "accent-1"
+"#3b82f6" = "accent-1"
+"#475569" = "grid"
+"#64748b" = "muted-soft"
+"#94a3b8" = "muted"
+"#dbdbdb" = "grid"
+"#dbeafe" = "bg"
+"#e2e8f0" = "bg"
+"#f1f5f9" = "muted-soft"
+"#ffffff" = "ink"
+"background-color:#ffffff" = "bg"
+"fill:#3b82f6" = "accent-1-soft"
+
+["evolution-loop.svg"]
+card = true
+["evolution-loop.svg".map]
+"#000000" = "ink"
+"#0f172a" = "muted-soft"
+"#131313" = "grid"
+"#15803d" = "good-soft"
+"#1d4ed8" = "accent-1-soft"
+"#1e293b" = "muted-soft"
+"#22c55e" = "good"
+"#334155" = "muted-soft"
+"#3b82f6" = "accent-1"
+"#475569" = "grid"
+"#64748b" = "muted"
+"#7c3aed" = "accent-3-soft"
+"#a78bfa" = "accent-3"
+"#b45309" = "accent-2-soft"
+"#b91c1c" = "bad-soft"
+"#e2e8f0" = "ink"
+"#ef4444" = "bad"
+"#f0e8d5" = "muted"
+"#f59e0b" = "accent-2"
+
+["lineage-flow.svg"]
+card = true
+["lineage-flow.svg".map]
+"#000000" = "ink"
+"#333333" = "ink"
+"#552222" = "bad"
+"#666666" = "grid"
+"#999999" = "grid"
+"#aaaa33" = "accent-2"
+"#dacef3" = "grid"
+"#eaeaea" = "muted-soft"
+"#ececff" = "muted-soft"
+"#f4f4f4" = "muted-soft"
+"#fff5ad" = "accent-2-soft"
+"#ffffff" = "bg"
+
+["maker-checker-workflow.svg"]
+card = true
+["maker-checker-workflow.svg".map]
+"#000000" = "ink"
+"#28a745" = "good"
+"#333333" = "ink"
+"#552222" = "bad"
+"#9370db" = "accent-3"
+"#999999" = "grid"
+"#aaaa33" = "grid"
+"#d4edda" = "good-soft"
+"#dc3545" = "bad"
+"#e8e8e8" = "muted-soft"
+"#ececff" = "accent-3-soft"
+"#eeeeee" = "muted-soft"
+"#f8d7da" = "bad-soft"
+"#f9ffec" = "bg"
+"#ffc107" = "accent-2"
+"#fff3cd" = "accent-2-soft"
+"#ffffde" = "muted-soft"
+"#ffffff" = "bg"
+
+["param-drift-lifecycle.svg"]
+card = true
+["param-drift-lifecycle.svg".map]
+"#000000" = "ink"
+"#0b0b0b" = "muted"
+"#16a34a" = "good"
+"#1e293b" = "ink"
+"#22c55e" = "good-soft"
+"#2563eb" = "accent-1"
+"#3b82f6" = "accent-1"
+"#475569" = "grid"
+"#64748b" = "muted-soft"
+"#94a3b8" = "muted"
+"#dbdbdb" = "grid"
+"#dc2626" = "bad"
+"#ef4444" = "bad"
+"#f1f5f9" = "muted-soft"
+"#ffffff" = "ink"
+"background-color:#ffffff" = "bg"
+"fill:#3b82f6" = "accent-1-soft"
+"fill:#ef4444" = "bad-soft"
+
+["receipt-chain.svg"]
+card = true
+["receipt-chain.svg".map]
+"#000000" = "ink"
+"#333333" = "ink"
+"#552222" = "bad"
+"#9370db" = "accent-3"
+"#aaaa33" = "grid"
+"#e8e8e8" = "muted-soft"
+"#ececff" = "accent-3-soft"
+"#f9ffec" = "bg"
+"#ffffde" = "muted-soft"
+"#ffffff" = "bg"
+
+["redelivery-lifecycle.svg"]
+card = true
+["redelivery-lifecycle.svg".map]
+"#000000" = "ink"
+"#333333" = "ink"
+"#552222" = "bad"
+"#666666" = "muted"
+"#707070" = "grid"
+"#999999" = "grid"
+"#eeeeee" = "muted-soft"
+"#fcfcfc" = "bg"
+"#ffffff" = "bg"
+
+["saucier-aurore-ambiguity.svg"]
+card = true
+["saucier-aurore-ambiguity.svg".map]
+"#000000" = "ink"
+"#1f2020" = "bg"
+"#201f1f" = "bg"
+"#2f2f2f" = "grid"
+"#474949" = "muted-soft"
+"#585858" = "muted-soft"
+"#7fb069" = "good"
+"#8a8f98" = "muted"
+"#a44141" = "bad"
+"#c96f4a" = "accent-2"
+"#cccccc" = "ink"
+"#d3d3d3" = "muted"
+"#dddddd" = "ink"
+"#f9fffe" = "ink"
+"#ffffff" = "grid"
+
+["saucier-cut-stream.svg"]
+card = true
+["saucier-cut-stream.svg".map]
+"#1f2020" = "bg"
+"#555555" = "grid"
+"#7fb069" = "good"
+"#888888" = "muted"
+"#aaaaaa" = "muted"
+"#c96f4a" = "accent-2"
+"#cccccc" = "ink"
+
+["saucier-derived-waterfall.svg"]
+card = true
+["saucier-derived-waterfall.svg".map]
+"#1f2020" = "bg"
+"#2a3a2a" = "good-soft"
+"#777777" = "muted"
+"#7fb069" = "good"
+"#999999" = "muted"
+"#c96f4a" = "accent-2"
+"#cccccc" = "ink"
+
+["saucier-espaqnole-mother.svg"]
+card = true
+["saucier-espaqnole-mother.svg".map]
+"#1f2020" = "bg"
+"#555555" = "grid"
+"#7fb069" = "good"
+"#888888" = "muted"
+"#999999" = "muted"
+"#bbbbbb" = "ink"
+"#c96f4a" = "accent-2"
+"#cccccc" = "ink"
+"#dddddd" = "ink"
+
+["saucier-mornay-procedure.svg"]
+card = true
+["saucier-mornay-procedure.svg".map]
+"#1f2020" = "bg"
+"#555555" = "grid"
+"#7fb069" = "good"
+"#888888" = "muted"
+"#aaaaaa" = "muted"
+"#bbbbbb" = "ink"
+"#c96f4a" = "accent-2"
+"#cccccc" = "ink"
+"#dddddd" = "ink"
+
+["saucier-one-record.svg"]
+card = true
+["saucier-one-record.svg".map]
+"#1f2020" = "bg"
+"#555555" = "grid"
+"#7fb069" = "good"
+"#888888" = "muted"
+"#aaaaaa" = "muted"
+"#c96f4a" = "accent-2"
+"#cccccc" = "ink"
+"#e6e6e6" = "ink"
+
+["saucier-perigueux-page-break.svg"]
+card = true
+["saucier-perigueux-page-break.svg".map]
+"#1f2020" = "bg"
+"#555555" = "grid"
+"#666666" = "muted"
+"#777777" = "muted"
+"#7fb069" = "good"
+"#999999" = "muted"
+"#aaaaaa" = "muted"
+"#c96f4a" = "accent-2"
+"#cccccc" = "ink"
+
+["saucier-stated-chain-line-1437.svg"]
+card = true
+["saucier-stated-chain-line-1437.svg".map]
+"#1f2020" = "bg"
+"#575757" = "muted-soft"
+"#7fb069" = "good"
+"#c96f4a" = "accent-2"
+"#cccccc" = "ink"
+
+["saucier-two-books-one-reader.svg"]
+card = true
+["saucier-two-books-one-reader.svg".map]
+"#1f2020" = "bg"
+"#555555" = "grid"
+"#7fb069" = "good"
+"#aaaaaa" = "muted"
+"#c96f4a" = "accent-2"
+"#cccccc" = "ink"
+
+["saucier-unstated-chain-resolved.svg"]
+card = true
+["saucier-unstated-chain-resolved.svg".map]
+"#000000" = "ink"
+"#1f2020" = "bg"
+"#201f1f" = "bg"
+"#2f2f2f" = "grid"
+"#474949" = "muted-soft"
+"#585858" = "muted-soft"
+"#7fb069" = "good"
+"#a44141" = "bad"
+"#c96f4a" = "accent-2"
+"#cccccc" = "ink"
+"#d3d3d3" = "muted"
+"#dddddd" = "ink"
+"#f9fffe" = "ink"
+"#ffffff" = "grid"
+
+["saucier-unstated-chain.svg"]
+card = true
+["saucier-unstated-chain.svg".map]
+"#000000" = "ink"
+"#1f2020" = "bg"
+"#201f1f" = "bg"
+"#2f2f2f" = "grid"
+"#474949" = "muted-soft"
+"#585858" = "muted-soft"
+"#7fb069" = "good"
+"#a44141" = "bad"
+"#c96f4a" = "accent-2"
+"#cccccc" = "ink"
+"#d3d3d3" = "muted"
+"#dddddd" = "ink"
+"#f9fffe" = "ink"
+"#ffffff" = "grid"
+
+["saucier-veto-gate.svg"]
+card = true
+["saucier-veto-gate.svg".map]
+"#1f2020" = "bg"
+"#2a3a2a" = "good-soft"
+"#555555" = "grid"
+"#7fb069" = "good"
+"#999999" = "muted"
+"#aaaaaa" = "muted"
+"#c96f4a" = "accent-2"
+"#cccccc" = "ink"
+
+["turboquant-bit-budget.svg"]
+card = true
+["turboquant-bit-budget.svg".map]
+"#000000" = "ink"
+"#0f172a" = "muted-soft"
+"#131313" = "grid"
+"#15803d" = "good-soft"
+"#1d4ed8" = "accent-1-soft"
+"#1e293b" = "muted-soft"
+"#22c55e" = "good"
+"#334155" = "muted-soft"
+"#3b82f6" = "accent-1"
+"#475569" = "grid"
+"#64748b" = "muted"
+"#b45309" = "accent-2-soft"
+"#b91c1c" = "bad-soft"
+"#e2e8f0" = "ink"
+"#ef4444" = "bad"
+"#f0e8d5" = "muted"
+"#f59e0b" = "accent-2"
+
+["turboquant-container-architecture.svg"]
+card = true
+["turboquant-container-architecture.svg".map]
+"#000000" = "ink"
+"#10b981" = "good-soft"
+"#1e293b" = "ink"
+"#34d399" = "good"
+"#3a4f71" = "muted-soft"
+"#3b82f6" = "accent-1-soft"
+"#475569" = "grid"
+"#585858" = "muted-soft"
+"#60a5fa" = "accent-1"
+"#8b5cf6" = "accent-3-soft"
+"#94a3b8" = "muted"
+"#a44141" = "bad"
+"#a78bfa" = "accent-3"
+"#cccccc" = "ink"
+"#d3d3d3" = "muted"
+"#dddddd" = "ink"
+"#f8fafc" = "ink"
+"#f9fffe" = "ink"
+"#ffffff" = "grid"
+"fill:#1e293b" = "muted-soft"
+"fill:#475569" = "muted-soft"
+
+["turboquant-fused-kernel-flow.svg"]
+card = true
+["turboquant-fused-kernel-flow.svg".map]
+"#000000" = "ink"
+"#10b981" = "good-soft"
+"#1e293b" = "ink"
+"#34d399" = "good"
+"#3a4f71" = "muted-soft"
+"#3b82f6" = "accent-1-soft"
+"#475569" = "grid"
+"#585858" = "muted-soft"
+"#60a5fa" = "accent-1"
+"#8b5cf6" = "accent-3-soft"
+"#94a3b8" = "muted"
+"#a44141" = "bad"
+"#a78bfa" = "accent-3"
+"#cccccc" = "ink"
+"#d3d3d3" = "muted"
+"#dddddd" = "ink"
+"#f59e0b" = "accent-2-soft"
+"#f8fafc" = "ink"
+"#f9fffe" = "ink"
+"#fbbf24" = "accent-2"
+"#ffffff" = "grid"
+"fill:#1e293b" = "muted-soft"
+"fill:#475569" = "muted-soft"
+
+["turboquant-kv-compression.svg"]
+card = true
+["turboquant-kv-compression.svg".map]
+"#000000" = "ink"
+"#0f172a" = "muted-soft"
+"#131313" = "grid"
+"#15803d" = "good-soft"
+"#1d4ed8" = "accent-1-soft"
+"#1e293b" = "muted-soft"
+"#22c55e" = "good"
+"#334155" = "muted-soft"
+"#3b82f6" = "accent-1"
+"#475569" = "grid"
+"#64748b" = "muted"
+"#7c3aed" = "accent-3-soft"
+"#a78bfa" = "accent-3"
+"#e2e8f0" = "ink"
+"#f0e8d5" = "muted"
+
+["turboquant-model-portability.svg"]
+card = true
+["turboquant-model-portability.svg".map]
+"#000000" = "ink"
+"#10b981" = "good-soft"
+"#1e293b" = "ink"
+"#34d399" = "good"
+"#3a4f71" = "muted-soft"
+"#3b82f6" = "accent-1-soft"
+"#475569" = "grid"
+"#585858" = "muted-soft"
+"#60a5fa" = "accent-1"
+"#64748b" = "muted"
+"#8b5cf6" = "accent-3-soft"
+"#94a3b8" = "muted"
+"#a44141" = "bad"
+"#a78bfa" = "accent-3"
+"#cccccc" = "ink"
+"#d3d3d3" = "muted"
+"#dddddd" = "ink"
+"#f59e0b" = "accent-2-soft"
+"#f8fafc" = "ink"
+"#f9fffe" = "ink"
+"#fbbf24" = "accent-2"
+"#ffffff" = "grid"
+"fill:#1e293b" = "muted-soft"
+"fill:#475569" = "muted-soft"
+
+["turboquant-vllm-architecture.svg"]
+card = true
+["turboquant-vllm-architecture.svg".map]
+"#000000" = "ink"
+"#10b981" = "good-soft"
+"#1e293b" = "ink"
+"#34d399" = "good"
+"#3a4f71" = "muted-soft"
+"#3b82f6" = "accent-1-soft"
+"#475569" = "grid"
+"#585858" = "muted-soft"
+"#60a5fa" = "accent-1"
+"#8b5cf6" = "accent-3-soft"
+"#94a3b8" = "muted"
+"#a44141" = "bad"
+"#a78bfa" = "accent-3"
+"#cccccc" = "ink"
+"#d3d3d3" = "muted"
+"#dddddd" = "ink"
+"#f8fafc" = "ink"
+"#f9fffe" = "ink"
+"#ffffff" = "grid"
+"fill:#1e293b" = "muted-soft"
+"fill:#475569" = "muted-soft"
+
+["vramfit-16gib-budget.svg"]
+card = true
+["vramfit-16gib-budget.svg".map]
+"#14532d" = "good-soft"
+"#1e293b" = "muted-soft"
+"#1e40af" = "accent-1-soft"
+"#475569" = "grid"
+"#4ade80" = "good"
+"#60a5fa" = "accent-1"
+"#64748b" = "muted"
+"#78350f" = "accent-2-soft"
+"#86efac" = "good"
+"#93c5fd" = "accent-1"
+"#94a3b8" = "muted"
+"#cbd5e1" = "ink"
+"#e2e8f0" = "ink"
+"#f59e0b" = "accent-2"
+"#fbbf24" = "accent-2"
+
+["vramfit-16gib-recipe.svg"]
+card = true
+["vramfit-16gib-recipe.svg".map]
+"#1e40af" = "accent-1-soft"
+"#334155" = "muted-soft"
+"#60a5fa" = "accent-1"
+"#64748b" = "muted"
+"#78350f" = "accent-2-soft"
+"#94a3b8" = "muted"
+"#cbd5e1" = "ink"
+"#f59e0b" = "accent-2"
+
+["vramfit-budget.svg"]
+card = true
+["vramfit-budget.svg".map]
+"#1e293b" = "muted-soft"
+"#1e40af" = "accent-1-soft"
+"#475569" = "grid"
+"#60a5fa" = "accent-1"
+"#64748b" = "muted"
+"#78350f" = "accent-2-soft"
+"#93c5fd" = "accent-1"
+"#94a3b8" = "muted"
+"#cbd5e1" = "ink"
+"#e2e8f0" = "ink"
+"#f59e0b" = "accent-2"
+"#fbbf24" = "accent-2"
+
+["vramfit-distribution-shoulders.svg"]
+card = true
+["vramfit-distribution-shoulders.svg".map]
+"#475569" = "grid"
+"#60a5fa" = "accent-1"
+"#64748b" = "muted"
+"#94a3b8" = "muted"
+"#cbd5e1" = "ink"
+"#e2e8f0" = "ink"
+"#f59e0b" = "accent-2"
+"#fbbf24" = "accent-2"
+
+["vramfit-label-vs-file.svg"]
+card = true
+["vramfit-label-vs-file.svg".map]
+"#1e40af" = "accent-1-soft"
+"#334155" = "muted-soft"
+"#475569" = "grid"
+"#60a5fa" = "accent-1"
+"#64748b" = "muted"
+"#93c5fd" = "accent-1"
+"#94a3b8" = "muted"
+"#cbd5e1" = "ink"
+"#e2e8f0" = "ink"
+"#f59e0b" = "accent-2"
+"#fbbf24" = "accent-2"
+
+["vramfit-pipeline.svg"]
+card = true
+["vramfit-pipeline.svg".map]
+"#1e293b" = "muted-soft"
+"#475569" = "grid"
+"#60a5fa" = "accent-1"
+"#64748b" = "muted"
+"#94a3b8" = "muted"
+"#cbd5e1" = "ink"
+"#e2e8f0" = "ink"
+"#f59e0b" = "accent-2"
+"#fbbf24" = "accent-2"
+
+["vramfit-recipe-shapes.svg"]
+card = true
+["vramfit-recipe-shapes.svg".map]
+"#22d3ee" = "good"
+"#4ade80" = "good"
+"#60a5fa" = "accent-1"
+"#64748b" = "muted"
+"#94a3b8" = "muted"
+"#a78bfa" = "accent-3"
+"#cbd5e1" = "ink"
+"#f87171" = "bad"
+
+["vramfit-three-ceilings.svg"]
+card = true
+["vramfit-three-ceilings.svg".map]
+"#000000" = "ink"
+"#212529" = "ink"
+"#28a745" = "good"
+"#333333" = "ink"
+"#552222" = "bad"
+"#868e96" = "muted"
+"#9370db" = "accent-3"
+"#aaaa33" = "grid"
+"#adb5bd" = "grid"
+"#d4edda" = "good-soft"
+"#dc3545" = "bad"
+"#e8e8e8" = "muted-soft"
+"#e9ecef" = "muted-soft"
+"#ececff" = "accent-3-soft"
+"#f1f3f5" = "bg"
+"#f8d7da" = "bad-soft"
+"#f9ffec" = "bg"
+"#ffc107" = "accent-2"
+"#fff3cd" = "accent-2-soft"
+"#ffffde" = "muted-soft"
+"#ffffff" = "bg"

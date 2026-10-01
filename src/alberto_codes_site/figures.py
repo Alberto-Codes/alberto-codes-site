@@ -36,8 +36,10 @@ FIGURE_TOKENS: dict[str, dict[str, str]] = {
         "accent-2": "#a85200",
         "good": "#1a7f37",
         "bad": "#cf222e",
+        "accent-3": "#8250df",
         "accent-1-soft": "#ddf4ff",
         "accent-2-soft": "#fff1e5",
+        "accent-3-soft": "#fbefff",
         "good-soft": "#dafbe1",
         "bad-soft": "#ffebe9",
         "muted-soft": "#e6eaef",
@@ -51,17 +53,26 @@ FIGURE_TOKENS: dict[str, dict[str, str]] = {
         "accent-2": "#d9894a",
         "good": "#7fb069",
         "bad": "#e07a5f",
+        "accent-3": "#b083f0",
         "accent-1-soft": "#1d3a5c",
         "accent-2-soft": "#4a3418",
+        "accent-3-soft": "#35284f",
         "good-soft": "#233d26",
         "bad-soft": "#4a2620",
         "muted-soft": "#333638",
     },
 }
 
-TEXT_TOKENS = ("ink", "muted", "accent-1", "accent-2", "good", "bad")
+TEXT_TOKENS = ("ink", "muted", "accent-1", "accent-2", "accent-3", "good", "bad")
 GRAPHIC_TOKENS = ("grid",)
-SOFT_TOKENS = ("accent-1-soft", "accent-2-soft", "good-soft", "bad-soft", "muted-soft")
+SOFT_TOKENS = (
+    "accent-1-soft",
+    "accent-2-soft",
+    "accent-3-soft",
+    "good-soft",
+    "bad-soft",
+    "muted-soft",
+)
 
 TOKEN_BLOCK_MARKER = "fig-tokens v1"
 
@@ -102,6 +113,8 @@ def figure_page_style() -> dict:
             "display": "block",
             "max_width": "100%",
             "height": "auto",
+            # Mermaid renders cap their own width below the column; centre them.
+            "margin_inline": "auto",
         },
     }
 

@@ -4,10 +4,12 @@ ADR-0005 records why: a figure loaded through ``<img>`` cannot see the site's
 light/dark toggle, so a figure carrying the token block is inlined at render
 time and takes its colours from CSS custom properties the page sets per theme.
 
-These checks hold the line while the migration is partway done. Every SVG a
-post references either carries the token block or sits in
-``NOT_YET_MIGRATED``, which is the visible to-do list. Migrating a figure
-means running ``scripts/theme_figure.py`` on it and deleting its line here.
+Every SVG a post references carries the token block. ``NOT_YET_MIGRATED`` is
+the allowlist that tracked the migration; it is empty, and a figure may only
+go back on it with a reason. Migrating a figure means running
+``scripts/theme_figure.py`` on it (see ``tests/test_theme_figure.py``).
+Adding a token means adding it to one of the role tuples in
+``alberto_codes_site.figures``, which puts it under the contrast checks below.
 """
 
 import re
@@ -27,49 +29,9 @@ from alberto_codes_site.figures import (
 )
 from alberto_codes_site.pages.blog import POSTS_DIR
 
-# Figures still on hard-coded colours. Shrink this list; never grow it: a new
-# figure is drawn on the tokens from the start.
-NOT_YET_MIGRATED = {
-    "adk-session-data-flow.svg",
-    "bidirectional-verification.svg",
-    "blocking-comparison.svg",
-    "boto3-architecture-coverage.svg",
-    "boto3-event-system.svg",
-    "deterministic-vs-probabilistic.svg",
-    "docstring-quality-layers.svg",
-    "evolution-loop.svg",
-    "lineage-flow.svg",
-    "maker-checker-workflow.svg",
-    "param-drift-lifecycle.svg",
-    "receipt-chain.svg",
-    "redelivery-lifecycle.svg",
-    "saucier-aurore-ambiguity.svg",
-    "saucier-cut-stream.svg",
-    "saucier-derived-waterfall.svg",
-    "saucier-espaqnole-mother.svg",
-    "saucier-mornay-procedure.svg",
-    "saucier-one-record.svg",
-    "saucier-perigueux-page-break.svg",
-    "saucier-stated-chain-line-1437.svg",
-    "saucier-two-books-one-reader.svg",
-    "saucier-unstated-chain-resolved.svg",
-    "saucier-unstated-chain.svg",
-    "saucier-veto-gate.svg",
-    "turboquant-bit-budget.svg",
-    "turboquant-container-architecture.svg",
-    "turboquant-fused-kernel-flow.svg",
-    "turboquant-kv-compression.svg",
-    "turboquant-model-portability.svg",
-    "turboquant-vllm-architecture.svg",
-    "vramfit-16gib-budget.svg",
-    "vramfit-16gib-recipe.svg",
-    "vramfit-budget.svg",
-    "vramfit-distribution-shoulders.svg",
-    "vramfit-label-vs-file.svg",
-    "vramfit-pipeline.svg",
-    "vramfit-recipe-shapes.svg",
-    "vramfit-three-ceilings.svg",
-}
+# Figures still on hard-coded colours. Empty since #91; keep it that way: a new
+# figure is drawn on the tokens from the start, or migrated before it ships.
+NOT_YET_MIGRATED: set[str] = set()
 
 AA_TEXT = 4.5
 AA_GRAPHIC = 3.0
@@ -192,7 +154,9 @@ def test_migrated_figure_ids_cannot_collide_once_inlined(name):
 
 def test_split_inlines_migrated_figures_and_leaves_the_rest_as_markdown():
     """Only migrated figures on their own paragraph, outside code, are inlined."""
-    migrated, unmigrated = _migrated()[0], sorted(NOT_YET_MIGRATED)[0]
+    # Every post figure is on the tokens now; a missing file takes the same
+    # path as an un-migrated one, so it stands in for one.
+    migrated, unmigrated = _migrated()[0], "not-on-the-tokens.svg"
     body = (
         "Intro.\n\n"
         f"![A migrated figure](/{migrated})\n\n"
