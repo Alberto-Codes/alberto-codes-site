@@ -1,0 +1,54 @@
+name: Bounded task
+description: One deliverable, its exclusions, and a check that proves it is done.
+title: "<type>(<area>): <verb> <object>"
+labels: ["task", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One behaviour, one page change, or one decision per issue.
+        After filing, set `worker-fit` or `judgment`, `size-S` or `size-M`,
+        a priority (P1-P4), an area label (ux, seo, content, accessibility,
+        performance), and `ready` once the Prove section is checkable.
+  - type: textarea
+    id: do
+    attributes:
+      label: Do
+      description: The problem as observed, and one concrete deliverable.
+      placeholder: At 390px the table clips its right columns. Wrap tables in a sideways-scrolling container.
+    validations:
+      required: true
+  - type: textarea
+    id: do-not
+    attributes:
+      label: Do not
+      description: Exclusions, and what must stay intact.
+      placeholder: Do not shrink the font or change the page-level overflow rule.
+    validations:
+      required: true
+  - type: textarea
+    id: prove
+    attributes:
+      label: Prove
+      description: A command, a test, or screenshots (390px and desktop, light and dark) that show it is done.
+    validations:
+      required: true
+  - type: input
+    id: parent
+    attributes:
+      label: Parent epic
+      placeholder: "#66"
+    validations:
+      required: false
+  - type: dropdown
+    id: weight
+    attributes:
+      label: Weight hint
+      description: Model capacity for whoever builds it.
+      options:
+        - light
+        - medium
+        - heavy
+        - undecided
+    validations:
+      required: true
