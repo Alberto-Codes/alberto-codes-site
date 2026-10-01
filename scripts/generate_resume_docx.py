@@ -10,13 +10,14 @@ Formatting follows ATS best practices:
 - 0.75in margins, 1.15 line spacing
 """
 
-from docx import Document
-from docx.shared import Pt, Inches, RGBColor
-from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.oxml.ns import qn
-from docx.oxml import OxmlElement
 import os
 import subprocess
+
+from docx import Document
+from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml import OxmlElement
+from docx.oxml.ns import qn
+from docx.shared import Inches, Pt, RGBColor
 
 from alberto_codes_site.tenure import years_at_wells_fargo
 

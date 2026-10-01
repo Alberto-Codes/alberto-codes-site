@@ -21,7 +21,7 @@ build-backend = "uv_build"
 [tool.ruff]
 line-length = 88
 target-version = "py312"
-exclude = [".uv-cache", ".venv", "__pycache__", "*.egg-info"]
+exclude = [".uv-cache", ".venv", "__pycache__", "*.egg-info", ".claude", "_bmad", "_bmad-output"]
 
 [tool.ruff.lint]
 extend-select = ["E501", "I", "D"]
