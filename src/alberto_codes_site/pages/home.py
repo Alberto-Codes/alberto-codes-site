@@ -5,6 +5,7 @@ from datetime import date
 import reflex as rx
 
 from alberto_codes_site.components.button_link import button_link
+from alberto_codes_site.components.meta_label import meta_list
 from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
 from alberto_codes_site.pages.blog import _load_posts, published_posts
 from alberto_codes_site.tenure import years_at_wells_fargo
@@ -264,11 +265,8 @@ def home_page() -> rx.Component:
             ),
             rx.box(height="1em"),
             rx.heading("Areas of Expertise", as_="h2", size="3", weight="medium"),
-            rx.flex(
-                *[rx.badge(tag, variant="surface", size="2") for tag in EXPERTISE_TAGS],
-                wrap="wrap",
-                spacing="2",
-                justify="center",
+            rx.box(
+                meta_list(EXPERTISE_TAGS, size="2", justify="center"),
                 max_width=["100%", "100%", "32em", "32em", "32em"],
             ),
             spacing="4",

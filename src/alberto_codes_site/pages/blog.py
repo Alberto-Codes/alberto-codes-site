@@ -15,6 +15,7 @@ from urllib.parse import urlparse
 import reflex as rx
 from reflex.vars import Var
 
+from alberto_codes_site.components.meta_label import meta_label
 from alberto_codes_site.figures import figure_page_style, split_figures
 from alberto_codes_site.headings import (
     Slugger,
@@ -152,10 +153,10 @@ def published_posts(
     return [(m, b) for _, m, b in kept]
 
 
-def _type_badge(post_type: str) -> rx.Component:
-    """Render a colored badge for the Diataxis type."""
+def _type_badge(post_type: str, size: str = "1") -> rx.Component:
+    """Render the Diataxis type as a label in its colour, not as a button."""
     color = DIATAXIS_COLORS.get(post_type, "gray")
-    return rx.badge(post_type, variant="surface", size="1", color_scheme=color)
+    return meta_label(post_type, color_scheme=color, size=size)
 
 
 def _post_card(meta: dict) -> rx.Component:
@@ -825,7 +826,7 @@ def _render_post(
         ),
         rx.box(height="1em"),
         rx.hstack(
-            _type_badge(meta.get("type", "post")),
+            _type_badge(meta.get("type", "post"), size="2"),
             rx.text(meta.get("date", ""), size="2", color=rx.color("slate", 11)),
             rx.text(
                 f"{meta.get('reading_time', 1)} min read",
@@ -989,16 +990,8 @@ def blog_page(today: date | None = None) -> rx.Component:
                 color=rx.color("slate", 11),
             ),
             rx.hstack(
-                *[
-                    rx.badge(
-                        label,
-                        variant="surface",
-                        size="2",
-                        color_scheme=color,
-                    )
-                    for label, color in DIATAXIS_COLORS.items()
-                ],
-                spacing="2",
+                *[_type_badge(label, size="2") for label in DIATAXIS_COLORS],
+                spacing="4",
                 wrap="wrap",
             ),
             rx.box(height="1em"),

@@ -3,6 +3,7 @@
 import reflex as rx
 
 from alberto_codes_site.components.button_link import button_link
+from alberto_codes_site.components.meta_label import meta_list
 from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
 
 # This site is a static build with no runtime fetch, so the figures below
@@ -328,14 +329,7 @@ def project_card(project: dict) -> rx.Component:
                 color=rx.color("slate", 11),
                 line_height="1.7",
             ),
-            rx.flex(
-                *[
-                    rx.badge(tag, variant="surface", size="1")
-                    for tag in project["tags"]
-                ],
-                wrap="wrap",
-                spacing="2",
-            ),
+            meta_list(project["tags"]),
             *(
                 _project_links(
                     project.get("link", ""),
