@@ -51,7 +51,7 @@ def contact_page() -> rx.Component:
     return rx.container(
         rx.vstack(
             rx.box(height="4em"),
-            rx.heading("Contact", size="8", weight="bold"),
+            rx.heading("Contact", as_="h1", size="8", weight="bold"),
             rx.separator(size="4", color_scheme="blue"),
             rx.text(
                 "Feel free to reach out.",

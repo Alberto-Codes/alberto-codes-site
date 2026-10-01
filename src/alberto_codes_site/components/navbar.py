@@ -18,7 +18,14 @@ def navbar() -> rx.Component:
     return rx.box(
         rx.hstack(
             rx.link(
-                rx.heading("Alberto.Codes", size="4", weight="bold"),
+                # A logo, not a heading: the heading look on a block span.
+                rx.heading(
+                    rx.el.span("Alberto.Codes"),
+                    as_child=True,
+                    size="4",
+                    weight="bold",
+                    display="block",
+                ),
                 href="/",
                 underline="none",
                 color=rx.color("slate", 12),

@@ -22,7 +22,13 @@ def stat_card(value: str, label: str) -> rx.Component:
     """
     return rx.card(
         rx.vstack(
-            rx.heading(value, size="7", weight="bold", color=rx.color("blue", 9)),
+            rx.heading(
+                rx.el.p(value),
+                as_child=True,
+                size="7",
+                weight="bold",
+                color=rx.color("blue", 9),
+            ),
             rx.text(label, size="2", color=rx.color("slate", 10)),
             align="center",
             spacing="1",
@@ -36,7 +42,7 @@ def about_page() -> rx.Component:
     return rx.container(
         rx.vstack(
             rx.box(height="4em"),
-            rx.heading("About Me", size="8", weight="bold"),
+            rx.heading("About Me", as_="h1", size="8", weight="bold"),
             rx.separator(size="4", color_scheme="blue"),
             rx.box(height="1em"),
             rx.hstack(
@@ -96,7 +102,7 @@ def about_page() -> rx.Component:
                 width="100%",
             ),
             rx.box(height="2em"),
-            rx.heading("By the Numbers", size="5", weight="medium"),
+            rx.heading("By the Numbers", as_="h2", size="5", weight="medium"),
             rx.grid(
                 stat_card(str(years_at_wells_fargo()), "Years at Wells Fargo"),
                 stat_card("2", "Patents Pending"),

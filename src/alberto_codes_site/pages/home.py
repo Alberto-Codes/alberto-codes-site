@@ -83,7 +83,7 @@ def _latest_posts(today: date | None = None) -> list[dict]:
 def _section_heading(title: str, link_text: str, href: str) -> rx.Component:
     """Render a section heading with a trailing link to the full listing."""
     return rx.flex(
-        rx.heading(title, size="5", weight="medium"),
+        rx.heading(title, as_="h2", size="5", weight="medium"),
         rx.link(link_text, href=href, size="2", weight="medium"),
         justify="between",
         align="baseline",
@@ -99,7 +99,9 @@ def _latest_post_card(meta: dict) -> rx.Component:
         rx.card(
             rx.vstack(
                 rx.text(meta.get("date", ""), size="1", color=rx.color("slate", 9)),
-                rx.heading(meta.get("title", "Untitled"), size="3", weight="bold"),
+                rx.heading(
+                    meta.get("title", "Untitled"), as_="h3", size="3", weight="bold"
+                ),
                 rx.text(
                     meta.get("summary", ""),
                     size="2",
@@ -127,7 +129,7 @@ def _building_card(project: dict) -> rx.Component:
     return rx.link(
         rx.card(
             rx.vstack(
-                rx.heading(project["title"], size="4", weight="bold"),
+                rx.heading(project["title"], as_="h3", size="4", weight="bold"),
                 rx.text(project["proof"], size="2", color=rx.color("slate", 10)),
                 rx.spacer(),
                 rx.text(
@@ -167,11 +169,13 @@ def home_page() -> rx.Component:
             rx.text("Hello, I'm", size="4", color=rx.color("slate", 9)),
             rx.heading(
                 "Alberto Nieto",
+                as_="h1",
                 size=rx.breakpoints(initial="7", md="9"),
                 weight="bold",
             ),
             rx.heading(
-                "Generative AI Principal Engineer",
+                rx.el.p("Generative AI Principal Engineer"),
+                as_child=True,
                 size=rx.breakpoints(initial="3", md="6"),
                 weight="medium",
                 color=rx.color("blue", 9),
@@ -271,7 +275,7 @@ def home_page() -> rx.Component:
                 width="100%",
             ),
             rx.box(height="1em"),
-            rx.heading("Areas of Expertise", size="3", weight="medium"),
+            rx.heading("Areas of Expertise", as_="h2", size="3", weight="medium"),
             rx.flex(
                 *[rx.badge(tag, variant="surface", size="2") for tag in EXPERTISE_TAGS],
                 wrap="wrap",
