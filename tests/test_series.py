@@ -156,7 +156,9 @@ def test_future_part_is_neither_counted_nor_linked(fake_posts):
     assert "2026-10-02-three" not in jsx
     assert "Last part of " in jsx
     page = str(blog.series_page("fake-series", today=TODAY))
-    assert "A series in 2 parts, published from 2026-09-01 to 2026-09-15." in page
+    assert '"A series in 2 parts, ","published from ",' in page
+    assert 'jsx("time",{dateTime:"2026-09-01"},"1 Sep 2026")," to ",' in page
+    assert 'jsx("time",{dateTime:"2026-09-15"},"15 Sep 2026"),".")' in page
     assert "2026-10-02-three" not in page
     index = str(blog.blog_page(today=TODAY))
     assert "Part 1 of 2 \\u00b7 Fake Series" in index

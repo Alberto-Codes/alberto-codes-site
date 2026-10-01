@@ -6,6 +6,7 @@ import reflex as rx
 
 from alberto_codes_site.components.button_link import button_link
 from alberto_codes_site.components.meta_label import meta_list
+from alberto_codes_site.dates import time_el
 from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
 from alberto_codes_site.pages.blog import _load_posts, published_posts
 from alberto_codes_site.tenure import years_at_wells_fargo
@@ -95,7 +96,11 @@ def _latest_post_card(meta: dict) -> rx.Component:
     return rx.link(
         rx.card(
             rx.vstack(
-                rx.text(meta.get("date", ""), size="1", color=rx.color("slate", 11)),
+                rx.text(
+                    time_el(meta.get("date", "")),
+                    size="1",
+                    color=rx.color("slate", 11),
+                ),
                 rx.heading(
                     meta.get("title", "Untitled"), as_="h3", size="3", weight="bold"
                 ),

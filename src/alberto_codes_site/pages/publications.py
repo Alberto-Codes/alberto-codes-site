@@ -3,6 +3,7 @@
 import reflex as rx
 
 from alberto_codes_site.components.meta_label import meta_label
+from alberto_codes_site.dates import time_el
 from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
 
 PUBLICATIONS = [
@@ -253,7 +254,11 @@ def publication_card(publication: dict) -> rx.Component:
         rx.vstack(
             rx.hstack(
                 meta_label(publication["kind"], color_scheme="violet"),
-                rx.text(publication["date"], size="1", color=rx.color("slate", 11)),
+                rx.text(
+                    time_el(publication["date"]),
+                    size="1",
+                    color=rx.color("slate", 11),
+                ),
                 spacing="2",
                 align="center",
             ),

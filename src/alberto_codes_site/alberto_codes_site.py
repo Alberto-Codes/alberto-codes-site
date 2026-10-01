@@ -23,6 +23,7 @@ import reflex as rx
 from reflex.components.el.elements.inline import a as html_a
 
 from alberto_codes_site.components import footer, navbar
+from alberto_codes_site.dates import post_updated
 from alberto_codes_site.feed import FEED_URL, write_feed
 from alberto_codes_site.pages import (
     about_page,
@@ -225,7 +226,7 @@ def add_post_pages(today: date | None = None) -> None:
     """
     posts = published_posts(_load_posts(), today=today)
     all_series = build_series(posts)
-    for meta, _ in posts:
+    for meta, body in posts:
         slug = meta.get("slug", "")
         series = series_of(meta, all_series)
         title = meta.get("title", "Blog Post")
@@ -245,10 +246,10 @@ def add_post_pages(today: date | None = None) -> None:
                 description=summary,
                 date=meta.get("date", ""),
                 image=post_image(slug),
-                updated=meta.get("updated"),
+                updated=post_updated(meta, body),
                 series=(series.title, series.route) if series else None,
             ),
-            lastmod=post_lastmod(meta),
+            lastmod=post_lastmod(meta, body),
         )
 
 
