@@ -4,7 +4,7 @@ from datetime import date
 
 import reflex as rx
 
-from alberto_codes_site.pages.blog import _load_posts
+from alberto_codes_site.pages.blog import _load_posts, published_posts
 from alberto_codes_site.tenure import years_at_wells_fargo
 
 LATEST_POST_COUNT = 3
@@ -59,9 +59,6 @@ BUILDING = [
 def _latest_posts(today: date | None = None) -> list[dict]:
     """Return the newest published posts, skipping any dated after ``today``.
 
-    The blog loader renders future-dated files as well, so the home page
-    filters them itself rather than announce a post before its date.
-
     Args:
         today: The date to treat as now. Defaults to the build date.
 
@@ -73,11 +70,8 @@ def _latest_posts(today: date | None = None) -> list[dict]:
         _latest_posts(date(2026, 10, 1))[0]["slug"]
         ```
     """
-    cutoff = (today or date.today()).isoformat()
-    published = [
-        meta for meta, _body in _load_posts() if meta.get("date", "") <= cutoff
-    ]
-    return published[:LATEST_POST_COUNT]
+    published = published_posts(_load_posts(), today=today)
+    return [meta for meta, _body in published[:LATEST_POST_COUNT]]
 
 
 def _section_heading(title: str, link_text: str, href: str) -> rx.Component:
