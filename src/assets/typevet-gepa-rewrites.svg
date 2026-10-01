@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 840 400" style="max-width: 840px; background-color: transparent; font-family: 'trebuchet ms', verdana, arial, sans-serif; font-size: 14px;" role="img" aria-labelledby="t d">
+  <title id="t">Two rewrites of one question, in opposite directions</title>
+  <desc id="d">Two cards. Left, Gemma 4's rewrite: Label 1 only for obvious deceptive scam/phishing/social engineering; ignore personal text. Example: I want to show you the world, princess :) how about europe?, labelled not a scam, went from 99.98 percent scam with the original question to under 0.001 percent with the rewrite. Right, Jev's rewrite: Predict probability (0-1) that message is scam/phishing/unsolicited promo, offer, call, alert. Example: a real-estate promotion ending For Best Deal Call, labelled a scam, went from 32 percent to 89 percent.</desc>
+  <style>
+    text { fill: #cccccc; }
+    .m { fill: #888888; font-size: 12px; letter-spacing: 0.5px; }
+    .h { font-size: 15px; font-weight: bold; }
+    .big { font-size: 22px; font-weight: bold; }
+    .g { fill: #7fb069; }
+    .e { text-anchor: end; }
+  </style>
+  <rect x="0" y="0" width="840" height="400" rx="12" fill="#1f2020"/>
+  <text class="m" x="30" y="34">STARTING QUESTION FOR BOTH: IS THIS MESSAGE A SCAM, PHISHING OR SOCIAL-ENGINEERING ATTEMPT?</text>
+  <rect x="30" y="52" width="370" height="320" rx="10" fill="#1f2020" stroke="#444444" stroke-width="1.5"/>
+  <text class="m" x="50" y="82">GEMMA 4 NARROWED IT</text>
+  <text x="50" y="108">"Label 1 only for obvious deceptive</text>
+  <text x="50" y="130">scam/phishing/social engineering;</text>
+  <text x="50" y="152">ignore personal text."</text>
+  <line x1="50" y1="186" x2="380" y2="186" stroke="#444444"/>
+  <text class="m" x="50" y="212">EXAMPLE, NOT A SCAM</text>
+  <text x="50" y="238">"I want to show you the world,</text>
+  <text x="50" y="260">princess :) how about europe?"</text>
+  <text class="m" x="50" y="306">ORIGINAL QUESTION</text><text class="m e" x="380" y="306">ITS OWN REWRITE</text>
+  <text class="big" x="50" y="340">99.98%</text><text class="m" x="215" y="336" style="text-anchor:middle">CHANCE OF SCAM</text><text class="big g e" x="380" y="340">&lt;0.001%</text>
+  <rect x="440" y="52" width="370" height="320" rx="10" fill="#1f2020" stroke="#444444" stroke-width="1.5"/>
+  <text class="m" x="460" y="82">JEV WIDENED IT</text>
+  <text x="460" y="108">"Predict probability (0-1) that message</text>
+  <text x="460" y="130">is scam/phishing/unsolicited promo,</text>
+  <text x="460" y="152">offer, call, alert"</text>
+  <line x1="460" y1="186" x2="790" y2="186" stroke="#444444"/>
+  <text class="m" x="460" y="212">EXAMPLE, LABELLED A SCAM</text>
+  <text x="460" y="238">"... Logix Sec-124 @ 8200/- PSF</text>
+  <text x="460" y="260">For Best Deal Call 9711131802 ..."</text>
+  <text class="m" x="460" y="306">ORIGINAL QUESTION</text><text class="m e" x="790" y="306">ITS OWN REWRITE</text>
+  <text class="big" x="460" y="340">32%</text><text class="m" x="625" y="336" style="text-anchor:middle">CHANCE OF SCAM</text><text class="big g e" x="790" y="340">89%</text>
+</svg>
