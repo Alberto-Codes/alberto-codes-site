@@ -250,6 +250,67 @@ def _code_toolbar(code: Var, language: object) -> rx.Component:
     )
 
 
+# Light mode keeps react-syntax-highlighter's oneLight theme, but six of its
+# token colours fall below 4.5:1 on its own #fafafa block background (issue
+# #110). Each is darkened in HSL lightness only, hue and saturation kept, to
+# the first whole-percent step that passes. The dark theme (oneDark) is
+# untouched. tests/test_code_token_contrast.py holds the original colours and
+# checks every ratio.
+LIGHT_CODE_BACKGROUND = "#fafafa"
+_LIGHT_CODE_COMMENT = "#71727a"  # was hsl(230, 4%, 64%)
+_LIGHT_CODE_ORANGE = "#a76201"  # was hsl(35, 99%, 36%)
+_LIGHT_CODE_RED = "#d93020"  # was hsl(5, 74%, 59%)
+_LIGHT_CODE_GREEN = "#3f7e3e"  # was hsl(119, 34%, 47%)
+_LIGHT_CODE_BLUE = "#2868f0"  # was hsl(221, 87%, 60%)
+_LIGHT_CODE_CYAN = "#0179ad"  # was hsl(198, 99%, 37%)
+LIGHT_CODE_TOKEN_COLOURS = {
+    "comment": _LIGHT_CODE_COMMENT,
+    "prolog": _LIGHT_CODE_COMMENT,
+    "cdata": _LIGHT_CODE_COMMENT,
+    "attr-name": _LIGHT_CODE_ORANGE,
+    "class-name": _LIGHT_CODE_ORANGE,
+    "boolean": _LIGHT_CODE_ORANGE,
+    "constant": _LIGHT_CODE_ORANGE,
+    "number": _LIGHT_CODE_ORANGE,
+    "atrule": _LIGHT_CODE_ORANGE,
+    "property": _LIGHT_CODE_RED,
+    "tag": _LIGHT_CODE_RED,
+    "symbol": _LIGHT_CODE_RED,
+    "deleted": _LIGHT_CODE_RED,
+    "important": _LIGHT_CODE_RED,
+    "selector": _LIGHT_CODE_GREEN,
+    "string": _LIGHT_CODE_GREEN,
+    "char": _LIGHT_CODE_GREEN,
+    "builtin": _LIGHT_CODE_GREEN,
+    "inserted": _LIGHT_CODE_GREEN,
+    "regex": _LIGHT_CODE_GREEN,
+    "attr-value": _LIGHT_CODE_GREEN,
+    "variable": _LIGHT_CODE_BLUE,
+    "operator": _LIGHT_CODE_BLUE,
+    "function": _LIGHT_CODE_BLUE,
+    "url": _LIGHT_CODE_CYAN,
+}
+# The spread replaces a token class's whole style object, so an override has
+# to restate everything else oneLight set on that class.
+_LIGHT_CODE_ITALIC = {"comment"}
+_LIGHT_CODE_THEME = (
+    rx.code_block.themes.one_light.to(dict)
+    .merge(
+        Var.create(
+            {
+                token: {"color": colour}
+                | ({"fontStyle": "italic"} if token in _LIGHT_CODE_ITALIC else {})
+                for token, colour in LIGHT_CODE_TOKEN_COLOURS.items()
+            }
+            # oneLight fades namespace tokens to 0.8, which would undo the
+            # ratios above.
+            | {"namespace": {"opacity": 1}}
+        )
+    )
+    ._replace(_var_type=rx.code_block.themes)
+)
+
+
 def _code_block(value: object, **props) -> rx.Component:
     """Keep console columns intact with a scrollbar independent of OS settings.
 
@@ -262,6 +323,10 @@ def _code_block(value: object, **props) -> rx.Component:
             rx.code_block(
                 value,
                 **props,
+                theme=rx.color_mode_cond(
+                    light=_LIGHT_CODE_THEME,
+                    dark=rx.code_block.themes.one_dark,
+                ),
                 wrap_long_lines=False,
                 min_width="100%",
                 width="max-content",
