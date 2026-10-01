@@ -10,6 +10,7 @@ tags:
   - ai pipelines
   - saucier
   - open source
+series: Saucier
 ---
 
 Here is what `saucier show mornay` printed at `v0.5.0`, cut to the two lines

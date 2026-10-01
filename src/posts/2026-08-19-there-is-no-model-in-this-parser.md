@@ -10,6 +10,7 @@ tags:
   - ai pipelines
   - saucier
   - open source
+series: Saucier
 ---
 
 Here is something I wanted to know. It is 2026, every conversation that starts

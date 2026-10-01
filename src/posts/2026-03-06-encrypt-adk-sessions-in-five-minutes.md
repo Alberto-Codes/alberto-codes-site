@@ -10,6 +10,7 @@ tags:
   - security
   - encryption
   - open source
+series: Encrypted ADK sessions
 ---
 
 [In Part 1](/blog/2026-03-01-your-ai-agents-memories-arent-encrypted), I showed that Google ADK stores everything your agent knows — tool calls, user messages, conversation context — in plaintext SQLite. If that made you uncomfortable, this post fixes it.

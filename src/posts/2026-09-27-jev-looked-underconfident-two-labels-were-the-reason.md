@@ -9,6 +9,7 @@ tags:
   - calibration
   - judgevet
   - open source
+series: Measuring model confidence
 ---
 
 When a weather forecast says 30 percent chance of rain, it should rain on

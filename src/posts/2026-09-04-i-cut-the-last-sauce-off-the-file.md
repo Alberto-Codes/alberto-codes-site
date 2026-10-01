@@ -10,6 +10,7 @@ tags:
   - ai pipelines
   - saucier
   - open source
+series: Saucier
 ---
 
 I deleted the last line of a 293-line file and fed the rest to a reader I

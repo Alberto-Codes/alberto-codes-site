@@ -10,6 +10,7 @@ tags:
   - vision-language-model
   - inference-optimization
   - vllm
+series: TurboQuant on vision models
 ---
 
 A compression algorithm that only works on one model isn't a tool — it's a demo. When [turboquant-vllm v1.0.0](/blog/2026-03-27-paper-to-pypi-in-72-hours-building-the-first-turboquant-vllm-plugin) shipped, it was validated on exactly one architecture: Molmo2. The algorithm worked, the numbers were real (3.76x KV compression, ~97% cosine similarity), but every model has its own attention geometry. Head dimensions vary. Some layers use sliding windows. Triton kernels crash when you hand them a dimension that isn't a power of two.

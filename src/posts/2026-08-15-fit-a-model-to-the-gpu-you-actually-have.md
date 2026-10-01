@@ -10,6 +10,7 @@ tags:
   - llm
   - vramfit
   - open source
+series: vramfit
 ---
 
 ## Who this is for

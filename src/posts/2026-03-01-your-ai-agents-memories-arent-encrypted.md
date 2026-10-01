@@ -10,6 +10,7 @@ tags:
   - security
   - encryption
   - open source
+series: Encrypted ADK sessions
 ---
 
 You built an AI agent. It calls tools, remembers conversations, and tracks state across sessions. It works. You deploy it. Users start talking to it — sharing API keys, asking about internal systems, passing along customer data through tool calls.

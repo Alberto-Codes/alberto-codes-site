@@ -11,6 +11,7 @@ tags:
   - docstrings
   - developer tools
   - open source
+series: docvet and docstring quality
 ---
 
 Your AI coding agent can read your code, run your tests, and search your repo. But can it check whether your docstrings actually match what the code does?

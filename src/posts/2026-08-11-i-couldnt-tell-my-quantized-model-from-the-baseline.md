@@ -11,6 +11,7 @@ tags:
   - evaluation
   - vramfit
   - open source
+series: vramfit
 ---
 
 I asked two compressed copies of the same model fifteen questions each. Same questions, same settings, no randomness.

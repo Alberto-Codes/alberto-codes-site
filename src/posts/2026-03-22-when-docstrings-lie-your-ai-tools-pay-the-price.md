@@ -9,6 +9,7 @@ tags:
   - python
   - developer tools
   - open source
+series: docvet and docstring quality
 ---
 
 ## The problem isn't missing docstrings

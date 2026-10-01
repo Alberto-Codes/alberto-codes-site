@@ -25,7 +25,11 @@ from alberto_codes_site.headings import (
 from alberto_codes_site.pages.blog import TOC_MIN_SECTIONS, _render_post
 
 PAGES = {page.route: page.component for page in app._unevaluated_pages.values()}
-POST_ROUTES = sorted(route for route in PAGES if route.startswith("blog/"))
+POST_ROUTES = sorted(
+    route
+    for route in PAGES
+    if route.startswith("blog/") and not route.startswith("blog/series/")
+)
 
 
 def _walk(component: Component):

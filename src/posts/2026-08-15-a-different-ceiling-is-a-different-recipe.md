@@ -10,6 +10,7 @@ tags:
   - llm
   - vramfit
   - open source
+series: vramfit
 ---
 
 Cost a braise for a forty-dollar plate and you're refining: better stock,

@@ -10,6 +10,7 @@ tags:
   - ai pipelines
   - saucier
   - open source
+series: Saucier
 ---
 
 Post #1 ended with a promise: the next post would be the JSON file failing,

@@ -10,6 +10,7 @@ tags:
   - ai pipelines
   - saucier
   - open source
+series: Saucier
 ---
 
 Two earlier posts in this series carry a figure of the same four sauces:

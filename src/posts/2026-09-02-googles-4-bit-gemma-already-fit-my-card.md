@@ -12,6 +12,7 @@ tags:
   - evaluation
   - vramfit
   - open source
+series: vramfit
 ---
 
 [Gemma 4 31B](https://huggingface.co/google/gemma-4-31B-it) ships with something the last two models didn't have: an official quantization. Google publishes a [quantization-aware-trained Q4_0 GGUF](https://huggingface.co/google/gemma-4-31B-it-qat-q4_0-gguf), trained toward 4-bit deployment on purpose, at **16.44 GiB**. On a 24 GiB card it loads with seven and a half gigabytes to spare.

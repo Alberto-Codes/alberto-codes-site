@@ -10,6 +10,7 @@ tags:
   - celery
   - observability
   - openai
+series: AI pipeline plumbing
 ---
 
 Multimodal pipelines look clean on a whiteboard:

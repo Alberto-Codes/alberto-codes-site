@@ -176,6 +176,46 @@ links, as on the index cards. The section is page chrome only: it is not in
 the RSS item bodies or the JSON-LD. There are no comments, popups, email
 capture or generated summaries. `tests/test_post_end.py` checks every post.
 
+## Amendment, 2026-10-01: series
+
+A post joins a series with one optional frontmatter line, `series: <Display
+Title>` (issue #51). Posts without it are standalone. The model lives in
+`series.py`:
+
+- **Parts** are the *published* posts (`published_posts`) carrying the same
+  title, numbered oldest first by `date`, ties broken by file name. A
+  future-dated part is neither counted nor linked until its date arrives.
+- **Slug** comes from the title through the heading `Slugger`, so "TurboQuant
+  on vision models" is `turboquant-on-vision-models`. Two titles that give the
+  same slug fail the build.
+
+Where a series shows:
+
+- **In a part:** a compact box under the header, above the table of contents,
+  in the reading column: "Part N of M in <series>", the series name linking its
+  page, with "← Previous" and "Next →" to the adjacent parts. It is a `<nav>`
+  named by `aria-label`, not a heading.
+- **At a part's end:** the end section opens with "Next in <series>" and the
+  next part's title, or "Last part of <series>" for the newest part. The
+  older/newer links stay chronological. "More on this" leaves out the parts
+  the box already links (the previous and next ones).
+- **Series pages:** `/blog/series/<slug>`, one per series, registered through
+  `add_page` like any page, so each has a canonical link, a share card (the
+  site card) and a sitemap entry whose `<lastmod>` is the newest part's date.
+  The page is an `<h1>` with the title, one sentence giving the part count and
+  date range, and the parts in order as blog cards labelled "Part N of M". No
+  description is written for a series.
+- **Blog index:** a "Series" line under the type labels lists each series,
+  newest first, with its part count, linking its page. Each card of a part
+  carries a muted "Part N of M · <series>" label in the #79 plain-label style;
+  it is plain text, since the whole card is already a link.
+
+A part's `BlogPosting` JSON-LD carries `isPartOf`, a `CreativeWorkSeries` with
+the series name and page URL. Series navigation is page chrome: it is not in
+the RSS item bodies. `tests/test_series.py` checks the membership, numbering,
+published-only counting, the routes against the sitemap, and the box on every
+part.
+
 ## Consequences
 
 ### Positive

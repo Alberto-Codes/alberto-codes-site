@@ -37,6 +37,7 @@ from alberto_codes_site.layout import (
     READING_COLUMN,
     READING_WIDTH,
 )
+from alberto_codes_site.series import Series, build_series, series_of
 from alberto_codes_site.social import (
     AUTHOR_JOB_TITLE,
     AUTHOR_NAME,
@@ -163,11 +164,22 @@ def _type_badge(post_type: str, size: str = "1") -> rx.Component:
     return meta_label(post_type, color_scheme=color, size=size)
 
 
-def _post_card(meta: dict) -> rx.Component:
-    """Render a blog post summary card linking to the full post."""
+def _post_card(meta: dict, series_label: str | None = None) -> rx.Component:
+    """Render a blog post summary card linking to the full post.
+
+    Args:
+        meta: The post's frontmatter.
+        series_label: A muted line such as "Part 2 of 7 · Saucier" for a
+            series part. It is plain text, since the whole card is a link.
+
+    Returns:
+        The card, wrapped in a link to the post.
+    """
+    label = [meta_label(series_label)] if series_label else []
     return rx.link(
         rx.card(
             rx.vstack(
+                *label,
                 rx.hstack(
                     _type_badge(meta.get("type", "post")),
                     rx.text(
@@ -441,6 +453,80 @@ def _figure(markup: str) -> rx.Component:
     )
 
 
+def _series_box(meta: dict, series: Series) -> rx.Component:
+    """Render the compact series box under a series post's header (#51).
+
+    It reads "Part N of M in <series>", linking the series page, with
+    "← Previous" and "Next →" links to the adjacent parts. Only published
+    parts are counted or linked. It is a ``nav`` named by ``aria-label``, not
+    a heading, so the heading outline is unchanged.
+
+    Args:
+        meta: The post's frontmatter.
+        series: The post's series, from ``series_of``.
+
+    Returns:
+        The box, kept to the reading column.
+    """
+    slug = meta.get("slug", "")
+    previous, following = series.neighbours(slug)
+    steps = []
+    if previous is not None:
+        steps.append(
+            rx.link(
+                "← Previous",
+                href=f"/blog/{previous.get('slug', '')}",
+                title=previous.get("title", ""),
+            )
+        )
+    if following is not None:
+        steps.append(
+            rx.link(
+                "Next →",
+                href=f"/blog/{following.get('slug', '')}",
+                title=following.get("title", ""),
+            )
+        )
+    return rx.el.nav(
+        rx.el.p(
+            f"Part {series.number(slug)} of {len(series)} in ",
+            rx.link(series.title, href=series.route),
+            class_name="series-position",
+        ),
+        *([rx.el.p(*steps, class_name="series-steps")] if steps else []),
+        aria_label=f"{series.title} series",
+        class_name="series-box",
+        width="100%",
+        style={
+            **READING_COLUMN,
+            "display": "flex",
+            "flex_wrap": "wrap",
+            "align_items": "baseline",
+            "justify_content": "space-between",
+            "gap": "0.25em var(--space-4)",
+            "padding": "0.6em 1em",
+            "border": f"1px solid {rx.color('gray', 5)}",
+            "border_radius": "var(--radius-3)",
+            "background": rx.color("gray", 2),
+            "font_size": "var(--font-size-2)",
+            "line_height": "var(--line-height-2)",
+            "color": rx.color("slate", 11),
+            "& p": {"margin": "0"},
+            "& .series-steps": {"display": "flex", "gap": "var(--space-4)"},
+            # Beside plain text, colour alone is under 3:1 in dark mode.
+            "& .rt-Link": {
+                "color": rx.color("blue", 11),
+                "text_decoration_line": "underline",
+            },
+            "& .rt-Link:focus-visible": {
+                "outline": f"2px solid {rx.color('blue', 8)}",
+                "outline_offset": "2px",
+                "border_radius": "var(--radius-1)",
+            },
+        },
+    )
+
+
 # A post gets a table of contents once it has this many H2 sections (#75).
 TOC_MIN_SECTIONS = 4
 
@@ -671,10 +757,45 @@ def _neighbour(meta: dict | None, label: str, align: str) -> rx.Component:
     )
 
 
-def _post_end(meta: dict, posts: list[tuple[dict, str]]) -> rx.Component:
+def _series_next(meta: dict, series: Series) -> rx.Component:
+    """Render the end section's series block: the next part, or the last one.
+
+    Args:
+        meta: The current post's frontmatter.
+        series: The post's series.
+
+    Returns:
+        "Next in <series>" over the next part's title, or "Last part of
+        <series>" when this is the newest published part.
+    """
+    _previous, following = series.neighbours(meta.get("slug", ""))
+    series_link = rx.link(series.title, href=series.route, class_name="series-link")
+    if following is None:
+        return rx.el.nav(
+            rx.el.p("Last part of ", series_link, class_name="post-end-label"),
+            aria_label="Series",
+            class_name="post-end-series",
+        )
+    return rx.el.nav(
+        rx.el.p("Next in ", series_link, class_name="post-end-label"),
+        _post_link(
+            following,
+            rx.el.span(following.get("title", "Untitled"), class_name="post-end-title"),
+        ),
+        aria_label="Series",
+        class_name="post-end-series",
+    )
+
+
+def _post_end(
+    meta: dict, posts: list[tuple[dict, str]], series: Series | None = None
+) -> rx.Component:
     """Render the section that closes every post (issue #74).
 
-    Older/newer links among the published posts, up to ``RELATED_MAX``
+    A series part opens it with the next part in its series, or a note that
+    it is the last part (#51); a Newer link that would repeat that part is
+    dropped. Then come older/newer links among the
+    published posts, up to ``RELATED_MAX``
     related posts, a discussion link when the frontmatter has
     ``discussion_url``, and a one-line author note with profile links. Its
     labels are plain text, not headings, so the heading outline and the table
@@ -683,17 +804,29 @@ def _post_end(meta: dict, posts: list[tuple[dict, str]]) -> rx.Component:
     Args:
         meta: The current post's frontmatter.
         posts: The published posts, newest first.
+        series: The post's series, when it is a part of one.
 
     Returns:
         The section, kept to the reading column.
     """
     older, newer = neighbour_posts(meta.get("slug", ""), posts)
+    linked = [older, newer]
+    parts: list[rx.Component] = []
+    if series is not None:
+        # The series box already links the previous and next parts.
+        series_neighbours = series.neighbours(meta.get("slug", ""))
+        linked.extend(series_neighbours)
+        parts.append(_series_next(meta, series))
+        following = series_neighbours[1]
+        # "Next in" already names this post; don't repeat it as Newer.
+        if newer is not None and following is not None:
+            if newer.get("slug") == following.get("slug"):
+                newer = None
     related = related_posts(
         meta,
         posts,
-        exclude={m.get("slug") for m in (older, newer) if m is not None},
+        exclude={m.get("slug") for m in linked if m is not None},
     )
-    parts: list[rx.Component] = []
     if older is not None or newer is not None:
         parts.append(
             rx.el.nav(
@@ -785,7 +918,9 @@ def _post_end(meta: dict, posts: list[tuple[dict, str]]) -> rx.Component:
                 "font_size": "var(--font-size-1)",
                 "color": rx.color("slate", 11),
             },
-            "& .post-end-related .post-end-label": {"margin_bottom": "0.25em"},
+            "& :is(.post-end-related, .post-end-series) .post-end-label": {
+                "margin_bottom": "0.25em",
+            },
             "& .post-end-title": {"color": rx.color("blue", 11)},
             "& .post-end-link:hover .post-end-title": {
                 "text_decoration": "underline",
@@ -801,8 +936,9 @@ def _post_end(meta: dict, posts: list[tuple[dict, str]]) -> rx.Component:
             },
             # These sit beside plain text; colour alone is under 3:1 against
             # it in dark mode, so underline them.
+            "& .series-link": {"color": rx.color("blue", 11)},
             "& :is(.post-end-profiles .rt-Link, .post-end-discussion, "
-            "li .post-end-title)": {
+            "li .post-end-title, .series-link)": {
                 "text_decoration_line": "underline",
             },
             "& :is(.post-end-link, .rt-Link):focus-visible": {
@@ -822,7 +958,9 @@ def _render_post(
     The header and the body's running text keep to the reading measure, centred
     in the post column; figures, tables and code blocks use the full column. A
     post with ``TOC_MIN_SECTIONS`` or more H2s gets a table of contents between
-    the header and the body, and every post closes with ``_post_end``.
+    the header and the body, and every post closes with ``_post_end``. A
+    series part gets ``_series_box`` between the header and the table of
+    contents.
 
     Args:
         meta: The post's frontmatter.
@@ -835,6 +973,8 @@ def _render_post(
     """
     body_components, outline = _post_body(body)
     toc = _table_of_contents(outline)
+    posts = posts if posts is not None else [(meta, body)]
+    series = series_of(meta, build_series(posts))
     header = rx.vstack(
         rx.link(
             rx.hstack(
@@ -878,6 +1018,7 @@ def _render_post(
     )
     return rx.vstack(
         header,
+        *([_series_box(meta, series)] if series is not None else []),
         *([toc] if toc is not None else []),
         rx.box(
             *body_components,
@@ -938,9 +1079,75 @@ def _render_post(
                 },
             },
         ),
-        _post_end(meta, posts if posts is not None else [(meta, body)]),
+        _post_end(meta, posts, series),
         spacing="4",
         width="100%",
+    )
+
+
+def _series_label(meta: dict, all_series: list[Series]) -> str | None:
+    """Return a card's "Part N of M · <series>" line, or None when standalone."""
+    series = series_of(meta, all_series)
+    if series is None:
+        return None
+    number = series.number(meta.get("slug", ""))
+    return f"Part {number} of {len(series)} · {series.title}"
+
+
+def _parts(count: int) -> str:
+    """Return "1 part" or "N parts"."""
+    return f"{count} part" if count == 1 else f"{count} parts"
+
+
+def _series_index(all_series: list[Series]) -> rx.Component:
+    """Render the blog index's "Series" line: each series, its size, its page.
+
+    Args:
+        all_series: The series from ``build_series``, newest first.
+
+    Returns:
+        A ``nav`` labelled with plain text, not a heading.
+    """
+    return rx.el.nav(
+        rx.el.span("Series", class_name="series-index-label"),
+        rx.el.ul(
+            *[
+                rx.el.li(
+                    rx.link(series.title, href=series.route),
+                    rx.el.span(f" · {_parts(len(series))}"),
+                )
+                for series in all_series
+            ]
+        ),
+        aria_label="Series",
+        width="100%",
+        style={
+            "display": "flex",
+            "flex_wrap": "wrap",
+            "align_items": "baseline",
+            "gap": "0.25em var(--space-3)",
+            "font_size": "var(--font-size-2)",
+            "line_height": "var(--line-height-2)",
+            "color": rx.color("slate", 11),
+            "& .series-index-label": {
+                "font_weight": "600",
+                "color": rx.color("slate", 12),
+            },
+            "& ul": {
+                "display": "flex",
+                "flex_wrap": "wrap",
+                "gap": "0.25em var(--space-4)",
+                "list_style": "none",
+                "margin": "0",
+                "padding": "0",
+            },
+            "& li": {"white_space": "nowrap"},
+            # Beside plain text, colour alone is under 3:1 in dark mode.
+            "& .rt-Link": {
+                "color": rx.color("blue", 11),
+                "text_decoration_line": "underline",
+            },
+        },
     )
 
 
@@ -954,6 +1161,7 @@ def blog_page(today: date | None = None) -> rx.Component:
         The blog index, or a placeholder when nothing is published yet.
     """
     posts = published_posts(_load_posts(), today=today)
+    all_series = build_series(posts)
 
     if not posts:
         return rx.container(
@@ -1017,8 +1225,9 @@ def blog_page(today: date | None = None) -> rx.Component:
                 spacing="4",
                 wrap="wrap",
             ),
+            *([_series_index(all_series)] if all_series else []),
             rx.box(height="1em"),
-            *[_post_card(m) for m, _ in posts],
+            *[_post_card(m, _series_label(m, all_series)) for m, _ in posts],
             spacing="4",
             **PAGE_COLUMN,
         ),
@@ -1062,6 +1271,73 @@ def blog_post_page(slug: str, today: date | None = None) -> rx.Component:
             spacing="4",
             align="center",
             min_height="60vh",
+            **PAGE_COLUMN,
+        ),
+        size="3",
+        padding_y=PAGE_PADDING_Y,
+    )
+
+
+def series_page(slug: str, today: date | None = None) -> rx.Component:
+    """Render a series landing page: its title, size, dates and parts in order.
+
+    Args:
+        slug: The series slug, from ``Series.slug``.
+        today: The build date; parts dated after it are left out.
+
+    Returns:
+        The series page.
+
+    Raises:
+        ValueError: When no published post belongs to a series with this slug.
+    """
+    posts = published_posts(_load_posts(), today=today)
+    matches = [s for s in build_series(posts) if s.slug == slug]
+    if not matches:
+        raise ValueError(f"no published series {slug!r}")
+    (series,) = matches
+    if len(series) == 1:
+        span = f"published on {series.first_date}"
+    else:
+        span = f"published from {series.first_date} to {series.last_date}"
+    return rx.container(
+        rx.vstack(
+            rx.box(height="4em"),
+            rx.link(
+                rx.hstack(
+                    rx.icon("arrow-left", size=14),
+                    rx.text("Back to Blog", size="2"),
+                    spacing="1",
+                    align="center",
+                ),
+                href="/blog",
+                underline="none",
+                color=rx.color("blue", 11),
+            ),
+            rx.heading(series.title, as_="h1", size="8", weight="bold"),
+            rx.separator(size="4", color_scheme="blue"),
+            rx.text(
+                f"A series in {_parts(len(series))}, {span}.",
+                size="3",
+                color=rx.color("slate", 11),
+            ),
+            rx.el.ol(
+                *[
+                    rx.el.li(_post_card(part, f"Part {i} of {len(series)}"))
+                    for i, part in enumerate(series.parts, start=1)
+                ],
+                class_name="series-parts",
+                style={
+                    "list_style": "none",
+                    "margin": "0",
+                    "padding": "0",
+                    "width": "100%",
+                    "display": "flex",
+                    "flex_direction": "column",
+                    "gap": "var(--space-4)",
+                },
+            ),
+            spacing="4",
             **PAGE_COLUMN,
         ),
         size="3",

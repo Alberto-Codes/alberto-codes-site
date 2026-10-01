@@ -10,6 +10,7 @@ tags:
   - vision-language-model
   - inference-optimization
   - vllm
+series: TurboQuant on vision models
 ---
 
 There's a difference between nailing a recipe at home and running it on a restaurant line. At home you control the heat, the timing, the single plate going out. On the line, you need it to work with different stoves, multiple tickets firing at once, and a kitchen that wasn't built around your dish. The [first post](/blog/2026-03-26-i-ran-turboquant-on-a-vision-model-the-first-output-was-garbage) was the home kitchen version — implementing TurboQuant from the paper, finding what works and what breaks. This post is about getting it on the line.

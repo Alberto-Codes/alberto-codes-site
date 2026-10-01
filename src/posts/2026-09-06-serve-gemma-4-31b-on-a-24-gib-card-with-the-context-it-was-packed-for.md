@@ -10,6 +10,7 @@ tags:
   - multimodal
   - vramfit
   - open source
+series: vramfit
 ---
 
 ## Who this is for
