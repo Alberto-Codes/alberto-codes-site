@@ -45,6 +45,11 @@ The body below the frontmatter is standard markdown rendered by `rx.markdown()` 
 
 Mermaid diagrams cannot be rendered client-side in Reflex's static export because `rx.markdown` does not support Mermaid natively, `rx.script` injects into `<head>` via Helmet (race condition with React rendering), and React's `dangerouslySetInnerHTML` strips `<script>` tags. Instead, diagrams are pre-rendered to SVG files using the Mermaid CLI (`@mermaid-js/mermaid-cli`) and placed in `src/assets/`. Posts reference them with standard markdown image syntax: `![alt text](/diagram-name.svg)`.
 
+Since 2026-10-01, an SVG that carries the shared figure tokens is inlined
+into the post HTML at render time instead of loading as `<img>`, so it follows
+the site's light/dark toggle. See
+[ADR-0005](0005-theme-aware-post-figures.md).
+
 ### Routing
 
 - `/blog` — Index page listing all posts as clickable cards, sorted by date descending
