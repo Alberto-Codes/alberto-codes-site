@@ -277,6 +277,6 @@ def home_page() -> rx.Component:
             width="100%",
         ),
         size="3",
-        padding_x=["4", "4", "0", "0", "0"],
+        padding_x=["var(--space-4)", "var(--space-4)", "0", "0", "0"],
         padding_y="6",
     )

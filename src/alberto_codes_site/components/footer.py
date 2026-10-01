@@ -2,6 +2,8 @@
 
 import reflex as rx
 
+from alberto_codes_site.components.navbar import SIDE_PADDING
+
 
 def footer() -> rx.Component:
     """Render the site footer with copyright and social links."""
@@ -35,8 +37,8 @@ def footer() -> rx.Component:
             flex_direction=["column", "column", "row", "row", "row"],
             gap="4",
         ),
-        padding_x=["4", "4", "6", "8", "8"],
-        padding_y="6",
+        padding_x=SIDE_PADDING,
+        padding_y="var(--space-6)",
         border_top=f"1px solid {rx.color('gray', 4)}",
         width="100%",
     )
