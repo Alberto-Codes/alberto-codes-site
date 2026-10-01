@@ -2,6 +2,7 @@
 
 import reflex as rx
 
+from alberto_codes_site.components.meta_label import meta_label
 from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
 
 PUBLICATIONS = [
@@ -251,12 +252,7 @@ def publication_card(publication: dict) -> rx.Component:
     return rx.card(
         rx.vstack(
             rx.hstack(
-                rx.badge(
-                    publication["kind"],
-                    variant="surface",
-                    size="1",
-                    color_scheme="violet",
-                ),
+                meta_label(publication["kind"], color_scheme="violet"),
                 rx.text(publication["date"], size="1", color=rx.color("slate", 11)),
                 spacing="2",
                 align="center",

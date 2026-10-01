@@ -2,6 +2,7 @@
 
 import reflex as rx
 
+from alberto_codes_site.components.meta_label import meta_label
 from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
 from alberto_codes_site.tenure import years_at_wells_fargo
 
@@ -118,7 +119,7 @@ def timeline_item(role: dict) -> rx.Component:
                 rx.hstack(
                     rx.heading(role["title"], as_="h2", size="4", weight="bold"),
                     rx.spacer(),
-                    rx.badge(role["period"], variant="surface", size="1"),
+                    meta_label(role["period"]),
                     width="100%",
                     align="center",
                     flex_direction=["column", "column", "row", "row", "row"],
