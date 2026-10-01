@@ -18,6 +18,8 @@ from docx.oxml import OxmlElement
 import os
 import subprocess
 
+from alberto_codes_site.tenure import years_at_wells_fargo
+
 # -- Colors --
 NAVY = RGBColor(0x1B, 0x3A, 0x5C)
 DARK_GRAY = RGBColor(0x33, 0x33, 0x33)
@@ -148,12 +150,14 @@ add_section_heading("Professional Summary")
 p = doc.add_paragraph()
 p.space_after = Pt(4)
 run = p.add_run(
-    "Strategic and hands-on technology leader with 25+ years in financial services, "
+    f"Strategic and hands-on technology leader with {years_at_wells_fargo()} years at "
+    "Wells Fargo in financial services technology, "
     "specializing in AI-driven automation, cloud-native solutions, and enterprise-scale "
     "data engineering. Career spans from banking operations to Principal Engineer \u2014 "
     "building deep domain expertise at every level. Expert in Agentic AI frameworks, "
     "GCP infrastructure, and scalable automation pipelines. Open source contributor "
-    "with published Python libraries on PyPI. Co-inventor on patent application. "
+    "with eight Python libraries on PyPI. Co-inventor on two pending patent "
+    "applications. "
     "Bilingual in English and Spanish."
 )
 run.font.size = Pt(10.5)
@@ -185,13 +189,38 @@ for name, desc in [
     ),
     (
         "docvet",
-        "CLI tool for Python docstring quality vetting. 19 rules across "
-        "completeness, accuracy, rendering, and visibility.",
+        "CLI tool for Python docstring quality vetting. 31 rules across "
+        "presence, completeness, accuracy, rendering, and visibility.",
     ),
     (
         "gepa-adk",
         "Evolutionary prompt optimization for AI agents using Google ADK. "
         "Automatically evolves agent instructions through iterative improvement.",
+    ),
+    (
+        "vramfit",
+        "Fits large open models onto one GPU by measuring per-layer quantization "
+        "damage and solving a mixed-precision recipe against a VRAM budget. Three "
+        "published model packs on Hugging Face.",
+    ),
+    (
+        "typevet",
+        "Typed answers from open models about text and images: yes or no, one label, "
+        "or a rubric level, read from next-token probabilities. Gemma 4 31B on "
+        "llama.cpp and vLLM.",
+    ),
+    (
+        "judgevet",
+        "Typed Python client, CLI, and MCP server for TypeSafe's Jev judgment model.",
+    ),
+    (
+        "saucier",
+        "Provenance-traced extraction from a 1909 cookbook: 151 sauces, every claim "
+        "traced to the line it came from.",
+    ),
+    (
+        "turboquant-vllm",
+        "KV cache compression plugin for vLLM.",
     ),
 ]:
     bp = doc.add_paragraph()
@@ -211,7 +240,7 @@ for name, desc in [
 # ===== RECOGNITION =====
 add_section_heading("Recognition")
 for item in [
-    "January 2026 \u2014 Named as co-inventor on patent application",
+    "Co-inventor on two pending patent applications (first named January 2026)",
     "Top Performer 2018 (New Orleans) \u2014 Recognition for vulnerability remediation efforts",
     "Top Performer 2014 (Nashville) \u2014 Recognition for asset reporting initiatives",
 ]:
