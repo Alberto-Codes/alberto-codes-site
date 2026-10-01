@@ -52,9 +52,11 @@ def test_task_writes_the_public_sitemap():
 
 
 def test_sitemap_lists_every_registered_route():
-    """Each registered route appears exactly once; none is dropped."""
+    """Each registered route but the 404 page appears exactly once."""
     listed = sorted(_path(url.findtext("sm:loc", namespaces=NS)) for url in URLS)
-    registered = sorted("" if p.route == "index" else p.route for p in PAGES)
+    registered = sorted(
+        "" if p.route == "index" else p.route for p in PAGES if p.route != "404"
+    )
     assert listed == registered
 
 
