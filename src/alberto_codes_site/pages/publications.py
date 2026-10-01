@@ -2,6 +2,8 @@
 
 import reflex as rx
 
+from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
+
 PUBLICATIONS = [
     {
         "title": "gemma-4-31B-it-fit24gib-GGUF",
@@ -339,8 +341,8 @@ def publications_page() -> rx.Component:
                 width="100%",
             ),
             spacing="4",
-            max_width="48em",
+            **PAGE_COLUMN,
         ),
         size="3",
-        padding_y="6",
+        padding_y=PAGE_PADDING_Y,
     )

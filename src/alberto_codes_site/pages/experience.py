@@ -2,6 +2,7 @@
 
 import reflex as rx
 
+from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
 from alberto_codes_site.tenure import years_at_wells_fargo
 
 ROLES = [
@@ -203,8 +204,8 @@ def experience_page() -> rx.Component:
                 width="100%",
             ),
             spacing="4",
-            max_width="48em",
+            **PAGE_COLUMN,
         ),
         size="3",
-        padding_y="6",
+        padding_y=PAGE_PADDING_Y,
     )

@@ -2,6 +2,8 @@
 
 import reflex as rx
 
+from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
+
 
 def contact_link(icon_name: str, label: str, href: str) -> rx.Component:
     """Render a contact link card with an icon and label.
@@ -85,8 +87,8 @@ def contact_page() -> rx.Component:
                 max_width="28em",
             ),
             spacing="4",
-            max_width="48em",
+            **PAGE_COLUMN,
         ),
         size="3",
-        padding_y="6",
+        padding_y=PAGE_PADDING_Y,
     )

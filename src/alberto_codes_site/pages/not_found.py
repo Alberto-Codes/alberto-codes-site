@@ -7,6 +7,7 @@ Reflex registers it at its ``404`` route; the static export writes it to
 import reflex as rx
 
 from alberto_codes_site.components.button_link import button_link
+from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
 
 NOT_FOUND_LINKS = [
     ("Home", "/"),
@@ -55,8 +56,8 @@ def not_found_page() -> rx.Component:
             ),
             rx.box(height="4em"),
             spacing="4",
-            max_width="48em",
+            **PAGE_COLUMN,
         ),
         size="3",
-        padding_y="6",
+        padding_y=PAGE_PADDING_Y,
     )
