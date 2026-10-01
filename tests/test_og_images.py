@@ -48,7 +48,11 @@ def test_page_meta_uses_absolute_urls() -> None:
         image=post_image("x"),
         og_type="article",
     )
-    tags = {m.get("property") or m.get("name"): m["content"] for m in social["meta"]}
+    tags = {
+        m.get("property") or m.get("name"): m["content"]
+        for m in social["meta"]
+        if isinstance(m, dict)
+    }
     assert social["image"] == f"{SITE_URL}/og/x.png"
     assert tags["twitter:image"] == social["image"]
     assert tags["og:url"] == f"{SITE_URL}/blog/x"

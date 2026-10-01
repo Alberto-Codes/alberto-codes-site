@@ -32,7 +32,13 @@ from alberto_codes_site.pages import (
     publications_page,
 )
 from alberto_codes_site.pages.blog import _load_posts
-from alberto_codes_site.social import SITE_IMAGE, page_meta, post_image
+from alberto_codes_site.social import (
+    SITE_IMAGE,
+    blog_posting_data,
+    page_meta,
+    person_data,
+    post_image,
+)
 from alberto_codes_site.tenure import years_at_wells_fargo
 
 
@@ -89,8 +95,9 @@ def add_page(
     share_title: str | None = None,
     image: str = SITE_IMAGE,
     og_type: str = "website",
+    structured_data: dict | None = None,
 ) -> None:
-    """Register a laid-out page with its Open Graph and Twitter card tags.
+    """Register a laid-out page with its share tags and canonical link.
 
     Args:
         page: The page content, wrapped in the shared layout here.
@@ -100,6 +107,7 @@ def add_page(
         share_title: The title on the share card; defaults to ``title``.
         image: The card PNG under `src/assets/og/`; the site card by default.
         og_type: `article` for posts, `website` otherwise.
+        structured_data: A schema.org object to emit as JSON-LD, if any.
     """
     social = page_meta(
         route=route,
@@ -107,6 +115,7 @@ def add_page(
         description=description,
         image=image,
         og_type=og_type,
+        structured_data=structured_data,
     )
     app.add_page(
         layout(page),
@@ -126,6 +135,7 @@ add_page(
         f"where he has spent {years_at_wells_fargo()} years in financial "
         "services technology."
     ),
+    structured_data=person_data(),
 )
 add_page(
     about_page(),
@@ -176,14 +186,23 @@ for _meta, _ in _load_posts():
     _slug = _meta.get("slug", "")
     _title = _meta.get("title", "Blog Post")
     _summary = _meta.get("summary", "")
+    _route = f"/blog/{_slug}"
     add_page(
         blog_post_page(_slug),
-        route=f"/blog/{_slug}",
+        route=_route,
         title=f"{_title} | Alberto Nieto",
         description=_summary,
         share_title=_title,
         image=post_image(_slug),
         og_type="article",
+        structured_data=blog_posting_data(
+            route=_route,
+            title=_title,
+            description=_summary,
+            date=_meta.get("date", ""),
+            image=post_image(_slug),
+            updated=_meta.get("updated"),
+        ),
     )
 
 add_page(
