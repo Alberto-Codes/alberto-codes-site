@@ -10,6 +10,7 @@ hidden until the first build on or after its date; deploys rebuild.
 import math
 from datetime import date
 from pathlib import Path
+from urllib.parse import urlparse
 
 import reflex as rx
 from reflex.vars import Var
@@ -30,6 +31,11 @@ from alberto_codes_site.layout import (
     PAGE_PADDING_Y,
     READING_COLUMN,
     READING_WIDTH,
+)
+from alberto_codes_site.social import (
+    AUTHOR_JOB_TITLE,
+    AUTHOR_NAME,
+    AUTHOR_SAME_AS,
 )
 
 POSTS_DIR = Path(__file__).resolve().parent.parent.parent / "posts"
@@ -462,13 +468,281 @@ def _table_of_contents(outline: list[TocEntry]) -> rx.Component | None:
     )
 
 
-def _render_post(meta: dict, body: str) -> rx.Component:
+# A post counts as related once it shares this many frontmatter tags (#74).
+RELATED_MIN_SHARED_TAGS = 2
+RELATED_MAX = 3
+
+# The footer's profile links, in the order ``AUTHOR_SAME_AS`` keeps them.
+GITHUB_URL, LINKEDIN_URL = AUTHOR_SAME_AS
+
+
+def _post_tags(meta: dict) -> set[str]:
+    """Return a post's frontmatter tags as a set (empty when it has none)."""
+    tags = meta.get("tags", [])
+    return set(tags) if isinstance(tags, list) else set()
+
+
+def neighbour_posts(
+    slug: str, posts: list[tuple[dict, str]]
+) -> tuple[dict | None, dict | None]:
+    """Return the published posts just older and just newer than ``slug``.
+
+    Args:
+        slug: The current post's slug.
+        posts: The published posts, newest first, from ``published_posts``.
+
+    Returns:
+        ``(older, newer)`` frontmatter; either is None at that end of the list,
+        and both are None when ``slug`` is not among ``posts``.
+    """
+    slugs = [m.get("slug") for m, _ in posts]
+    if slug not in slugs:
+        return None, None
+    i = slugs.index(slug)
+    newer = posts[i - 1][0] if i > 0 else None
+    older = posts[i + 1][0] if i + 1 < len(posts) else None
+    return older, newer
+
+
+def related_posts(
+    meta: dict, posts: list[tuple[dict, str]], exclude: set[str] | None = None
+) -> list[dict]:
+    """Rank other published posts by how many tags they share with ``meta``.
+
+    A post needs ``RELATED_MIN_SHARED_TAGS`` shared tags to count; ties go to
+    the newer post. The current post and the slugs in ``exclude`` (the
+    older/newer links) are left out.
+
+    Args:
+        meta: The current post's frontmatter.
+        posts: The published posts, from ``published_posts``.
+        exclude: Slugs already linked from the post's end.
+
+    Returns:
+        Up to ``RELATED_MAX`` posts' frontmatter, best match first.
+    """
+    tags = _post_tags(meta)
+    skip = {meta.get("slug"), *(exclude or ())}
+    scored = [
+        (len(tags & _post_tags(other)), post_date(other), other)
+        for other, _ in posts
+        if other.get("slug") not in skip
+    ]
+    scored = [
+        item
+        for item in scored
+        if item[0] >= RELATED_MIN_SHARED_TAGS and item[1] is not None
+    ]
+    scored.sort(key=lambda item: (item[0], item[1]), reverse=True)
+    return [other for _, _, other in scored[:RELATED_MAX]]
+
+
+def discussion_label(url: str) -> str:
+    """Name the link for a post's ``discussion_url``.
+
+    Args:
+        url: The discussion's address.
+
+    Returns:
+        "Discuss on r/<sub>" for a subreddit thread, else "Join the
+        discussion".
+    """
+    parsed = urlparse(url)
+    host = parsed.netloc.lower()
+    parts = [part for part in parsed.path.split("/") if part]
+    on_reddit = host == "reddit.com" or host.endswith(".reddit.com")
+    if on_reddit and len(parts) >= 2 and parts[0].lower() == "r":
+        return f"Discuss on r/{parts[1]}"
+    return "Join the discussion"
+
+
+def _post_link(meta: dict, *children, **props) -> rx.Component:
+    """Link to a post through the client-side router, as the index cards do."""
+    return rx.link(
+        *children,
+        href=f"/blog/{meta.get('slug', '')}",
+        underline="none",
+        class_name="post-end-link",
+        **props,
+    )
+
+
+def _neighbour(meta: dict | None, label: str, align: str) -> rx.Component:
+    """Render one older/newer link: a small direction label over the title.
+
+    An empty span holds the grid cell when there is no post that way.
+    """
+    if meta is None:
+        return rx.el.span()
+    return _post_link(
+        meta,
+        rx.el.span(label, class_name="post-end-label"),
+        rx.el.span(meta.get("title", "Untitled"), class_name="post-end-title"),
+        text_align=align,
+    )
+
+
+def _post_end(meta: dict, posts: list[tuple[dict, str]]) -> rx.Component:
+    """Render the section that closes every post (issue #74).
+
+    Older/newer links among the published posts, up to ``RELATED_MAX``
+    related posts, a discussion link when the frontmatter has
+    ``discussion_url``, and a one-line author note with profile links. Its
+    labels are plain text, not headings, so the heading outline and the table
+    of contents are unchanged.
+
+    Args:
+        meta: The current post's frontmatter.
+        posts: The published posts, newest first.
+
+    Returns:
+        The section, kept to the reading column.
+    """
+    older, newer = neighbour_posts(meta.get("slug", ""), posts)
+    related = related_posts(
+        meta,
+        posts,
+        exclude={m.get("slug") for m in (older, newer) if m is not None},
+    )
+    parts: list[rx.Component] = []
+    if older is not None or newer is not None:
+        parts.append(
+            rx.el.nav(
+                _neighbour(older, "← Older", "left"),
+                _neighbour(newer, "Newer →", "right"),
+                aria_label="Older and newer posts",
+                class_name="post-end-neighbours",
+            )
+        )
+    if related:
+        parts.append(
+            rx.el.nav(
+                rx.el.p("More on this", class_name="post-end-label"),
+                rx.el.ul(
+                    *[
+                        rx.el.li(
+                            _post_link(
+                                other,
+                                rx.el.span(
+                                    other.get("title", "Untitled"),
+                                    class_name="post-end-title",
+                                ),
+                            ),
+                            rx.el.span(
+                                f" · {other.get('date', '')}",
+                                class_name="post-end-date",
+                            ),
+                        )
+                        for other in related
+                    ]
+                ),
+                aria_label="Related posts",
+                class_name="post-end-related",
+            )
+        )
+    discussion = str(meta.get("discussion_url", "")).strip()
+    if discussion:
+        parts.append(
+            rx.el.p(
+                rx.link(
+                    discussion_label(discussion),
+                    href=discussion,
+                    is_external=True,
+                    class_name="post-end-discussion",
+                )
+            )
+        )
+    parts.append(
+        rx.el.div(
+            rx.el.p(f"Written by {AUTHOR_NAME}, {AUTHOR_JOB_TITLE}."),
+            rx.el.p(
+                rx.link("About", href="/about"),
+                rx.link("GitHub", href=GITHUB_URL, is_external=True),
+                rx.link("LinkedIn", href=LINKEDIN_URL, is_external=True),
+                # A file, not a route: skip client-side navigation.
+                rx.link("RSS", href="/feed.xml", reload_document=True),
+                class_name="post-end-profiles",
+            ),
+            class_name="post-end-author",
+        )
+    )
+    return rx.el.div(
+        *parts,
+        class_name="post-end",
+        style={
+            **READING_COLUMN,
+            "width": "100%",
+            "margin_top": "var(--space-6)",
+            "padding_top": "var(--space-5)",
+            "border_top": f"1px solid {rx.color('gray', 5)}",
+            "display": "flex",
+            "flex_direction": "column",
+            "gap": "var(--space-5)",
+            "font_size": "var(--font-size-2)",
+            "line_height": "var(--line-height-2)",
+            "color": rx.color("slate", 11),
+            "& p": {"margin": "0"},
+            "& .post-end-neighbours": {
+                "display": "grid",
+                "grid_template_columns": "1fr 1fr",
+                "gap": "var(--space-4)",
+            },
+            "& .post-end-neighbours .post-end-link": {
+                "display": "flex",
+                "flex_direction": "column",
+                "gap": "var(--space-1)",
+            },
+            "& .post-end-label": {
+                "font_size": "var(--font-size-1)",
+                "color": rx.color("slate", 11),
+            },
+            "& .post-end-related .post-end-label": {"margin_bottom": "0.25em"},
+            "& .post-end-title": {"color": rx.color("blue", 11)},
+            "& .post-end-link:hover .post-end-title": {
+                "text_decoration": "underline",
+            },
+            "& ul": {"list_style": "none", "margin": "0", "padding": "0"},
+            "& li": {"margin": "0.4em 0"},
+            "& .post-end-date": {"white_space": "nowrap"},
+            "& .post-end-profiles": {
+                "display": "flex",
+                "flex_wrap": "wrap",
+                "gap": "0 var(--space-4)",
+                "margin_top": "var(--space-1)",
+            },
+            # These sit beside plain text; colour alone is under 3:1 against
+            # it in dark mode, so underline them.
+            "& :is(.post-end-profiles .rt-Link, .post-end-discussion, "
+            "li .post-end-title)": {
+                "text_decoration_line": "underline",
+            },
+            "& :is(.post-end-link, .rt-Link):focus-visible": {
+                "outline": f"2px solid {rx.color('blue', 8)}",
+                "outline_offset": "2px",
+                "border_radius": "var(--radius-1)",
+            },
+        },
+    )
+
+
+def _render_post(
+    meta: dict, body: str, posts: list[tuple[dict, str]] | None = None
+) -> rx.Component:
     """Render a full blog post with metadata header and markdown body.
 
     The header and the body's running text keep to the reading measure, centred
     in the post column; figures, tables and code blocks use the full column. A
     post with ``TOC_MIN_SECTIONS`` or more H2s gets a table of contents between
-    the header and the body.
+    the header and the body, and every post closes with ``_post_end``.
+
+    Args:
+        meta: The post's frontmatter.
+        body: The post's markdown.
+        posts: The published posts, newest first, for the older/newer and
+            related links; defaults to this post alone.
+
+    Returns:
+        The post's header, table of contents, body and end section.
     """
     body_components, outline = _post_body(body)
     toc = _table_of_contents(outline)
@@ -575,6 +849,7 @@ def _render_post(meta: dict, body: str) -> rx.Component:
                 },
             },
         ),
+        _post_end(meta, posts if posts is not None else [(meta, body)]),
         spacing="4",
         width="100%",
     )
@@ -687,7 +962,7 @@ def blog_post_page(slug: str, today: date | None = None) -> rx.Component:
             return rx.container(
                 rx.vstack(
                     rx.box(height="4em"),
-                    _render_post(meta, body),
+                    _render_post(meta, body, posts),
                     spacing="4",
                     width="100%",
                 ),

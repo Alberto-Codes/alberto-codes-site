@@ -149,6 +149,33 @@ the router did not make, and its scroll restoration puts the page back where it
 was. Headings carry `scroll-margin-top: 5rem`, so a fragment lands below the
 sticky header (about 57px), whether it is clicked or opened as a fresh URL.
 
+## Amendment, 2026-10-01: an end-of-post section
+
+Every post closes with a light section (issue #74, `_post_end` in
+`pages/blog.py`), in the reading column under a top border, in small text:
+
+- **Older / newer:** "← Older" and "Newer →" with the adjacent posts' titles,
+  in date order among *published* posts (`published_posts`), so a
+  future-dated post is never linked. The oldest post has no Older link and the
+  newest no Newer link.
+- **More on this:** up to three posts that share at least two frontmatter
+  `tags` with this one, ranked by the number shared, ties to the newer post,
+  leaving out the post itself and its older/newer links. Title and date only;
+  with no match the block is left out.
+- **Author line:** "Written by Alberto Nieto, Generative AI Principal
+  Engineer." with links to About, GitHub, LinkedIn and the RSS feed. The name,
+  title and profile URLs come from `social.py`.
+- **Discussion link:** an optional frontmatter field `discussion_url`. When set,
+  the post links to it as "Discuss on r/<sub>" for a subreddit thread, else
+  "Join the discussion".
+
+The older/newer and related blocks are `<nav>` elements named by
+`aria-label` and labelled with plain text, not headings, so the heading
+outline and the table of contents are unchanged. Post links are React Router
+links, as on the index cards. The section is page chrome only: it is not in
+the RSS item bodies or the JSON-LD. There are no comments, popups, email
+capture or generated summaries. `tests/test_post_end.py` checks every post.
+
 ## Consequences
 
 ### Positive
