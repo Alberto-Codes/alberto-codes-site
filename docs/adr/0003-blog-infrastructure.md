@@ -97,6 +97,18 @@ Browser verification of both, including the measurement script and before/after
 screenshots, is in
 [docs/validation/site-pre-overflow/README.md](../validation/site-pre-overflow/README.md).
 
+## Amendment, 2026-10-01: code blocks carry a language label and copy button
+
+`_code_block` puts a bar above each block (issue #76): the fenced language on
+the left, omitted when the fence names none, and a "Copy code" button on the
+right. The bar sits above the scroll area rather than over the code, so the
+button never covers a line on a phone and the block still scrolls sideways.
+The site is a static export with no backend, so the copy is a plain `onClick`
+that calls `navigator.clipboard.writeText` with the block text markdown passes
+in; it flags the button for two seconds (copy icon swaps to a check) and
+writes "Copied" to a polite live region. The highlighting theme is unchanged.
+`tests/test_code_block_toolbar.py` checks the compiled structure.
+
 ## Consequences
 
 ### Positive
