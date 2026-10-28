@@ -5,6 +5,8 @@ width and its smallest ``font-size``. ADR-0005's 2026-10-01 (#117) amendment
 records the rule; these tests pin the arithmetic and the two caps.
 """
 
+import time
+
 import pytest
 
 from alberto_codes_site.figures import (
@@ -43,6 +45,15 @@ def test_mermaid_tooltip_rule_is_ignored():
     )
     # 438 * 11 / 16 = 301.1, under the phone column.
     assert figure_min_width(svg) is None
+
+
+def test_an_embedded_image_is_measured_in_linear_time():
+    """A megabyte data URI has no braces; scanning it must not go quadratic."""
+    data = "A" * 1_000_000
+    svg = f'<svg viewBox="0 0 438 600"><image href="data:,{data}"/></svg>'
+    start = time.perf_counter()
+    figure_min_width(svg)
+    assert time.perf_counter() - start < 1
 
 
 def test_a_figure_that_reads_on_the_phone_needs_nothing():

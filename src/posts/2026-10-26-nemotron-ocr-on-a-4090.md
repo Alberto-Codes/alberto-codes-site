@@ -242,6 +242,8 @@ model remained uncertain about a difference I could point to in the strings.
 
 ## Inspecting and repeating it
 
+> Note 2026-10-27: This post records the v0.1.0 receipt pilot. To reproduce that version, use its [archived scoring tutorial](https://github.com/Alberto-Codes/inference-lab/blob/1b412ff74cee4b60d07b17d24e41daef4df18335/docs/tutorials/first-result.md) and [archived GPU procedure](https://github.com/Alberto-Codes/inference-lab/blob/1b412ff74cee4b60d07b17d24e41daef4df18335/docs/how-to/evaluate-receipts.md). The hosted documentation links below follow `main` and can change with later releases; the evidence links remain pinned to this experiment. Later tagged experiments have their own results and instructions.
+
 Start with [Inspect the saved experiment](https://alberto-codes.github.io/inference-lab/tutorials/first-result/).
 It recalculates the scores and takes you to receipt 20's reference, output
 and missing numbers. Setup needs Git, uv and an internet connection. After

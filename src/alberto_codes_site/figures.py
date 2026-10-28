@@ -91,7 +91,7 @@ WIDE_FIGURE_CLASS = "post-figure-wide"
 
 _VIEWBOX = re.compile(r"<svg\b[^>]*?\bviewBox=\"\s*[-\d.]+[\s,]+[-\d.]+[\s,]+([\d.]+)")
 # Mermaid's stylesheet sizes a hover tooltip that a static figure never shows.
-_UNSHOWN_RULE = re.compile(r"[^{}]*mermaidTooltip[^{}]*\{[^}]*\}")
+_UNSHOWN_RULE = re.compile(r"(?:^|(?<=[{}]))[^{}]*mermaidTooltip[^{}]*\{[^}]*\}")
 _FONT_SIZE = re.compile(r"font-size\s*(?:=\s*[\"']|:)\s*([\d.]+)(?:px)?\b")
 
 _FIGURE_LINE = re.compile(r"^!\[(?P<alt>.*)\]\(/(?P<name>[\w.-]+\.svg)\)\s*$")
