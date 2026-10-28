@@ -94,7 +94,7 @@ def test_frontmatter_series_field_parses():
 def test_real_series_membership():
     """Each series has the parts decided for #51; the rest are standalone."""
     assert {s.title: len(s) for s in SERIES} == EXPECTED_SIZES
-    assert len(STANDALONE) == 5
+    assert len(STANDALONE) == 6
 
 
 def test_series_slugs_come_from_the_title():
