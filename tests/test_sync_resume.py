@@ -101,12 +101,12 @@ def test_summary_and_competencies_verbatim(payload: dict) -> None:
 
 
 def test_projects_take_first_link_and_text_before_it(payload: dict) -> None:
-    """A project's url is its first link and its description drops the links."""
+    """A project's url is its first link; its description is the first sentence."""
     assert payload["projects"] == [
         {
             "name": "toolkit",
             "url": "https://github.com/jdoe/toolkit",
-            "description": "Does one thing well. MIT.",
+            "description": "Does one thing well.",
         },
         {
             "name": "lonely",
@@ -184,3 +184,77 @@ def test_cli_writes_json(tmp_path: Path) -> None:
     out = tmp_path / "resume.json"
     assert sync_resume.main(["--cv", str(cv), "--out", str(out)]) == 0
     assert json.loads(out.read_text()) == sync_resume.parse_cv(CV)
+
+
+def _role(role: str, company: str, dates: str) -> dict:
+    """Return a full experience entry for the public-trim tests."""
+    return {
+        "company": company,
+        "role": role,
+        "location": "Tucson, Arizona",
+        "dates": dates,
+        "context": f"{role} context.",
+        "bullets": [f"{role} bullet"],
+    }
+
+
+def test_older_roles_collapse_into_one_entry() -> None:
+    """Recent roles stay whole; older ones fold into one titles-and-span entry."""
+    roles = [
+        _role("Lead", "Acme", "Jan 2022 – Present"),
+        _role("Senior", "Acme", "2020 – Jan 2022"),
+        _role("Mid", "Acme", "2018 – 2020"),
+        _role("Engineer (AVP)", "Acme", "Nov 2016 – 2018"),
+        _role("Manager", "Acme", "2006 – Nov 2016"),
+        _role("Team Lead / Operations", "Acme / Beta Bank", "1999 – 2006"),
+    ]
+    trimmed = sync_resume.collapse_older_roles(roles)
+    assert sync_resume.FULL_DETAIL_ROLES == 3
+    assert trimmed[:3] == roles[:3]
+    assert trimmed[3:] == [
+        {
+            "company": "Acme / Beta Bank",
+            "role": "Earlier roles: Engineer (AVP), Manager, Team Lead / Operations",
+            "location": "Tucson, Arizona",
+            "dates": "1999 – 2018",
+            "bullets": [],
+        }
+    ]
+
+
+def test_no_older_roles_leaves_experience_unchanged(payload: dict) -> None:
+    """A CV with no more than FULL_DETAIL_ROLES roles gets no folded entry."""
+    assert [e["role"] for e in payload["experience"]] == [
+        "Staff Engineer (Director)",
+        "Analyst / Operations",
+    ]
+
+
+def test_projects_drop_in_declared_order(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Only the first DROPPED_PROJECT_COUNT names in PROJECT_DROP_ORDER go."""
+    projects = [{"name": n} for n in ("keep", "b", "a", "c")]
+    monkeypatch.setattr(sync_resume, "PROJECT_DROP_ORDER", ("a", "b", "c"))
+    monkeypatch.setattr(sync_resume, "DROPPED_PROJECT_COUNT", 2)
+    assert sync_resume.drop_projects(projects) == [{"name": "keep"}, {"name": "c"}]
+    monkeypatch.setattr(sync_resume, "DROPPED_PROJECT_COUNT", 0)
+    assert sync_resume.drop_projects(projects) == projects
+
+
+def test_public_resume_drop_order_never_reaches_kept_projects() -> None:
+    """The flagship projects are never on the drop list."""
+    kept = {"typevet", "judgevet", "vramfit", "saucier", "turboquant-vllm"}
+    assert not kept & set(sync_resume.PROJECT_DROP_ORDER)
+    assert sync_resume.PROJECT_DROP_ORDER == (
+        "adk-secure-sessions",
+        "gepa-adk",
+        "docvet",
+    )
+
+
+def test_project_description_keeps_first_sentence() -> None:
+    """The cut is at the first sentence end followed by space, not inside tokens."""
+    first = sync_resume.first_sentence
+    assert first("Runs 3.76x faster on llama.cpp (vLLM). Second. MIT.") == (
+        "Runs 3.76x faster on llama.cpp (vLLM)."
+    )
+    assert first("Only one sentence") == "Only one sentence"
