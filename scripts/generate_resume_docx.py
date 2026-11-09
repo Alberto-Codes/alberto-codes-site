@@ -258,7 +258,7 @@ add_section_heading("Professional Experience")
 add_role(
     "Principal Engineer (Executive Director)",
     "Wells Fargo, Phoenix, Arizona",
-    "Jun 2025 \u2013 Present",
+    "Jul 2025 \u2013 Present",
     "Builds AI solutions for line-of-business needs, plus the documentation and "
     "frameworks that speed developer onboarding and production rollouts.",
     [
@@ -283,7 +283,7 @@ add_role(
 add_role(
     "Senior Lead Analytics Consultant (Executive Director)",
     "Wells Fargo, Phoenix, Arizona",
-    "Jun 2022 \u2013 Jun 2025",
+    "Jun 2022 \u2013 Jul 2025",
     "Individual contributor and the team's go-to engineer for GenAI and agentic "
     "AI frameworks. Focused on proof of concepts and production-ready AI implementations.",
     [

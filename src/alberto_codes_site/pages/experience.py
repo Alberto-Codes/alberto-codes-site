@@ -10,7 +10,7 @@ ROLES = [
     {
         "title": "Principal Engineer (Executive Director)",
         "company": "Wells Fargo",
-        "period": "Jun 2025 - Present",
+        "period": "Jul 2025 - Present",
         "location": "Phoenix, Arizona",
         "bullets": [
             "Created AI agent framework to automate line-of-business operations, "
@@ -29,7 +29,7 @@ ROLES = [
     {
         "title": "Senior Lead Analytics Consultant (Executive Director)",
         "company": "Wells Fargo",
-        "period": "Jun 2022 - Jun 2025",
+        "period": "Jun 2022 - Jul 2025",
         "location": "Phoenix, Arizona",
         "bullets": [
             "The team's go-to engineer for GenAI and agentic AI frameworks, "
