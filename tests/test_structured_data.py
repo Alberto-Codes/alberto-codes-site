@@ -8,7 +8,9 @@ import json
 from pathlib import Path
 
 import pytest
+from reflex.components.component import Component
 
+from alberto_codes_site.alberto_codes_site import app
 from alberto_codes_site.pages.blog import _load_posts
 from alberto_codes_site.social import (
     AUTHOR_SAME_AS,
@@ -78,15 +80,38 @@ def test_json_ld_escapes_script_close() -> None:
 
 
 def test_person_data_has_required_fields() -> None:
-    """The home page Person names the author, the site and the footer links."""
-    data = person_data()
+    """The Person JSON-LD parses and carries the resume's identity fields."""
+    data = json.loads(json.dumps(person_data()))
     assert data["@context"] == "https://schema.org"
     assert data["@type"] == "Person"
     assert data["name"] == "Alberto Nieto"
     assert data["url"] == SITE_URL
-    assert data["jobTitle"] == "Generative AI Principal Engineer"
-    assert data["sameAs"] == list(AUTHOR_SAME_AS)
-    json.dumps(data)
+    assert data["jobTitle"] == "Principal Engineer"
+    assert data["worksFor"] == {"@type": "Organization", "name": "Wells Fargo"}
+    assert data["sameAs"] == [
+        "https://github.com/Alberto-Codes",
+        "https://www.linkedin.com/in/alberto-codes",
+        "https://huggingface.co/Alberto-Codes",
+    ]
+    assert data["alumniOf"]["name"] == "DeVry University"
+    assert data["knowsLanguage"] == ["en", "es"]
+    assert "Python" in data["knowsAbout"]
+    assert data["homeLocation"]["name"] == "Phoenix, Arizona"
+    assert "telephone" not in data
+    assert "address" not in data
+
+
+@pytest.mark.parametrize("route", ["/", "/about", "/experience"])
+def test_profile_pages_emit_person_json_ld(route: str) -> None:
+    """Home, about and experience each carry one parseable Person block."""
+    page = app._unevaluated_pages[route.strip("/") or "index"]
+    attrs: list[dict] = [m.custom_attrs for m in page.meta if isinstance(m, Component)]
+    blocks = [
+        json.loads(a["dangerouslySetInnerHTML"]["__html"])
+        for a in attrs
+        if "dangerouslySetInnerHTML" in a
+    ]
+    assert blocks == [json.loads(json.dumps(person_data()))]
 
 
 def test_same_as_matches_footer_links() -> None:

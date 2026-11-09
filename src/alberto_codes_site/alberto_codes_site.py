@@ -178,6 +178,7 @@ add_page(
         "to Principal Engineer. Co-inventor on three pending patent applications "
         "and author of eight open source Python packages."
     ),
+    structured_data=person_data(),
 )
 add_page(
     experience_page(),
@@ -187,6 +188,7 @@ add_page(
         "From customer service to Principal Engineer, "
         f"{years_at_wells_fargo()} years at Wells Fargo."
     ),
+    structured_data=person_data(),
 )
 add_page(
     projects_page(),
