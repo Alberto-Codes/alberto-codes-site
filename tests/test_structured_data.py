@@ -5,6 +5,7 @@ the helpers in `alberto_codes_site.social` that feed it.
 """
 
 import json
+import re
 from pathlib import Path
 
 import pytest
@@ -21,6 +22,7 @@ from alberto_codes_site.social import (
     page_meta,
     person_data,
     post_image,
+    profile_page_data,
 )
 
 ASSETS = Path(__file__).resolve().parent.parent / "src" / "assets"
@@ -84,6 +86,7 @@ def test_person_data_has_required_fields() -> None:
     data = json.loads(json.dumps(person_data()))
     assert data["@context"] == "https://schema.org"
     assert data["@type"] == "Person"
+    assert data["@id"] == f"{SITE_URL}/#person"
     assert data["name"] == "Alberto Nieto"
     assert data["url"] == SITE_URL
     assert data["jobTitle"] == "Principal Engineer"
@@ -92,6 +95,7 @@ def test_person_data_has_required_fields() -> None:
         "https://github.com/Alberto-Codes",
         "https://www.linkedin.com/in/alberto-codes",
         "https://huggingface.co/Alberto-Codes",
+        "https://pypi.org/user/Alberto-Codes/",
     ]
     assert data["alumniOf"]["name"] == "DeVry University"
     assert data["knowsLanguage"] == ["en", "es"]
@@ -101,17 +105,39 @@ def test_person_data_has_required_fields() -> None:
     assert "address" not in data
 
 
-@pytest.mark.parametrize("route", ["/", "/about", "/experience"])
-def test_profile_pages_emit_person_json_ld(route: str) -> None:
-    """Home, about and experience each carry one parseable Person block."""
+def _json_ld_blocks(route: str) -> list[dict]:
+    """Return the parsed JSON-LD blocks registered on a route."""
     page = app._unevaluated_pages[route.strip("/") or "index"]
     attrs: list[dict] = [m.custom_attrs for m in page.meta if isinstance(m, Component)]
-    blocks = [
+    return [
         json.loads(a["dangerouslySetInnerHTML"]["__html"])
         for a in attrs
         if "dangerouslySetInnerHTML" in a
     ]
-    assert blocks == [json.loads(json.dumps(person_data()))]
+
+
+@pytest.mark.parametrize("route", ["/", "/experience"])
+def test_profile_pages_emit_person_json_ld(route: str) -> None:
+    """Home and experience each carry one parseable Person block."""
+    assert _json_ld_blocks(route) == [json.loads(json.dumps(person_data()))]
+
+
+def test_about_emits_profile_page_around_the_person() -> None:
+    """About carries one ProfilePage whose mainEntity is the shared Person, and no second Person."""
+    blocks = _json_ld_blocks("/about")
+    assert len(blocks) == 1
+    page = blocks[0]
+    assert page["@type"] == "ProfilePage"
+    assert page["url"] == canonical_url("/about")
+    person = {k: v for k, v in person_data().items() if k != "@context"}
+    assert page["mainEntity"] == json.loads(json.dumps(person))
+    assert page["mainEntity"]["@id"] == f"{SITE_URL}/#person"
+    assert re.fullmatch(r"\d{4}-\d{2}-\d{2}", page["dateModified"])
+
+
+def test_profile_page_date_modified_only_when_given() -> None:
+    """DateModified is left out rather than guessed."""
+    assert "dateModified" not in profile_page_data(route="/about")
 
 
 def test_same_as_matches_footer_links() -> None:

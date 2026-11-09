@@ -7,10 +7,12 @@ with no option to change it, so `SitemapPlugin` here reuses Reflex's link
 collection and XML writer and swaps the namespace before the file is saved,
 in the same compile step that `reflex run` and `reflex export` already run.
 
-Every registered page is listed. A page opts into ``<lastmod>`` through
-``add_page(context=sitemap_context(...))``; blog posts pass their updated
-date (``post_updated``) or else their frontmatter date, and the other routes
-omit it rather than claim a date nobody recorded.
+Every registered page is listed with a ``<lastmod>``, passed through
+``add_page(context=sitemap_context(...))``. Blog posts pass their updated
+date (``post_updated``) or else their frontmatter date, and series pages
+their newest part's date. A static page passes the last commit date of the
+files that render it (``commit_date``), plus the newest post's date where it
+lists posts. The deploy checks out full history so those dates are real.
 
 Examples:
     In `rxconfig.py`:
@@ -22,7 +24,9 @@ Examples:
     ```
 """
 
+import subprocess
 from collections.abc import Sequence
+from pathlib import Path
 
 from reflex.plugins import sitemap as reflex_sitemap
 
@@ -30,6 +34,39 @@ from alberto_codes_site.dates import parse_date, post_updated
 
 SITEMAP_NAMESPACE = "http://www.sitemaps.org/schemas/sitemap/0.9"
 _REFLEX_NAMESPACE = "https://www.sitemaps.org/schemas/sitemap/0.9"
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def commit_date(*paths: Path) -> str | None:
+    """Return the date of the last commit that touched any of ``paths``.
+
+    Args:
+        paths: Source files that render a page.
+
+    Returns:
+        The committer date as `YYYY-MM-DD`, or None outside a git checkout
+        or when no commit touched the files.
+    """
+    result = subprocess.run(
+        ["git", "log", "-1", "--format=%cs", "--", *map(str, paths)],
+        cwd=_REPO_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return result.stdout.strip() or None
+
+
+def latest(*dates: str | None) -> str | None:
+    """Return the newest of some `YYYY-MM-DD` dates, ignoring None.
+
+    Args:
+        dates: ISO dates, any of which may be None.
+
+    Returns:
+        The latest date, or None when none is given.
+    """
+    return max((d for d in dates if d), default=None)
 
 
 def post_lastmod(meta: dict, body: str = "") -> str | None:

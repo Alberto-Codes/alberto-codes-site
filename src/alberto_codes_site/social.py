@@ -60,6 +60,11 @@ AUTHOR_SAME_AS = (
 RESUME_JSON = Path(__file__).resolve().parents[2] / "resume" / "resume.json"
 # Linked from cv.md's vramfit entry; not a field of the resume payload.
 HUGGING_FACE_URL = "https://huggingface.co/Alberto-Codes"
+# The PyPI account that owns the published packages (the `ownership` field of
+# https://pypi.org/pypi/saucier/json names it).
+PYPI_USER_URL = "https://pypi.org/user/Alberto-Codes/"
+# Every Person block carries this @id, so crawlers merge them into one node.
+PERSON_ID = f"{SITE_URL}/#person"
 # The BCP 47 codes for cv.md's Languages section: English and Spanish.
 AUTHOR_LANGUAGES = ("en", "es")
 
@@ -146,7 +151,7 @@ def person_data() -> dict:
     profile links. No phone number or street address.
 
     Returns:
-        A JSON-LD object with name, url, jobTitle, worksFor, sameAs,
+        A JSON-LD object with @id, name, url, jobTitle, worksFor, sameAs,
         alumniOf, knowsLanguage, knowsAbout and homeLocation.
     """
     resume = json.loads(RESUME_JSON.read_text(encoding="utf-8"))
@@ -155,6 +160,7 @@ def person_data() -> dict:
     return {
         "@context": "https://schema.org",
         "@type": "Person",
+        "@id": PERSON_ID,
         "name": candidate["name"],
         "url": SITE_URL,
         "jobTitle": current["role"].split(" (")[0],
@@ -163,6 +169,7 @@ def person_data() -> dict:
             candidate["github"]["url"],
             candidate["linkedin"]["url"],
             HUGGING_FACE_URL,
+            PYPI_USER_URL,
         ],
         "alumniOf": {
             "@type": "CollegeOrUniversity",
@@ -172,6 +179,32 @@ def person_data() -> dict:
         "knowsAbout": resume["competencies"],
         "homeLocation": {"@type": "Place", "name": candidate["location"]},
     }
+
+
+def profile_page_data(*, route: str, date_modified: str | None = None) -> dict:
+    """Return the schema.org `ProfilePage` whose main entity is the author.
+
+    The Person is nested rather than emitted beside it, so the page carries
+    one Person node, with the same ``@id`` as on every other page.
+
+    Args:
+        route: The profile page route, `/about`.
+        date_modified: The page's `YYYY-MM-DD` last change, when known.
+
+    Returns:
+        A JSON-LD object; ``dateModified`` appears only with ``date_modified``.
+    """
+    person = person_data()
+    del person["@context"]
+    data = {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "url": canonical_url(route),
+        "mainEntity": person,
+    }
+    if date_modified:
+        data["dateModified"] = date_modified
+    return data
 
 
 def blog_posting_data(
