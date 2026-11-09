@@ -1,424 +1,230 @@
-"""Generate resume as Word document and PDF.
+"""Generate `Alberto_Nieto_Resume.docx` from `resume/resume.json`.
 
-Outputs:
-- Alberto_Nieto_Resume.docx  (project root)
-- src/assets/Alberto_Nieto_Resume.pdf  (served by the site)
+`resume/resume.json` is written from the canonical `cv.md` by
+`scripts/sync_resume.py`; this script adds no facts of its own. The PDF the
+site serves is rendered from the same JSON by career-ops (see
+`scripts/build_resume.sh`).
 
-Formatting follows ATS best practices:
-- Single column, no tables/text boxes
-- Calibri throughout, navy accent (#1B3A5C)
-- 0.75in margins, 1.15 line spacing
+Layout follows ATS conventions: one column, standard section headings, plain
+paragraphs and real bullet lists, everything in the document body (no tables,
+text boxes, images, or content in headers and footers). Calibri throughout,
+navy accent (#1B3A5C).
+
+Usage:
+    uv run python scripts/generate_resume_docx.py [--json PATH] [--out PATH]
 """
 
-import os
-import subprocess
+import argparse
+import json
+from pathlib import Path
 
 from docx import Document
+from docx.document import Document as DocumentType
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Inches, Pt, RGBColor
+from docx.text.paragraph import Paragraph
 
-# -- Colors --
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_JSON = PROJECT_ROOT / "resume" / "resume.json"
+DEFAULT_OUT = PROJECT_ROOT / "Alberto_Nieto_Resume.docx"
+
 NAVY = RGBColor(0x1B, 0x3A, 0x5C)
 DARK_GRAY = RGBColor(0x33, 0x33, 0x33)
 MID_GRAY = RGBColor(0x55, 0x55, 0x55)
-
-doc = Document()
-
-# -- Page setup --
-for section in doc.sections:
-    section.top_margin = Inches(0.5)
-    section.bottom_margin = Inches(0.45)
-    section.left_margin = Inches(0.7)
-    section.right_margin = Inches(0.7)
-
-# -- Base style --
-style = doc.styles["Normal"]
-style.font.name = "Calibri"
-style.font.size = Pt(10.5)
-style.font.color.rgb = DARK_GRAY
-style.paragraph_format.space_after = Pt(1)
-style.paragraph_format.space_before = Pt(0)
-style.paragraph_format.line_spacing = 1.1
+FONT = "Calibri"
 
 
-def add_bottom_border(paragraph, color="1B3A5C"):
-    """Add a thin bottom border to a paragraph."""
-    pPr = paragraph._p.get_or_add_pPr()
-    pBdr = OxmlElement("w:pBdr")
-    bottom = OxmlElement("w:bottom")
-    bottom.set(qn("w:val"), "single")
-    bottom.set(qn("w:sz"), "4")
-    bottom.set(qn("w:space"), "1")
-    bottom.set(qn("w:color"), color)
-    pBdr.append(bottom)
-    pPr.append(pBdr)
+def add_text(
+    doc: DocumentType,
+    text: str,
+    *,
+    size: float = 10.5,
+    color: RGBColor = DARK_GRAY,
+    bold: bool = False,
+    before: float = 0,
+    after: float = 1,
+    style: str | None = None,
+) -> Paragraph:
+    """Add a paragraph holding one run of text.
 
+    Args:
+        doc: The document to append to.
+        text: The paragraph text.
+        size: Font size in points.
+        color: Font color.
+        bold: Whether the run is bold.
+        before: Space before the paragraph, in points.
+        after: Space after the paragraph, in points.
+        style: A paragraph style name such as ``List Bullet``.
 
-def add_section_heading(text):
-    """Add a section heading with navy bottom border."""
-    p = doc.add_paragraph()
-    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
-    p.space_before = Pt(10)
-    p.space_after = Pt(3)
-    run = p.add_run(text.upper())
-    run.bold = True
-    run.font.size = Pt(12)
-    run.font.name = "Calibri"
-    run.font.color.rgb = NAVY
-    add_bottom_border(p)
+    Returns:
+        The new paragraph.
+    """
+    p = doc.add_paragraph(style=style)
+    p.paragraph_format.space_before = Pt(before)
+    p.paragraph_format.space_after = Pt(after)
+    run = p.add_run(text)
+    run.bold = bold
+    run.font.size = Pt(size)
+    run.font.name = FONT
+    run.font.color.rgb = color
     return p
 
 
-def add_role(title, company_location, period, summary="", bullets=None):
-    """Add a role entry with title, company, period, summary, and bullets."""
-    # Title + right-aligned period
-    p = doc.add_paragraph()
-    p.space_before = Pt(6)
-    p.space_after = Pt(0)
+def add_heading(doc: DocumentType, text: str) -> None:
+    """Add a section heading with a thin navy rule beneath it.
+
+    Args:
+        doc: The document to append to.
+        text: The heading text, written in capitals.
+    """
+    p = add_text(doc, text.upper(), size=12, color=NAVY, bold=True, before=10, after=3)
     p.paragraph_format.keep_with_next = True
-    run_title = p.add_run(title)
-    run_title.bold = True
-    run_title.font.size = Pt(10.5)
-    run_title.font.name = "Calibri"
-    run_title.font.color.rgb = DARK_GRAY
-    p.add_run("\t")
-    run_period = p.add_run(period)
-    run_period.font.size = Pt(9.5)
-    run_period.font.name = "Calibri"
-    run_period.font.color.rgb = MID_GRAY
-    tab_stops = p.paragraph_format.tab_stops
-    tab_stops.add_tab_stop(Inches(6.6), alignment=WD_ALIGN_PARAGRAPH.RIGHT)
-
-    # Company line
-    p2 = doc.add_paragraph()
-    p2.space_before = Pt(0)
-    p2.space_after = Pt(1)
-    p2.paragraph_format.keep_with_next = True
-    run_co = p2.add_run(company_location)
-    run_co.font.size = Pt(9.5)
-    run_co.font.name = "Calibri"
-    run_co.font.color.rgb = MID_GRAY
-
-    if summary:
-        p3 = doc.add_paragraph()
-        p3.space_before = Pt(0)
-        p3.space_after = Pt(1)
-        p3.paragraph_format.keep_with_next = True
-        run_s = p3.add_run(summary)
-        run_s.font.size = Pt(10)
-        run_s.font.name = "Calibri"
-        run_s.font.color.rgb = DARK_GRAY
-
-    if bullets:
-        for bullet in bullets:
-            bp = doc.add_paragraph(style="List Bullet")
-            bp.clear()
-            bp.space_before = Pt(0)
-            bp.space_after = Pt(1)
-            bp.paragraph_format.left_indent = Inches(0.25)
-            run_b = bp.add_run(bullet)
-            run_b.font.size = Pt(10)
-            run_b.font.name = "Calibri"
-            run_b.font.color.rgb = DARK_GRAY
+    border = OxmlElement("w:pBdr")
+    bottom = OxmlElement("w:bottom")
+    for key, value in (
+        ("val", "single"),
+        ("sz", "4"),
+        ("space", "1"),
+        ("color", "1B3A5C"),
+    ):
+        bottom.set(qn(f"w:{key}"), value)
+    border.append(bottom)
+    p._p.get_or_add_pPr().append(border)
 
 
-# ===== HEADER =====
-p = doc.add_paragraph()
-p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-p.space_after = Pt(2)
-run = p.add_run("ALBERTO NIETO")
-run.bold = True
-run.font.size = Pt(24)
-run.font.name = "Calibri"
-run.font.color.rgb = NAVY
+def add_bullet(doc: DocumentType, text: str) -> None:
+    """Add one bullet in the built-in ``List Bullet`` style.
 
-p = doc.add_paragraph()
-p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-p.space_after = Pt(0)
-run = p.add_run(
-    "Alberto.Codes.Dev@gmail.com  |  alberto.codes  |  github.com/Alberto-Codes"
-)
-run.font.size = Pt(10)
-run.font.name = "Calibri"
-run.font.color.rgb = NAVY
+    Args:
+        doc: The document to append to.
+        text: The bullet text.
+    """
+    add_text(doc, text, size=10, style="List Bullet")
 
-# ===== PROFESSIONAL SUMMARY =====
-add_section_heading("Professional Summary")
-p = doc.add_paragraph()
-p.space_after = Pt(4)
-run = p.add_run(
-    "Principal Engineer with 25+ years in financial services, from banking "
-    "operations to principal-level AI engineering. Builds agentic AI, LLM "
-    "evaluation and decision models, document and video pipelines, and the cloud "
-    "infrastructure they run on (GCP, OpenShift/Kubernetes). Outside work, builds "
-    "open source tools that test what models actually do, then publishes the "
-    "evidence: 8 Python packages on PyPI. Co-inventor on three pending patent "
-    "applications. Bilingual in English and Spanish."
-)
-run.font.size = Pt(10.5)
-run.font.name = "Calibri"
-run.font.color.rgb = DARK_GRAY
 
-# ===== AREAS OF EXPERTISE =====
-add_section_heading("Areas of Expertise")
-p = doc.add_paragraph()
-p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-p.space_after = Pt(4)
-run = p.add_run(
-    "Generative AI & Agents  \u2022  Python  \u2022  Cloud Engineering (GCP, PCF)  \u2022  "
-    "Data Engineering & Pipelines\n"
-    "OCR & Document Intelligence  \u2022  Video Inference  \u2022  "
-    "CI/CD & DevOps  \u2022  Enterprise Architecture"
-)
-run.font.size = Pt(10.5)
-run.font.name = "Calibri"
-run.font.color.rgb = DARK_GRAY
+def add_role(doc: DocumentType, role: dict) -> None:
+    """Add a role: title and dates, company and location, context, bullets.
 
-# ===== OPEN SOURCE =====
-add_section_heading("Open Source")
-for name, desc in [
-    (
-        "adk-secure-sessions",
-        "Encrypted session storage for Google ADK agents. "
-        "Drop-in replacement using Fernet encryption with PBKDF2 key derivation.",
-    ),
-    (
-        "docvet",
-        "CLI tool for Python docstring quality vetting. 32 rules across "
-        "presence, enrichment, freshness, griffe, and mkdocs coverage.",
-    ),
-    (
-        "gepa-adk",
-        "Evolutionary prompt optimization for AI agents using Google ADK. "
-        "Automatically evolves agent instructions through iterative improvement.",
-    ),
-    (
-        "vramfit",
-        "Fits large open models onto one GPU by measuring per-layer quantization "
-        "damage and solving a mixed-precision recipe against a VRAM budget. Three "
-        "published model packs on Hugging Face.",
-    ),
-    (
-        "typevet",
-        "Typed answers from open models about text and images: yes or no, one label, "
-        "or a rubric level, read from next-token probabilities. Gemma 4 31B on "
-        "llama.cpp and vLLM.",
-    ),
-    (
-        "judgevet",
-        "Typed Python client, CLI, and MCP server for TypeSafe's Jev judgment model.",
-    ),
-    (
-        "saucier",
-        "Provenance-traced extraction from a 1909 cookbook: 151 sauces, every claim "
-        "traced to the line it came from.",
-    ),
-    (
-        "turboquant-vllm",
-        "KV cache compression plugin for vLLM.",
-    ),
-]:
-    bp = doc.add_paragraph()
-    bp.space_before = Pt(1)
-    bp.space_after = Pt(2)
-    bp.paragraph_format.left_indent = Inches(0.25)
-    run_name = bp.add_run(f"{name}: ")
-    run_name.bold = True
-    run_name.font.size = Pt(10.5)
-    run_name.font.name = "Calibri"
-    run_name.font.color.rgb = NAVY
-    run_desc = bp.add_run(desc)
-    run_desc.font.size = Pt(10.5)
-    run_desc.font.name = "Calibri"
-    run_desc.font.color.rgb = DARK_GRAY
-
-# ===== RECOGNITION =====
-add_section_heading("Recognition")
-for item in [
-    "2026 \u2014 Named as co-inventor on a second and third pending patent application",
-    "January 2026 \u2014 Named as co-inventor on a pending patent application",
-    "Top Performer 2018 (New Orleans) \u2014 Recognition for vulnerability remediation efforts",
-    "Top Performer 2014 (Nashville) \u2014 Recognition for asset reporting initiatives",
-]:
-    bp = doc.add_paragraph(style="List Bullet")
-    bp.clear()
-    bp.space_before = Pt(0)
-    bp.space_after = Pt(2)
-    bp.paragraph_format.left_indent = Inches(0.25)
-    run_b = bp.add_run(item)
-    run_b.font.size = Pt(10.5)
-    run_b.font.name = "Calibri"
-    run_b.font.color.rgb = DARK_GRAY
-
-# ===== PROFESSIONAL EXPERIENCE =====
-add_section_heading("Professional Experience")
-
-add_role(
-    "Principal Engineer (Executive Director)",
-    "Wells Fargo, Phoenix, Arizona",
-    "Jul 2025 \u2013 Present",
-    "Builds AI solutions for line-of-business needs, plus the documentation and "
-    "frameworks that speed developer onboarding and production rollouts.",
-    [
-        "Created AI agent framework to automate line-of-business operations, "
-        "adopted across multiple teams",
-        "Fine-tuned Gemma 3 and Gemma 4 on internal documents, building the "
-        "training set from a graph of entities and relationships, with "
-        "held-out evaluation",
-        "Building decision models for collections and customer-service "
-        "next-best-action",
-        "Built video processing pipeline handling thousands of videos daily into "
-        "standard operating procedures for knowledge tree persistence",
-        "Implemented evaluation and evolution frameworks to score and evolve "
-        "agent definitions for data pipeline tasks (open-sourced as gepa-adk)",
-        "Established patterns ensuring non-functional requirements are satisfied "
-        "with AI deployments",
-        "Audited enterprise API clients for Apigee AI provisioning to enable "
-        "multi-modal capabilities and proper scaling",
-    ],
-)
-
-add_role(
-    "Senior Lead Analytics Consultant (Executive Director)",
-    "Wells Fargo, Phoenix, Arizona",
-    "Jun 2022 \u2013 Jul 2025",
-    "Individual contributor and the team's go-to engineer for GenAI and agentic "
-    "AI frameworks. Focused on proof of concepts and production-ready AI implementations.",
-    [
-        "Architected scalable OCR pipeline processing 500K+ documents using Gemini, "
-        "with results stored in Teradata and SQLite for distributed processing",
-        "Developed intelligent agents for database querying, KPI summarization, "
-        "SQL validation, and structured QA using Python and Google ADK",
-        "Built reusable data pipelines for document ingestion, OCR, and validation "
-        "using Selenium, HTTPX, and Docling with Gradio/Streamlit frontends",
-        "Designed modular, scalable architecture patterns reused across multiple "
-        "teams and projects",
-        "Implemented git-based dev workflow with peer reviews, pull requests, and "
-        "release standards to mature end-user compute tool development",
-    ],
-)
-
-add_role(
-    "Lead Analytics Consultant (AVP)",
-    "Wells Fargo, Phoenix, Arizona",
-    "Jan 2018 \u2013 Jun 2022",
-    "T-shaped role providing leadership, oversight, and direct development "
-    "in ETL, visualization, and advanced analytics workstreams.",
-    [
-        "Onboarded applications to Pivotal Cloud Foundry with Splunk logging "
-        "and Blackduck security scans",
-        "Built web scrape automation for business intelligence visualization "
-        "previews and validation",
-        "Created dynamic databases for manual and automated data ingestion "
-        "from flat-file data providers",
-        "Engaged technology peer groups to execute high-priority regulatory "
-        "data analytics",
-    ],
-)
-
-add_role(
-    "Applications Systems Engineer (AVP)",
-    "Wells Fargo, Phoenix, Arizona",
-    "Nov 2016 \u2013 Jan 2018",
-    "Team lead for vulnerability business intelligence development team.",
-    [
-        "Provided guidance to development team and business partners on BI "
-        "solutions for emergency remediation and reporting",
-        "Consulted leadership on data architecture roadmap for vulnerability "
-        "remediation",
-        "Created ad-hoc SQL reports across systems of record to illustrate "
-        "compliance status",
-    ],
-)
-
-add_role(
-    "Business Systems Consultant (AVP)",
-    "Wells Fargo, Phoenix, Arizona",
-    "Oct 2009 \u2013 Nov 2016",
-    "Created business intelligence reporting and tools for regulatory compliance "
-    "and leadership decision-making.",
-    [
-        "Built and supported ongoing asset validation processes",
-        "Created compliance metrics for server footprint tracking",
-        "Developed business process reports for server implementation, changes, "
-        "and decommission time-to-market",
-    ],
-)
-
-add_role(
-    "Technology Manager",
-    "Wells Fargo, Phoenix, Arizona",
-    "2006 \u2013 2009",
-    "Led team of technical professionals supporting end-user technology across "
-    "four administrative sites.",
-    [
-        "Led 8-9 technicians across four administrative sites",
-        "Led desktop OS migrations and provided onsite hardware swap support",
-        "Expedited Business Continuity Plan documentation to 100% compliance "
-        "for disaster recovery across four business lines",
-        "Led monthly compliance efforts for security patching, encryption, "
-        "and asset tracking",
-    ],
-)
-
-add_role(
-    "Team Lead / Leadership Development Program / Operations",
-    "Wells Fargo / Bank of America, Phoenix, Arizona",
-    "1999 \u2013 2006",
-    "Progressive career from teller to operations analyst to leadership "
-    "development program, building deep financial services domain expertise.",
-    [
-        "Selected for Wells Fargo Leadership Development Program (2004-2005), "
-        "rotating through operations and technology departments",
-        "Built and presented a SharePoint hosting solution",
-        "Led six technicians at two admin sites with desktop end-user support",
-        "Progressed through teller, personal banker, lead teller, operations "
-        "processor, and operations analyst roles (1999-2004)",
-    ],
-)
-
-# ===== EDUCATION =====
-add_section_heading("Education")
-p = doc.add_paragraph()
-p.space_before = Pt(2)
-run_deg = p.add_run("Bachelor of Science, Accounting Information Systems")
-run_deg.bold = True
-run_deg.font.size = Pt(11)
-run_deg.font.name = "Calibri"
-run_deg.font.color.rgb = DARK_GRAY
-p2 = doc.add_paragraph()
-p2.space_before = Pt(0)
-run_school = p2.add_run("DeVry University, Phoenix, Arizona")
-run_school.font.size = Pt(10.5)
-run_school.font.name = "Calibri"
-run_school.font.color.rgb = MID_GRAY
-
-# ===== SAVE =====
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-docx_path = os.path.join(project_root, "Alberto_Nieto_Resume.docx")
-doc.save(docx_path)
-print(f"DOCX saved to: {docx_path}")
-
-# Convert to PDF via LibreOffice
-pdf_dest = os.path.join(project_root, "src", "assets", "Alberto_Nieto_Resume.pdf")
-try:
-    subprocess.run(
-        [
-            "libreoffice",
-            "--headless",
-            "--convert-to",
-            "pdf",
-            "--outdir",
-            os.path.dirname(pdf_dest),
-            docx_path,
-        ],
-        check=True,
-        capture_output=True,
+    Args:
+        doc: The document to append to.
+        role: One ``experience`` entry from the payload.
+    """
+    p = add_text(doc, role["role"], bold=True, before=6, after=0)
+    p.paragraph_format.keep_with_next = True
+    p.paragraph_format.tab_stops.add_tab_stop(
+        Inches(7.1), alignment=WD_ALIGN_PARAGRAPH.RIGHT
     )
-    print(f"PDF saved to: {pdf_dest}")
-except FileNotFoundError:
-    print("LibreOffice not found -- DOCX saved but PDF not generated.")
-    print(f"To convert manually: libreoffice --headless --convert-to pdf {docx_path}")
+    dates = p.add_run(f"\t{role['dates']}")
+    dates.font.size = Pt(9.5)
+    dates.font.name = FONT
+    dates.font.color.rgb = MID_GRAY
+    company = add_text(
+        doc, f"{role['company']}, {role['location']}", size=9.5, color=MID_GRAY
+    )
+    company.paragraph_format.keep_with_next = True
+    if role.get("context"):
+        add_text(doc, role["context"], size=10)
+    for bullet in role["bullets"]:
+        add_bullet(doc, bullet)
+
+
+def build(resume: dict) -> DocumentType:
+    """Lay the payload out as a Word document.
+
+    Args:
+        resume: The parsed `resume/resume.json`.
+
+    Returns:
+        The document, ready to save.
+    """
+    doc = Document()
+    for section in doc.sections:
+        section.top_margin = Inches(0.5)
+        section.bottom_margin = Inches(0.45)
+        section.left_margin = Inches(0.7)
+        section.right_margin = Inches(0.7)
+    normal = doc.styles["Normal"]
+    normal.font.name = FONT
+    normal.font.size = Pt(10.5)
+    normal.font.color.rgb = DARK_GRAY
+    normal.paragraph_format.line_spacing = 1.1
+
+    c = resume["candidate"]
+    name = add_text(doc, c["name"].upper(), size=24, color=NAVY, bold=True, after=2)
+    name.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    for line in (
+        c["title"],
+        "  |  ".join(
+            [c["email"]]
+            + [c[k]["display"] for k in ("portfolio", "linkedin", "github")]
+        ),
+        c["location"],
+    ):
+        add_text(
+            doc, line, size=10, color=NAVY, after=0
+        ).alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+    add_heading(doc, "Professional Summary")
+    add_text(doc, resume["summary"], after=4)
+
+    add_heading(doc, "Core Competencies")
+    add_text(doc, ", ".join(resume["competencies"]), after=4)
+
+    add_heading(doc, "Work Experience")
+    for role in resume["experience"]:
+        add_role(doc, role)
+
+    add_heading(doc, "Projects")
+    for project in resume["projects"]:
+        p = add_text(doc, f"{project['name']}: ", color=NAVY, bold=True, after=2)
+        run = p.add_run(f"{project['description']} {project['url']}")
+        run.font.size = Pt(10)
+        run.font.name = FONT
+        run.font.color.rgb = DARK_GRAY
+
+    add_heading(doc, "Education")
+    for degree in resume["education"]:
+        add_text(doc, degree["title"], bold=True, before=2, after=0)
+        add_text(doc, f"{degree['org']}, {degree['location']}", color=MID_GRAY)
+
+    add_heading(doc, "Awards")
+    for award in resume["awards"]:
+        add_bullet(
+            doc,
+            f"{award['year']}: {award['title']}"
+            if award.get("year")
+            else award["title"],
+        )
+
+    for skill in resume["skills"]:
+        add_heading(doc, skill["category"])
+        add_text(doc, skill["items"])
+    return doc
+
+
+def main(argv: list[str] | None = None) -> None:
+    """Read the JSON payload and write the DOCX.
+
+    Args:
+        argv: Command-line arguments; ``sys.argv[1:]`` when omitted.
+    """
+    parser = argparse.ArgumentParser(
+        description="Write the resume DOCX from resume/resume.json."
+    )
+    parser.add_argument(
+        "--json", type=Path, default=DEFAULT_JSON, help="resume.json path"
+    )
+    parser.add_argument(
+        "--out", type=Path, default=DEFAULT_OUT, help="DOCX output path"
+    )
+    args = parser.parse_args(argv)
+    resume = json.loads(args.json.read_text(encoding="utf-8"))
+    build(resume).save(str(args.out))
+    print(f"DOCX saved to: {args.out}")
+
+
+if __name__ == "__main__":
+    main()
