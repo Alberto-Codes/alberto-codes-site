@@ -7,13 +7,17 @@ export uses, without a build or the network.
 
 import re
 import xml.etree.ElementTree as ET
+from pathlib import Path
 
 import pytest
 
+from alberto_codes_site import sitemap
 from alberto_codes_site.alberto_codes_site import app
 from alberto_codes_site.sitemap import (
     SITEMAP_NAMESPACE,
     SitemapPlugin,
+    commit_date,
+    latest,
     post_lastmod,
     sitemap_task,
     sitemap_xml,
@@ -60,16 +64,25 @@ def test_sitemap_lists_every_registered_route():
     assert listed == registered
 
 
-def test_every_post_has_a_lastmod_and_nothing_else_does():
-    """Posts carry a `YYYY-MM-DD` lastmod; other routes omit it."""
+def test_every_url_has_a_lastmod():
+    """Every listed route, posts and static pages alike, carries a `YYYY-MM-DD` lastmod."""
     for url in URLS:
         route = _path(url.findtext("sm:loc", namespaces=NS))
         lastmod = url.findtext("sm:lastmod", namespaces=NS)
-        if route.startswith("blog/"):
-            assert lastmod is not None, route
-            assert re.fullmatch(r"\d{4}-\d{2}-\d{2}", lastmod), (route, lastmod)
-        else:
-            assert lastmod is None, route
+        assert lastmod is not None, route
+        assert re.fullmatch(r"\d{4}-\d{2}-\d{2}", lastmod), (route, lastmod)
+
+
+def test_commit_date_reads_git_history():
+    """A tracked file gets its last commit's date; an untracked path gets None."""
+    assert re.fullmatch(r"\d{4}-\d{2}-\d{2}", commit_date(Path(sitemap.__file__)))
+    assert commit_date(Path("no/such/file.py")) is None
+
+
+def test_latest_ignores_missing_dates():
+    """The newest date wins, and None counts as no date."""
+    assert latest("2026-01-02", None, "2026-03-01") == "2026-03-01"
+    assert latest(None) is None
 
 
 @pytest.mark.parametrize(

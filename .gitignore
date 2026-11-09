@@ -16,6 +16,8 @@ wheels/
 
 # Generated at build time by alberto_codes_site/feed.py (#41)
 src/assets/feed.xml
+# Generated at build time by alberto_codes_site/llms.py
+src/assets/llms.txt
 
 # Local editor metadata generated during validation
 .serena/

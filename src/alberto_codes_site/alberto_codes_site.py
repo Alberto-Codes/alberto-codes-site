@@ -3,6 +3,8 @@
 This module sets up the Reflex application with all routes for the portfolio site,
 including home, blog, projects, experience, about, and contact pages. It provides
 a shared layout wrapper that applies consistent navbar and footer components across all pages.
+Importing it also writes the generated `/feed.xml` and `/llms.txt` assets, and
+gives every page a sitemap ``<lastmod>``.
 
 Examples:
     The app is initialized and pages are added with the shared layout:
@@ -18,6 +20,7 @@ See Also:
 """
 
 from datetime import date
+from pathlib import Path
 
 import reflex as rx
 from reflex.components.el.elements.inline import a as html_a
@@ -25,6 +28,7 @@ from reflex.components.el.elements.inline import a as html_a
 from alberto_codes_site.components import footer, navbar
 from alberto_codes_site.dates import post_updated
 from alberto_codes_site.feed import FEED_URL, write_feed
+from alberto_codes_site.llms import write_llms_txt
 from alberto_codes_site.pages import (
     about_page,
     blog_page,
@@ -38,17 +42,25 @@ from alberto_codes_site.pages import (
 )
 from alberto_codes_site.pages.blog import _load_posts, published_posts, series_page
 from alberto_codes_site.series import build_series, series_of
-from alberto_codes_site.sitemap import post_lastmod, sitemap_context
+from alberto_codes_site.sitemap import (
+    commit_date,
+    latest,
+    post_lastmod,
+    sitemap_context,
+)
 from alberto_codes_site.social import (
+    RESUME_JSON,
     SITE_IMAGE,
     blog_posting_data,
     page_meta,
     person_data,
     post_image,
+    profile_page_data,
 )
 from alberto_codes_site.tenure import years_at_wells_fargo
 
 MAIN_CONTENT_ID = "main-content"
+PAGES_DIR = Path(__file__).resolve().parent / "pages"
 
 
 def layout(page: rx.Component) -> rx.Component:
@@ -111,8 +123,14 @@ app = rx.App(
 )
 
 # Rebuilt on every import so `reflex run` and `reflex export` both ship a
-# feed that matches today's date; Reflex copies src/assets/ afterwards.
+# feed and llms.txt that match today's date; Reflex copies src/assets/ afterwards.
 write_feed(_load_posts())
+write_llms_txt(_load_posts())
+
+# The sitemap <lastmod> of the static pages: the last commit to the files that
+# render each one, and for the pages that list posts, the newest post.
+NEWEST_POST = latest(*(post_lastmod(m, b) for m, b in published_posts(_load_posts())))
+ABOUT_LASTMOD = commit_date(PAGES_DIR / "about.py", RESUME_JSON)
 
 
 def add_page(
@@ -168,6 +186,7 @@ add_page(
         "services technology."
     ),
     structured_data=person_data(),
+    lastmod=latest(commit_date(PAGES_DIR / "home.py", RESUME_JSON), NEWEST_POST),
 )
 add_page(
     about_page(),
@@ -178,7 +197,8 @@ add_page(
         "to Principal Engineer. Co-inventor on three pending patent applications "
         "and author of eight open source Python packages."
     ),
-    structured_data=person_data(),
+    structured_data=profile_page_data(route="/about", date_modified=ABOUT_LASTMOD),
+    lastmod=ABOUT_LASTMOD,
 )
 add_page(
     experience_page(),
@@ -189,6 +209,7 @@ add_page(
         f"{years_at_wells_fargo()} years at Wells Fargo."
     ),
     structured_data=person_data(),
+    lastmod=commit_date(PAGES_DIR / "experience.py", RESUME_JSON),
 )
 add_page(
     projects_page(),
@@ -198,6 +219,7 @@ add_page(
         "Technical projects including saucier, vramfit, and gepa-adk, "
         "open-source Python and AI tooling, and enterprise AI/ML initiatives."
     ),
+    lastmod=commit_date(PAGES_DIR / "projects.py"),
 )
 add_page(
     publications_page(),
@@ -208,12 +230,14 @@ add_page(
         "a mixed-precision quantization of Nemotron Super 49B fitted to a "
         "24 GiB GPU."
     ),
+    lastmod=commit_date(PAGES_DIR / "publications.py"),
 )
 add_page(
     blog_page(),
     route="/blog",
     title="Blog | Alberto Nieto",
     description="Open source AI tooling, with the evidence.",
+    lastmod=latest(commit_date(PAGES_DIR / "blog.py"), NEWEST_POST),
 )
 
 
@@ -287,6 +311,7 @@ add_page(
     route="/contact",
     title="Contact | Alberto Nieto",
     description="Get in touch with Alberto Nieto via email, GitHub, or LinkedIn.",
+    lastmod=commit_date(PAGES_DIR / "contact.py"),
 )
 
 # The not-found page skips `add_page`: it has no canonical URL or share card
