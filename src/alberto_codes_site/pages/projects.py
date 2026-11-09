@@ -161,8 +161,8 @@ PROJECTS = [
         "title": "docvet",
         "description": (
             "Python docstring quality vetting that catches what linters miss. "
-            "31 rules across presence, completeness, accuracy, rendering, "
-            "and visibility \u2014 including git-based staleness detection via "
+            "32 rules across presence, enrichment, freshness, griffe, and "
+            "mkdocs coverage \u2014 including git-based staleness detection via "
             "diff and blame. Production/Stable, ~3,300 downloads. MIT."
         ),
         "tags": ["Python", "CLI", "Code Quality", "PyPI", "Open Source"],

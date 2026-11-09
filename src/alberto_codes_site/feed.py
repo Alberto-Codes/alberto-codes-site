@@ -37,9 +37,7 @@ FEED_PATH = "/feed.xml"
 FEED_URL = absolute_url(FEED_PATH)
 FEED_FILE = Path(__file__).resolve().parent.parent / "assets" / "feed.xml"
 
-CHANNEL_DESCRIPTION = (
-    "Thoughts on AI engineering, Python, career growth, and technical leadership."
-)
+CHANNEL_DESCRIPTION = "Open source AI tooling, with the evidence."
 
 _CONTENT_NS = "http://purl.org/rss/1.0/modules/content/"
 _ATOM_NS = "http://www.w3.org/2005/Atom"

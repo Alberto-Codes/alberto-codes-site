@@ -19,8 +19,6 @@ from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Inches, Pt, RGBColor
 
-from alberto_codes_site.tenure import years_at_wells_fargo
-
 # -- Colors --
 NAVY = RGBColor(0x1B, 0x3A, 0x5C)
 DARK_GRAY = RGBColor(0x33, 0x33, 0x33)
@@ -151,15 +149,13 @@ add_section_heading("Professional Summary")
 p = doc.add_paragraph()
 p.space_after = Pt(4)
 run = p.add_run(
-    f"Strategic and hands-on technology leader with {years_at_wells_fargo()} years at "
-    "Wells Fargo in financial services technology, "
-    "specializing in AI-driven automation, cloud-native solutions, and enterprise-scale "
-    "data engineering. Career spans from banking operations to Principal Engineer \u2014 "
-    "building deep domain expertise at every level. Expert in Agentic AI frameworks, "
-    "GCP infrastructure, and scalable automation pipelines. Open source contributor "
-    "with eight Python libraries on PyPI. Co-inventor on two pending patent "
-    "applications. "
-    "Bilingual in English and Spanish."
+    "Principal Engineer with 25+ years in financial services, from banking "
+    "operations to principal-level AI engineering. Builds agentic AI, LLM "
+    "evaluation and decision models, document and video pipelines, and the cloud "
+    "infrastructure they run on (GCP, OpenShift/Kubernetes). Outside work, builds "
+    "open source tools that test what models actually do, then publishes the "
+    "evidence: 8 Python packages on PyPI. Co-inventor on three pending patent "
+    "applications. Bilingual in English and Spanish."
 )
 run.font.size = Pt(10.5)
 run.font.name = "Calibri"
@@ -190,8 +186,8 @@ for name, desc in [
     ),
     (
         "docvet",
-        "CLI tool for Python docstring quality vetting. 31 rules across "
-        "presence, completeness, accuracy, rendering, and visibility.",
+        "CLI tool for Python docstring quality vetting. 32 rules across "
+        "presence, enrichment, freshness, griffe, and mkdocs coverage.",
     ),
     (
         "gepa-adk",
@@ -241,7 +237,8 @@ for name, desc in [
 # ===== RECOGNITION =====
 add_section_heading("Recognition")
 for item in [
-    "Co-inventor on two pending patent applications (first named January 2026)",
+    "2026 \u2014 Named as co-inventor on a second and third pending patent application",
+    "January 2026 \u2014 Named as co-inventor on a pending patent application",
     "Top Performer 2018 (New Orleans) \u2014 Recognition for vulnerability remediation efforts",
     "Top Performer 2014 (Nashville) \u2014 Recognition for asset reporting initiatives",
 ]:
@@ -260,14 +257,18 @@ add_section_heading("Professional Experience")
 
 add_role(
     "Principal Engineer (Executive Director)",
-    "Wells Fargo, Chandler, Arizona (Phoenix area)",
-    "Jul 2025 \u2013 Present",
-    "Leader in implementing cutting-edge AI solutions for business needs. "
-    "Creating documentation and frameworks to "
-    "accelerate developer onboarding and production rollouts.",
+    "Wells Fargo, Phoenix, Arizona",
+    "Jun 2025 \u2013 Present",
+    "Builds AI solutions for line-of-business needs, plus the documentation and "
+    "frameworks that speed developer onboarding and production rollouts.",
     [
         "Created AI agent framework to automate line-of-business operations, "
         "adopted across multiple teams",
+        "Fine-tuned Gemma 3 and Gemma 4 on internal documents, building the "
+        "training set from a graph of entities and relationships, with "
+        "held-out evaluation",
+        "Building decision models for collections and customer-service "
+        "next-best-action",
         "Built video processing pipeline handling thousands of videos daily into "
         "standard operating procedures for knowledge tree persistence",
         "Implemented evaluation and evolution frameworks to score and evolve "
@@ -281,10 +282,10 @@ add_role(
 
 add_role(
     "Senior Lead Analytics Consultant (Executive Director)",
-    "Wells Fargo, Chandler, Arizona (Phoenix area)",
-    "Jun 2022 \u2013 Jul 2025",
-    "Individual contributor and team's resident expert in GenAI and Agentic AI "
-    "frameworks. Focused on proof of concepts and production-ready AI implementations.",
+    "Wells Fargo, Phoenix, Arizona",
+    "Jun 2022 \u2013 Jun 2025",
+    "Individual contributor and the team's go-to engineer for GenAI and agentic "
+    "AI frameworks. Focused on proof of concepts and production-ready AI implementations.",
     [
         "Architected scalable OCR pipeline processing 500K+ documents using Gemini, "
         "with results stored in Teradata and SQLite for distributed processing",
@@ -301,7 +302,7 @@ add_role(
 
 add_role(
     "Lead Analytics Consultant (AVP)",
-    "Wells Fargo, Chandler, Arizona (Phoenix area)",
+    "Wells Fargo, Phoenix, Arizona",
     "Jan 2018 \u2013 Jun 2022",
     "T-shaped role providing leadership, oversight, and direct development "
     "in ETL, visualization, and advanced analytics workstreams.",
@@ -371,7 +372,7 @@ add_role(
     [
         "Selected for Wells Fargo Leadership Development Program (2004-2005), "
         "rotating through operations and technology departments",
-        "Presented SharePoint hosting solution to technology executive leadership",
+        "Built and presented a SharePoint hosting solution",
         "Led six technicians at two admin sites with desktop end-user support",
         "Progressed through teller, personal banker, lead teller, operations "
         "processor, and operations analyst roles (1999-2004)",
@@ -382,7 +383,7 @@ add_role(
 add_section_heading("Education")
 p = doc.add_paragraph()
 p.space_before = Pt(2)
-run_deg = p.add_run("Bachelor of Science, Accounting")
+run_deg = p.add_run("Bachelor of Science, Accounting Information Systems")
 run_deg.bold = True
 run_deg.font.size = Pt(11)
 run_deg.font.name = "Calibri"

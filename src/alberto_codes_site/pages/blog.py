@@ -1250,8 +1250,7 @@ def blog_page(today: date | None = None) -> rx.Component:
                         "Coming Soon", as_="h2", size="6", color=rx.color("slate", 9)
                     ),
                     rx.text(
-                        "I'm working on sharing thoughts on AI engineering, "
-                        "career growth, and technical leadership.",
+                        "Open source AI tooling, with the evidence.",
                         size="3",
                         color=rx.color("slate", 11),
                         text_align="center",
@@ -1289,8 +1288,7 @@ def blog_page(today: date | None = None) -> rx.Component:
             rx.separator(size="4", color_scheme="blue"),
             rx.box(height="1em"),
             rx.text(
-                "Thoughts on AI engineering, Python, career growth, and "
-                "technical leadership — organized using the Diataxis framework.",
+                "Open source AI tooling, with the evidence.",
                 size="3",
                 color=rx.color("slate", 11),
             ),

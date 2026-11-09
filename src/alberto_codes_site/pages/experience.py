@@ -10,13 +10,18 @@ ROLES = [
     {
         "title": "Principal Engineer (Executive Director)",
         "company": "Wells Fargo",
-        "period": "Jul 2025 - Present",
-        "location": "Chandler, Arizona (Phoenix area) - Hybrid",
+        "period": "Jun 2025 - Present",
+        "location": "Phoenix, Arizona",
         "bullets": [
-            "Lead generative AI engineering initiatives",
-            "Created AI agent framework to automate line-of-business operations",
+            "Created AI agent framework to automate line-of-business operations, "
+            "adopted across multiple teams",
+            "Fine-tuned Gemma 3 and Gemma 4 on internal documents, building the "
+            "training set from a graph of entities and relationships, with "
+            "held-out evaluation",
+            "Building decision models for collections and customer-service "
+            "next-best-action",
             "Built video processing pipeline handling thousands of videos daily",
-            "Co-inventor on two pending patent applications",
+            "Co-inventor on three pending patent applications",
             "Open source: shipped gepa-adk, docvet, adk-secure-sessions, "
             "saucier, vramfit, turboquant-vllm, typevet, and judgevet to PyPI",
         ],
@@ -24,10 +29,10 @@ ROLES = [
     {
         "title": "Senior Lead Analytics Consultant (Executive Director)",
         "company": "Wells Fargo",
-        "period": "Jun 2022 - Jul 2025",
-        "location": "Chandler, Arizona (Phoenix area) - Hybrid",
+        "period": "Jun 2022 - Jun 2025",
+        "location": "Phoenix, Arizona",
         "bullets": [
-            "Team's resident expert in GenAI and Agentic AI frameworks "
+            "The team's go-to engineer for GenAI and agentic AI frameworks, "
             "including Google ADK and Pydantic-AI",
             "Architected scalable OCR pipeline processing 500K+ documents using Gemini",
             "Built reusable data pipelines for document ingestion, OCR, and validation",
@@ -39,7 +44,7 @@ ROLES = [
         "title": "Lead Analytics Consultant (AVP)",
         "company": "Wells Fargo",
         "period": "Jan 2018 - Jun 2022",
-        "location": "Chandler, Arizona (Phoenix area)",
+        "location": "Phoenix, Arizona",
         "bullets": [
             "Delivered analytics solutions and CI/CD workflow automation",
             "Onboarded applications to Cloud Foundry with Splunk logging "
@@ -69,7 +74,7 @@ ROLES = [
             "Progressed from teller to operations analyst to leadership "
             "development program in 5 years",
             "Selected for Wells Fargo Leadership Development Program (2004-2005)",
-            "Presented SharePoint hosting solution to technology executive leadership",
+            "Built and presented a SharePoint hosting solution",
         ],
     },
 ]
@@ -192,11 +197,6 @@ def experience_page() -> rx.Component:
                     ),
                     rx.text(
                         "Bachelor of Science, Accounting Information Systems",
-                        size="2",
-                        color=rx.color("slate", 11),
-                    ),
-                    rx.text(
-                        "1998 - 2003",
                         size="2",
                         color=rx.color("slate", 11),
                     ),
