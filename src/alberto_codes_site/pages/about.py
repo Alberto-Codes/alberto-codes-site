@@ -43,7 +43,7 @@ def about_page() -> rx.Component:
                         "I hold a Bachelor of Science in Accounting Information "
                         "Systems from DeVry University, which gives me a perspective "
                         "that bridges business and technology. I'm a co-inventor on "
-                        "two pending patent applications, I'm a "
+                        "three pending patent applications, I'm a "
                         "two-time Top Performer award recipient, and I'm bilingual "
                         "in English and Spanish.",
                         size="3",

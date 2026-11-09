@@ -21,7 +21,6 @@ EXPERTISE_TAGS = [
     "OCR & Document Intelligence",
     "CI/CD & DevOps",
     "Enterprise Architecture",
-    "Technical Leadership",
 ]
 
 # Each proof line is a measured result from the post it links to, so the
@@ -201,10 +200,10 @@ def home_page() -> rx.Component:
             #   2x Top Performer    the 2006-2018 role in pages/experience.py,
             #                       "Two-time Top Performer award recipient
             #                       (2014, 2018)"
-            #   2 Patents Pending   the current role in pages/experience.py,
-            #                       "Co-inventor on two pending patent
-            #                       applications". Two applications filed, none
-            #                       granted; the About bio says the same
+            #   3 Patents Pending   the current role in pages/experience.py,
+            #                       "Co-inventor on three pending patent
+            #                       applications". Three applications filed,
+            #                       none granted; the About bio says the same
             #   N Years             years_at_wells_fargo() in tenure.py, whole
             #                       years since the 2000-08-14 start date,
             #                       recomputed on every build. The paragraph
@@ -222,7 +221,7 @@ def home_page() -> rx.Component:
                 ),
                 rx.hstack(
                     rx.icon("file-check", size=16, color=rx.color("blue", 9)),
-                    rx.text("2 Patents Pending", size="2", color=rx.color("slate", 11)),
+                    rx.text("3 Patents Pending", size="2", color=rx.color("slate", 11)),
                     spacing="1",
                     align="center",
                 ),

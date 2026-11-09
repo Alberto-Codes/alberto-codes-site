@@ -175,7 +175,8 @@ add_page(
     title="About | Alberto Nieto",
     description=(
         "Learn about Alberto Nieto's career journey from customer service "
-        "to Principal Engineer, co-inventor on two pending patents, and AI leader."
+        "to Principal Engineer. Co-inventor on three pending patent applications "
+        "and author of eight open source Python packages."
     ),
 )
 add_page(
@@ -183,9 +184,8 @@ add_page(
     route="/experience",
     title="Experience | Alberto Nieto",
     description=(
-        f"{years_at_wells_fargo()} years of progressive career growth at "
-        "Wells Fargo spanning customer service, analytics, and AI "
-        "engineering leadership."
+        "From customer service to Principal Engineer, "
+        f"{years_at_wells_fargo()} years at Wells Fargo."
     ),
 )
 add_page(
@@ -211,7 +211,7 @@ add_page(
     blog_page(),
     route="/blog",
     title="Blog | Alberto Nieto",
-    description="Thoughts on AI engineering, career growth, and technical leadership.",
+    description="Open source AI tooling, with the evidence.",
 )
 
 
