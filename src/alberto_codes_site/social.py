@@ -55,6 +55,14 @@ AUTHOR_SAME_AS = (
     "https://www.linkedin.com/in/alberto-codes/",
 )
 
+# Written from the canonical cv.md by `scripts/sync_resume.py`; the same file
+# feeds the downloadable DOCX and PDF, so the Person below cannot drift from them.
+RESUME_JSON = Path(__file__).resolve().parents[2] / "resume" / "resume.json"
+# Linked from cv.md's vramfit entry; not a field of the resume payload.
+HUGGING_FACE_URL = "https://huggingface.co/Alberto-Codes"
+# The BCP 47 codes for cv.md's Languages section: English and Spanish.
+AUTHOR_LANGUAGES = ("en", "es")
+
 
 def post_image(slug: str) -> str:
     """Return the card image file name for a post slug.
@@ -133,16 +141,36 @@ def json_ld(data: dict) -> rx.Component:
 def person_data() -> dict:
     """Return the schema.org `Person` for the site's author.
 
+    Built from `resume/resume.json`: the current role (its title without the
+    parenthetical band) and employer, the school, the competencies and the
+    profile links. No phone number or street address.
+
     Returns:
-        A JSON-LD object with name, url, jobTitle and sameAs.
+        A JSON-LD object with name, url, jobTitle, worksFor, sameAs,
+        alumniOf, knowsLanguage, knowsAbout and homeLocation.
     """
+    resume = json.loads(RESUME_JSON.read_text(encoding="utf-8"))
+    candidate = resume["candidate"]
+    current = resume["experience"][0]
     return {
         "@context": "https://schema.org",
         "@type": "Person",
-        "name": AUTHOR_NAME,
+        "name": candidate["name"],
         "url": SITE_URL,
-        "jobTitle": AUTHOR_JOB_TITLE,
-        "sameAs": list(AUTHOR_SAME_AS),
+        "jobTitle": current["role"].split(" (")[0],
+        "worksFor": {"@type": "Organization", "name": current["company"]},
+        "sameAs": [
+            candidate["github"]["url"],
+            candidate["linkedin"]["url"],
+            HUGGING_FACE_URL,
+        ],
+        "alumniOf": {
+            "@type": "CollegeOrUniversity",
+            "name": resume["education"][0]["org"],
+        },
+        "knowsLanguage": list(AUTHOR_LANGUAGES),
+        "knowsAbout": resume["competencies"],
+        "homeLocation": {"@type": "Place", "name": candidate["location"]},
     }
 
 
