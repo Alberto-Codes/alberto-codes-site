@@ -262,8 +262,8 @@ add_role(
     "Principal Engineer (Executive Director)",
     "Wells Fargo, Chandler, Arizona (Phoenix area)",
     "Jul 2025 \u2013 Present",
-    "Leader in implementing cutting-edge AI solutions for business needs, "
-    "presented to CTO weekly. Creating documentation and frameworks to "
+    "Leader in implementing cutting-edge AI solutions for business needs. "
+    "Creating documentation and frameworks to "
     "accelerate developer onboarding and production rollouts.",
     [
         "Created AI agent framework to automate line-of-business operations, "

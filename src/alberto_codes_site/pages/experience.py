@@ -13,7 +13,7 @@ ROLES = [
         "period": "Jul 2025 - Present",
         "location": "Chandler, Arizona (Phoenix area) - Hybrid",
         "bullets": [
-            "Lead generative AI engineering initiatives presented to CTO weekly",
+            "Lead generative AI engineering initiatives",
             "Created AI agent framework to automate line-of-business operations",
             "Built video processing pipeline handling thousands of videos daily",
             "Co-inventor on two pending patent applications",
