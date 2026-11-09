@@ -79,96 +79,38 @@
       ]
     },
     {
-      "company": "Wells Fargo",
-      "role": "Applications Systems Engineer (AVP)",
-      "location": "Phoenix, Arizona",
-      "dates": "Nov 2016 – Jan 2018",
-      "context": "Team lead for vulnerability business intelligence development team.",
-      "bullets": [
-        "Provided guidance to development team and business partners on BI solutions for emergency remediation and reporting",
-        "Consulted leadership on data architecture roadmap for vulnerability remediation",
-        "Created ad-hoc SQL reports across systems of record to illustrate compliance status"
-      ]
-    },
-    {
-      "company": "Wells Fargo",
-      "role": "Business Systems Consultant (AVP)",
-      "location": "Phoenix, Arizona",
-      "dates": "Oct 2009 – Nov 2016",
-      "context": "Created business intelligence reporting and tools for regulatory compliance and leadership decision-making.",
-      "bullets": [
-        "Built and supported ongoing asset validation processes",
-        "Created compliance metrics for server footprint tracking",
-        "Developed business process reports for server implementation, changes, and decommission time-to-market"
-      ]
-    },
-    {
-      "company": "Wells Fargo",
-      "role": "Technology Manager",
-      "location": "Phoenix, Arizona",
-      "dates": "2006 – 2009",
-      "context": "Led team of technical professionals supporting end-user technology across four administrative sites.",
-      "bullets": [
-        "Led 8-9 technicians across four administrative sites",
-        "Led desktop OS migrations and provided onsite hardware swap support",
-        "Expedited Business Continuity Plan documentation to 100% compliance for disaster recovery across four business lines",
-        "Led monthly compliance efforts for security patching, encryption, and asset tracking"
-      ]
-    },
-    {
       "company": "Wells Fargo / Bank of America",
-      "role": "Team Lead / Leadership Development Program / Operations",
+      "role": "Earlier roles: Applications Systems Engineer (AVP), Business Systems Consultant (AVP), Technology Manager, Team Lead / Leadership Development Program / Operations",
       "location": "Phoenix, Arizona",
-      "dates": "1999 – 2006",
-      "context": "Progressive career from teller to operations analyst to leadership development program, building deep financial services domain expertise.",
-      "bullets": [
-        "Selected for Wells Fargo Leadership Development Program (2004-2005), rotating through operations and technology departments",
-        "Built and presented a SharePoint hosting solution",
-        "Led six technicians at two admin sites with desktop end-user support",
-        "Progressed through teller, personal banker, lead teller, operations processor, and operations analyst roles (1999-2004)"
-      ]
+      "dates": "1999 – Jan 2018",
+      "bullets": []
     }
   ],
   "projects": [
     {
-      "name": "gepa-adk",
-      "url": "https://github.com/Alberto-Codes/gepa-adk",
-      "description": "Evolutionary prompt optimization for AI agents using Google ADK. Automatically evolves agent instructions through iterative improvement. Async-first engine with hexagonal architecture and protocol-based interfaces. Apache-2.0."
-    },
-    {
-      "name": "adk-secure-sessions",
-      "url": "https://github.com/Alberto-Codes/adk-secure-sessions",
-      "description": "Encrypted session storage for Google ADK agents. Drop-in replacement using Fernet encryption with PBKDF2 key derivation. Apache-2.0."
-    },
-    {
-      "name": "docvet",
-      "url": "https://github.com/Alberto-Codes/docvet",
-      "description": "CLI tool for Python docstring quality vetting. 32 rules across five checks (presence, enrichment, freshness, griffe, mkdocs coverage), including git-based staleness detection via diff and blame. Production/Stable. MIT."
-    },
-    {
       "name": "vramfit",
       "url": "https://github.com/Alberto-Codes/vramfit",
-      "description": "Hardware-targeted LLM quantization. Measures per-layer compression damage, then solves a mixed-precision recipe against a real VRAM budget (scan → plan → pack). Fit Llama-3.3-Nemotron-Super-49B onto a single 24 GiB RTX 4090: 20.36 GiB packed against a 20.47 GiB weight budget, beating every in-budget baseline on KL divergence. Three packs published across three model families and 24/16 GiB budgets, with per-layer sensitivity maps for the Nemotron packs published for independent reproduction. MIT."
+      "description": "Hardware-targeted LLM quantization."
     },
     {
       "name": "saucier",
       "url": "https://github.com/Alberto-Codes/saucier",
-      "description": "Provenance-first extraction: parses Escoffier's January 1909 edition into a catalogue of 151 preparations where every claim traces to a source line, with no model in the loop. Publishes the deterministic baseline (94 of 151 state no base) that a later agentic system must beat. 8 ADRs, Diátaxis documentation, API reference generated from docstrings. MIT."
+      "description": "Provenance-first extraction: parses Escoffier's January 1909 edition into a catalogue of 151 preparations where every claim traces to a source line, with no model in the loop."
     },
     {
       "name": "turboquant-vllm",
       "url": "https://github.com/Alberto-Codes/turboquant-vllm",
-      "description": "First TurboQuant vLLM plugin, built paper-to-PyPI in 72 hours after Google's ICLR 2026 publication. 3.76x KV cache compression across 7 model families; fused paged kernels cut memory traffic 8.5x."
+      "description": "First TurboQuant vLLM plugin, built paper-to-PyPI in 72 hours after Google's ICLR 2026 publication."
     },
     {
       "name": "typevet",
       "url": "https://pypi.org/project/typevet/",
-      "description": "Asks an open model typed questions about text and images and reads each answer as a probability from its next-token distribution; runs Gemma 4 31B on a 24 GiB card (llama.cpp or vLLM). With a receipt photo attached it caught 6 of 6 swapped totals that Gemma, reading text alone, had passed as \"match\" at ≥99.96% confidence. A pre-registered calibration study (16 series, decision rule and split fixed before any fit) found isotonic recalibration sufficient on 5 of 6 decision series, so it recommended against fine-tuning. MIT."
+      "description": "Asks an open model typed questions about text and images and reads each answer as a probability from its next-token distribution; runs Gemma 4 31B on a 24 GiB card (llama.cpp or vLLM)."
     },
     {
       "name": "judgevet",
       "url": "https://pypi.org/project/judgevet/",
-      "description": "Typed Python client, CLI and MCP server for TypeSafe's Jev judgment model, with a published calibration study: Jev's scam-text calibration gap measured at 7 points (ECE 0.073) with sorting score 0.995. Ships a verification ledger that separates live-verified from inferred API claims, checked by a dedicated auditing agent. MIT."
+      "description": "Typed Python client, CLI and MCP server for TypeSafe's Jev judgment model, with a published calibration study: Jev's scam-text calibration gap measured at 7 points (ECE 0.073) with sorting score 0.995."
     }
   ],
   "education": [

@@ -8,6 +8,13 @@ field is copied from `cv.md` verbatim, with only markdown markup removed.
 The phone number in `cv.md` is deliberately left out: the public site never
 shows it.
 
+The public resume is also shorter than `cv.md` so it fits two letter pages:
+only the `FULL_DETAIL_ROLES` most recent roles keep their context and
+bullets; every older role is collapsed into one entry that lists their titles
+and spans their dates; each project keeps only the first sentence of its
+description; and the first `DROPPED_PROJECT_COUNT` projects in
+`PROJECT_DROP_ORDER` are left out. `cv.md` itself stays complete.
+
 Usage:
     uv run python scripts/sync_resume.py [--cv PATH] [--out PATH]
 """
@@ -35,8 +42,18 @@ REQUIRED_SECTIONS = (
     "Education",
     "Languages",
 )
+# Roles, most recent first, that keep their context and bullets publicly.
+FULL_DETAIL_ROLES = 3
+# Label that opens the single entry listing every older role's title.
+EARLIER_ROLES_LABEL = "Earlier roles: "
+# Projects left off the public resume, in the order they are dropped; the
+# first DROPPED_PROJECT_COUNT go. gepa-adk is still named in a role bullet.
+PROJECT_DROP_ORDER = ("adk-secure-sessions", "gepa-adk", "docvet")
+DROPPED_PROJECT_COUNT = 3
 # A dash between two fields: em dash, en dash, or a spaced hyphen.
 DASH = r"\s+[—–-]\s+"
+# A sentence ends at a period, question or exclamation mark followed by space.
+SENTENCE_END = re.compile(r"(?<=[.!?])\s+")
 LINK = re.compile(r"\[([^\]]*)\]\(([^)]*)\)")
 LEADING_DATE = re.compile(
     r"^((?:(?:January|February|March|April|May|June|July|August|September"
@@ -152,6 +169,18 @@ def parse_candidate(preamble: list[str]) -> dict:
     }
 
 
+def first_sentence(text: str) -> str:
+    """Return the text up to and including its first sentence's end mark.
+
+    Args:
+        text: Plain prose.
+
+    Returns:
+        The first sentence, or the whole text when it has only one.
+    """
+    return SENTENCE_END.split(text, maxsplit=1)[0]
+
+
 def parse_projects(lines: list[str]) -> list[dict]:
     """Parse `- **name** — description ([Link](url) · ...)` bullets.
 
@@ -180,7 +209,7 @@ def parse_projects(lines: list[str]) -> list[dict]:
             {
                 "name": name,
                 "url": link.group(2),
-                "description": strip_markdown(body[:paren]),
+                "description": first_sentence(strip_markdown(body[:paren])),
             }
         )
     return projects
@@ -251,6 +280,67 @@ def parse_experience(lines: list[str]) -> list[dict]:
     return experience
 
 
+def unique_parts(values: list[str]) -> list[str]:
+    """Split each value on `` / `` and return the parts once each, in order.
+
+    Args:
+        values: Field values such as company names.
+
+    Returns:
+        The distinct parts in first-seen order.
+    """
+    parts: list[str] = []
+    for value in values:
+        for part in value.split(" / "):
+            if part not in parts:
+                parts.append(part)
+    return parts
+
+
+def collapse_older_roles(experience: list[dict]) -> list[dict]:
+    """Keep the most recent roles whole and fold the rest into one entry.
+
+    The folded entry lists each older role's title verbatim after
+    ``EARLIER_ROLES_LABEL``, joins their companies and locations, and spans
+    from the oldest start date to the newest end date. It has no context and
+    no bullets.
+
+    Args:
+        experience: Roles in cv.md order, most recent first.
+
+    Returns:
+        The first ``FULL_DETAIL_ROLES`` roles unchanged, plus the folded entry
+        when there are older roles.
+    """
+    recent, older = experience[:FULL_DETAIL_ROLES], experience[FULL_DETAIL_ROLES:]
+    if not older:
+        return recent
+    start = re.split(DASH, older[-1]["dates"], maxsplit=1)[0]
+    end = re.split(DASH, older[0]["dates"], maxsplit=1)[-1]
+    dash = re.search(DASH, older[0]["dates"])
+    folded = {
+        "company": " / ".join(unique_parts([r["company"] for r in older])),
+        "role": EARLIER_ROLES_LABEL + ", ".join(r["role"] for r in older),
+        "location": " / ".join(unique_parts([r["location"] for r in older])),
+        "dates": start + (dash.group(0) if dash else " – ") + end,
+        "bullets": [],
+    }
+    return [*recent, folded]
+
+
+def drop_projects(projects: list[dict]) -> list[dict]:
+    """Leave out the first ``DROPPED_PROJECT_COUNT`` of ``PROJECT_DROP_ORDER``.
+
+    Args:
+        projects: Projects in cv.md order.
+
+    Returns:
+        The remaining projects, order kept.
+    """
+    dropped = set(PROJECT_DROP_ORDER[:DROPPED_PROJECT_COUNT])
+    return [p for p in projects if p["name"] not in dropped]
+
+
 def parse_education(lines: list[str]) -> list[dict]:
     """Parse `**Degree** — School, Location` lines.
 
@@ -305,8 +395,10 @@ def parse_cv(markdown: str) -> dict:
             " ".join(paragraphs(sections["Professional Summary"]))
         ),
         "competencies": [strip_markdown(c) for c in competencies.split(" · ")],
-        "experience": parse_experience(sections["Professional Experience"]),
-        "projects": parse_projects(sections["Open Source"]),
+        "experience": collapse_older_roles(
+            parse_experience(sections["Professional Experience"])
+        ),
+        "projects": drop_projects(parse_projects(sections["Open Source"])),
         "education": parse_education(sections["Education"]),
         "awards": parse_awards(sections["Recognition"]),
         "skills": [
