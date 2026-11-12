@@ -1,7 +1,8 @@
 """The /blog index says what each Diataxis post type means (issue #49).
 
-The meanings sit beside the labels in a definition list, always visible,
+The meanings sit beside the marks in a definition list, always visible,
 rather than in a hover tooltip that touch and keyboard readers cannot reach.
+The list is set as one muted line.
 """
 
 from datetime import date
@@ -9,9 +10,9 @@ from datetime import date
 from alberto_codes_site.pages import blog
 
 DESCRIPTIONS = {
-    "tutorial": "learn by doing, step by step",
-    "how-to": "solve one specific problem",
-    "explanation": "understand why something works",
+    "explanation": "why something works",
+    "tutorial": "learn by doing",
+    "how-to": "solve one problem",
     "reference": "look up the details",
 }
 
@@ -37,6 +38,7 @@ def test_legend_is_a_definition_list():
     assert rendered.count('jsx("dd"') == len(DESCRIPTIONS)
 
 
-def test_every_type_has_a_description():
-    """A type added to the colour map needs a description too."""
-    assert set(blog.DIATAXIS_DESCRIPTIONS) == set(blog.DIATAXIS_COLORS)
+def test_every_post_type_has_a_description():
+    """Every type a post uses is explained in the legend."""
+    used = {meta.get("type") for meta, _ in blog._load_posts()}
+    assert used <= set(blog.DIATAXIS_DESCRIPTIONS)

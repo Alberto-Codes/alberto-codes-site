@@ -6,13 +6,16 @@ from alberto_codes_site.components.navbar import SIDE_PADDING
 
 
 def footer() -> rx.Component:
-    """Render the site footer with copyright and social links."""
+    """Render the site footer, on the same cloth as the masthead.
+
+    The cloth colours live in ``assets/identity.css`` (``.cloth``).
+    """
     return rx.box(
         rx.hstack(
             rx.text(
-                "\u00a9 2026 Alberto Nieto. All rights reserved.",
+                "© 2026 Alberto Nieto. All rights reserved.",
                 size="2",
-                color=rx.color("slate", 11),
+                color="var(--cloth-ink)",
             ),
             rx.spacer(),
             rx.hstack(
@@ -21,14 +24,14 @@ def footer() -> rx.Component:
                     href="https://github.com/Alberto-Codes",
                     is_external=True,
                     aria_label="GitHub",
-                    color=rx.color("slate", 11),
+                    color="var(--cloth-ink)",
                 ),
                 rx.link(
                     rx.icon("linkedin", size=18),
                     href="https://www.linkedin.com/in/alberto-codes/",
                     is_external=True,
                     aria_label="LinkedIn",
-                    color=rx.color("slate", 11),
+                    color="var(--cloth-ink)",
                 ),
                 spacing="4",
             ),
@@ -37,8 +40,8 @@ def footer() -> rx.Component:
             flex_direction=["column", "column", "row", "row", "row"],
             gap="4",
         ),
+        class_name="cloth",
         padding_x=SIDE_PADDING,
         padding_y="var(--space-6)",
-        border_top=f"1px solid {rx.color('gray', 4)}",
         width="100%",
     )

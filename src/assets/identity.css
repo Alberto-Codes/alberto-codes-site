@@ -1,0 +1,167 @@
+/*
+ * The site's type and frame, loaded through rx.App(stylesheets=...).
+ *
+ * Besley is self-hosted (fonts/Besley-wght.woff2, Latin subset of the
+ * variable wght 400-900 font from github.com/google/fonts, ofl/besley;
+ * licence in fonts/Besley-OFL.txt). It sets the wordmark, titles and
+ * section headings through Radix's --heading-font-family; running text,
+ * labels, navigation and tables keep the system sans.
+ */
+
+@font-face {
+  font-family: "Besley";
+  src: url("/fonts/Besley-wght.woff2") format("woff2");
+  font-weight: 400 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/*
+ * Fallbacks sized to Besley Bold's average glyph width and vertical metrics
+ * (ascent 1.25em, descent 0.425em), so a heading wraps the same before and
+ * after the swap. Widths from capsize's Bold metrics: Besley 0.548em,
+ * Georgia 0.519em, Noto Serif 0.512em, Times New Roman 0.433em (Liberation
+ * Serif is metric-compatible with Times).
+ */
+@font-face {
+  font-family: "Besley Fallback Georgia";
+  src: local("Georgia Bold"), local("Georgia-Bold"), local("Georgia");
+  size-adjust: 105.7%;
+  ascent-override: 118.3%;
+  descent-override: 40.2%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Besley Fallback Noto";
+  src: local("Noto Serif Bold"), local("NotoSerif-Bold"), local("Noto Serif");
+  size-adjust: 107%;
+  ascent-override: 116.8%;
+  descent-override: 39.7%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: "Besley Fallback Times";
+  src: local("Times New Roman Bold"), local("TimesNewRomanPS-BoldMT"),
+    local("Liberation Serif Bold"), local("LiberationSerif-Bold"),
+    local("Times New Roman");
+  size-adjust: 126.7%;
+  ascent-override: 98.7%;
+  descent-override: 33.5%;
+  line-gap-override: 0%;
+}
+
+/*
+ * The cloth: one deep green field for the masthead and footer, the same in
+ * both themes. It sits between grass 11 and grass 12 of the light scale.
+ * Text on it: --cloth-ink about 9:1, --cloth-ink-muted about 7:1; the
+ * current-page mark (grass 7) about 5:1.
+ */
+:root {
+  --cloth: #1f4a2b;
+  --cloth-ink: #f4f8f5;
+  --cloth-ink-muted: #cfdcd2;
+  --cloth-mark: #94ce9a;
+  --cloth-rule: rgba(244, 248, 245, 0.32);
+  --cloth-hover: rgba(244, 248, 245, 0.1);
+}
+
+.radix-themes {
+  --heading-font-family: "Besley", "Besley Fallback Georgia",
+    "Besley Fallback Noto", "Besley Fallback Times", Georgia, serif;
+}
+
+/* The light ground is a green-tinted neutral rather than Radix's white. */
+html:not(.dark) .radix-themes {
+  --color-background: var(--gray-2);
+}
+
+.rt-Heading {
+  text-wrap: balance;
+}
+
+/*
+ * Inline code is not a link, so it takes the gray ink rather than Radix's
+ * accent tint; the accent stays reserved for links and the current page.
+ */
+html .rt-Code.rt-variant-soft {
+  color: var(--gray-12);
+  background-color: var(--gray-a3);
+}
+
+/* Browser surfaces in the palette. */
+::selection {
+  background-color: var(--accent-a5);
+  color: inherit;
+}
+
+html {
+  caret-color: var(--accent-11);
+  scrollbar-color: var(--gray-8) var(--color-background);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-8);
+  outline-offset: 2px;
+}
+
+.rt-Link,
+a {
+  text-underline-offset: 0.2em;
+  text-decoration-thickness: 1px;
+}
+
+/* The masthead and footer cloth. */
+.cloth {
+  background-color: var(--cloth);
+  color: var(--cloth-ink);
+}
+
+.cloth :focus-visible {
+  outline-color: var(--cloth-mark);
+}
+
+.cloth .nav-link {
+  color: var(--cloth-ink-muted);
+  text-decoration: none;
+  padding-block: 0.25em;
+  border-bottom: 2px solid transparent;
+}
+
+.cloth .nav-link:hover {
+  color: var(--cloth-ink);
+}
+
+.cloth .nav-link[aria-current="page"] {
+  color: var(--cloth-ink);
+  border-bottom-color: var(--cloth-mark);
+}
+
+.cloth .rt-Button,
+.cloth .rt-IconButton {
+  color: var(--cloth-ink);
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px var(--cloth-rule);
+}
+
+.cloth .rt-IconButton.rt-variant-ghost {
+  box-shadow: none;
+}
+
+@media (hover: hover) {
+  .cloth .rt-Button:hover,
+  .cloth .rt-IconButton:hover {
+    background-color: var(--cloth-hover);
+  }
+}
+
+/* The phone menu panel marks the current page the same way, on the ground. */
+.menu-link[aria-current="page"] {
+  color: var(--gray-12);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--accent-11);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+}

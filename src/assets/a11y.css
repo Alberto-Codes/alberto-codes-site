@@ -1,8 +1,9 @@
 /*
  * Site-wide accessibility overrides (issue #71), loaded through
  * rx.App(stylesheets=...). Text colours that pages set themselves use the
- * Radix step-11 tokens (slate 11 for secondary text, blue 11 for links),
- * which clear 4.5:1 in both themes. The rules here cover Radix component
+ * Radix step-11 tokens of the theme scales (gray 11, sage, for secondary
+ * text; accent 11, grass, for links), which clear 4.5:1 on the ground in
+ * both themes. The rules here cover Radix component
  * defaults a page cannot reach with a colour prop.
  */
 
@@ -38,8 +39,8 @@ main:focus {
 }
 
 /*
- * Solid buttons: white text on blue 9 is 3.3:1. Darken the fill, same hue,
- * to about 5:1 in both themes; hover darkens a little further.
+ * Solid buttons: white text on accent 9 is under 4.5:1. Darken the fill,
+ * same hue, to clear it in both themes; hover darkens a little further.
  */
 .rt-Button.rt-variant-solid {
   background-color: color-mix(in srgb, var(--accent-9), black 22%);
@@ -52,11 +53,10 @@ main:focus {
 }
 
 /*
- * Light theme only: tinted badge and inline-code text (accent 11 on an
- * accent 2-3 fill) lands between 4.2 and 4.5:1. Darken the text, same hue.
- * Dark theme already passes.
+ * Light theme only: tinted badge text (accent 11 on an accent 2-3 fill)
+ * lands between 4.2 and 4.5:1. Darken the text, same hue. Dark theme
+ * already passes. Inline code is gray-on-gray (identity.css).
  */
-html:not(.dark) .rt-Badge.rt-variant-surface,
-html:not(.dark) .rt-Code.rt-variant-soft {
+html:not(.dark) .rt-Badge.rt-variant-surface {
   color: color-mix(in srgb, var(--accent-11), black 15%);
 }

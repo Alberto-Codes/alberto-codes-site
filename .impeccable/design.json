@@ -1,0 +1,484 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-12T05:44:53+00:00",
+  "title": "Design System: Alberto.Codes",
+  "extensions": {
+    "colorMeta": {
+      "cloth": {
+        "role": "primary",
+        "displayName": "Bottle-Green Cloth",
+        "canonical": "--cloth (src/assets/identity.css)",
+        "tonalRamp": [
+          "#142f1c",
+          "#1f4a2b",
+          "#2f6340",
+          "#467d57",
+          "#6a9a77",
+          "#9bbca2",
+          "#cfdcd2",
+          "#f4f8f5"
+        ],
+        "darkTheme": "#1f4a2b (unchanged)"
+      },
+      "cloth-ink": {
+        "role": "primary",
+        "displayName": "Cloth Ink",
+        "canonical": "--cloth-ink (src/assets/identity.css)",
+        "tonalRamp": [
+          "#142f1c",
+          "#1f4a2b",
+          "#2f6340",
+          "#467d57",
+          "#6a9a77",
+          "#9bbca2",
+          "#cfdcd2",
+          "#f4f8f5"
+        ],
+        "darkTheme": "#f4f8f5 (unchanged)"
+      },
+      "cloth-ink-muted": {
+        "role": "primary",
+        "displayName": "Cloth Ink, Muted",
+        "canonical": "--cloth-ink-muted (src/assets/identity.css)",
+        "tonalRamp": [
+          "#142f1c",
+          "#1f4a2b",
+          "#2f6340",
+          "#467d57",
+          "#6a9a77",
+          "#9bbca2",
+          "#cfdcd2",
+          "#f4f8f5"
+        ],
+        "darkTheme": "#cfdcd2 (unchanged)"
+      },
+      "cloth-mark": {
+        "role": "primary",
+        "displayName": "Cloth Mark",
+        "canonical": "--cloth-mark (src/assets/identity.css); equals light grass 7",
+        "tonalRamp": [
+          "#203c25",
+          "#2a7e3b",
+          "#46a758",
+          "#65ba74",
+          "#94ce9a",
+          "#c9e8ca",
+          "#e9f6e9",
+          "#fbfefb"
+        ],
+        "darkTheme": "#94ce9a (unchanged)"
+      },
+      "cloth-rule": {
+        "role": "primary",
+        "displayName": "Cloth Rule",
+        "canonical": "--cloth-rule (src/assets/identity.css)",
+        "tonalRamp": [
+          "#142f1c",
+          "#1f4a2b",
+          "#2f6340",
+          "#467d57",
+          "#6a9a77",
+          "#9bbca2",
+          "#cfdcd2",
+          "#f4f8f5"
+        ],
+        "darkTheme": "unchanged"
+      },
+      "cloth-hover": {
+        "role": "primary",
+        "displayName": "Cloth Hover",
+        "canonical": "--cloth-hover (src/assets/identity.css)",
+        "tonalRamp": [
+          "#142f1c",
+          "#1f4a2b",
+          "#2f6340",
+          "#467d57",
+          "#6a9a77",
+          "#9bbca2",
+          "#cfdcd2",
+          "#f4f8f5"
+        ],
+        "darkTheme": "unchanged"
+      },
+      "link-ink": {
+        "role": "secondary",
+        "displayName": "Grass Link Ink",
+        "canonical": "var(--accent-11), Radix grass 11",
+        "tonalRamp": [
+          "#203c25",
+          "#2a7e3b",
+          "#46a758",
+          "#65ba74",
+          "#94ce9a",
+          "#c9e8ca",
+          "#e9f6e9",
+          "#fbfefb"
+        ],
+        "darkTheme": "#71d083"
+      },
+      "focus-ring": {
+        "role": "secondary",
+        "displayName": "Grass Focus Ring",
+        "canonical": "var(--accent-8), Radix grass 8",
+        "tonalRamp": [
+          "#203c25",
+          "#2a7e3b",
+          "#46a758",
+          "#65ba74",
+          "#94ce9a",
+          "#c9e8ca",
+          "#e9f6e9",
+          "#fbfefb"
+        ],
+        "darkTheme": "#3e7949"
+      },
+      "ground": {
+        "role": "neutral",
+        "displayName": "Sage Paper",
+        "canonical": "--color-background: var(--gray-2), light theme only (src/assets/identity.css)",
+        "tonalRamp": [
+          "#1a211e",
+          "#5f6563",
+          "#868e8b",
+          "#b8bcba",
+          "#cbcfcd",
+          "#dfe2e0",
+          "#eef1f0",
+          "#fbfdfc"
+        ],
+        "darkTheme": "Radix dark-theme default background"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Graphite Ink",
+        "canonical": "var(--gray-12), Radix sage 12",
+        "tonalRamp": [
+          "#1a211e",
+          "#5f6563",
+          "#868e8b",
+          "#b8bcba",
+          "#cbcfcd",
+          "#dfe2e0",
+          "#eef1f0",
+          "#fbfdfc"
+        ],
+        "darkTheme": "#eceeed"
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Muted Graphite",
+        "canonical": "var(--gray-11), Radix sage 11",
+        "tonalRamp": [
+          "#1a211e",
+          "#5f6563",
+          "#868e8b",
+          "#b8bcba",
+          "#cbcfcd",
+          "#dfe2e0",
+          "#eef1f0",
+          "#fbfdfc"
+        ],
+        "darkTheme": "#adb5b2"
+      },
+      "separator-dot": {
+        "role": "neutral",
+        "displayName": "Separator Dot",
+        "canonical": "var(--gray-9), Radix sage 9",
+        "tonalRamp": [
+          "#1a211e",
+          "#5f6563",
+          "#868e8b",
+          "#b8bcba",
+          "#cbcfcd",
+          "#dfe2e0",
+          "#eef1f0",
+          "#fbfdfc"
+        ],
+        "darkTheme": "#63706b"
+      },
+      "rule-hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "var(--gray-8), Radix sage 8",
+        "tonalRamp": [
+          "#1a211e",
+          "#5f6563",
+          "#868e8b",
+          "#b8bcba",
+          "#cbcfcd",
+          "#dfe2e0",
+          "#eef1f0",
+          "#fbfdfc"
+        ],
+        "darkTheme": "#5b625f"
+      },
+      "rule-year": {
+        "role": "neutral",
+        "displayName": "Year Rule",
+        "canonical": "var(--gray-7), Radix sage 7",
+        "tonalRamp": [
+          "#1a211e",
+          "#5f6563",
+          "#868e8b",
+          "#b8bcba",
+          "#cbcfcd",
+          "#dfe2e0",
+          "#eef1f0",
+          "#fbfdfc"
+        ],
+        "darkTheme": "#444947"
+      },
+      "rule-soft": {
+        "role": "neutral",
+        "displayName": "Soft Rule",
+        "canonical": "var(--gray-6), Radix sage 6",
+        "tonalRamp": [
+          "#1a211e",
+          "#5f6563",
+          "#868e8b",
+          "#b8bcba",
+          "#cbcfcd",
+          "#dfe2e0",
+          "#eef1f0",
+          "#fbfdfc"
+        ],
+        "darkTheme": "#373b39"
+      },
+      "code-border": {
+        "role": "neutral",
+        "displayName": "Code Border",
+        "canonical": "var(--gray-5), Radix sage 5",
+        "tonalRamp": [
+          "#1a211e",
+          "#5f6563",
+          "#868e8b",
+          "#b8bcba",
+          "#cbcfcd",
+          "#dfe2e0",
+          "#eef1f0",
+          "#fbfdfc"
+        ],
+        "darkTheme": "#2e3130"
+      },
+      "code-surface": {
+        "role": "neutral",
+        "displayName": "Code Surface",
+        "canonical": "var(--gray-3), Radix sage 3",
+        "tonalRamp": [
+          "#1a211e",
+          "#5f6563",
+          "#868e8b",
+          "#b8bcba",
+          "#cbcfcd",
+          "#dfe2e0",
+          "#eef1f0",
+          "#fbfdfc"
+        ],
+        "darkTheme": "#202221"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Page and post titles; 28px on phones (Radix size 7), 35px from 30em (size 8)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Post h2; 1.375rem below 768px. Sizes in headings.py HEADING_SIZES."
+      },
+      "subhead": {
+        "displayName": "Subhead",
+        "purpose": "Post h3; 1.1875rem below 768px. h4 is 1.125rem / 1.0625rem."
+      },
+      "year": {
+        "displayName": "Year",
+        "purpose": "Year heads of the blog index, lining figures, over a gray-7 rule."
+      },
+      "wordmark": {
+        "displayName": "Wordmark",
+        "purpose": "Alberto.Codes on the cloth."
+      },
+      "title": {
+        "displayName": "Index Title",
+        "purpose": "Blog index entries."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Post running text; 1rem below 768px; line height is the Radix text default."
+      },
+      "summary": {
+        "displayName": "Summary",
+        "purpose": "A post's standfirst in muted ink; 1rem below 768px."
+      },
+      "meta": {
+        "displayName": "Meta",
+        "purpose": "Dates, index summaries, series runs, phone table cells; tabular figures for dates and tables."
+      },
+      "mark": {
+        "displayName": "Mark",
+        "purpose": "A post's kind, all small caps; 12px on the index, 14px in a dateline."
+      },
+      "nav": {
+        "displayName": "Nav",
+        "purpose": "Masthead navigation on the cloth."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "leader-close",
+        "value": "120ms ease-out",
+        "purpose": "Index leader closes into a solid rule on hover or focus (blog.py LEADER_CLOSE); the contents caret rotation reuses it. Removed under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "30em"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      }
+    ],
+    "layout": {
+      "container": "880px (Radix container size 3)",
+      "pageColumn": "48em",
+      "readingMeasure": "40rem",
+      "indexSummaryMeasure": "65ch",
+      "pagePaddingY": "var(--space-6)",
+      "sidePadding": "var(--space-4) below md, var(--space-6) from md",
+      "headingScrollMargin": "5rem"
+    },
+    "focus": {
+      "ground": "2px solid var(--accent-8), offset 2px",
+      "cloth": "2px solid var(--cloth-mark)"
+    },
+    "radixTheme": {
+      "accent_color": "grass",
+      "gray_color": "sage",
+      "source": "src/alberto_codes_site/alberto_codes_site.py"
+    }
+  },
+  "components": [
+    {
+      "name": "Masthead",
+      "kind": "nav",
+      "refersTo": "masthead",
+      "description": "The sticky cloth band: Besley wordmark left, navigation right, current page underlined in cloth mark.",
+      "html": "<header class=\"ds-cloth\"><a class=\"ds-wordmark\" href=\"#\">Alberto.Codes</a><nav class=\"ds-nav\"><a class=\"ds-nav-link\" href=\"#\">About</a><a class=\"ds-nav-link\" href=\"#\">Projects</a><a class=\"ds-nav-link\" href=\"#\" aria-current=\"page\">Blog</a><a class=\"ds-nav-link\" href=\"#\">Contact</a></nav></header>",
+      "css": ".ds-cloth { display: flex; align-items: center; justify-content: space-between; padding: 16px 32px; background: #1f4a2b; color: #f4f8f5; } .ds-wordmark { font-family: Besley, Georgia, serif; font-size: 20px; font-weight: 700; color: #f4f8f5; text-decoration: none; } .ds-nav { display: flex; gap: 20px; } .ds-nav-link { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif; font-size: 14px; font-weight: 500; color: #cfdcd2; text-decoration: none; padding-block: 0.25em; border-bottom: 2px solid transparent; } .ds-nav-link:hover { color: #f4f8f5; } .ds-nav-link[aria-current=\"page\"] { color: #f4f8f5; border-bottom-color: #94ce9a; } .ds-nav-link:focus-visible, .ds-wordmark:focus-visible { outline: 2px solid #94ce9a; outline-offset: 2px; }"
+    },
+    {
+      "name": "Cloth Button",
+      "kind": "button",
+      "refersTo": "cloth-button",
+      "description": "Outline button on the cloth, such as the resume link.",
+      "html": "<div class=\"ds-cloth-bg\"><a class=\"ds-cloth-btn\" href=\"#\">Resume</a></div>",
+      "css": ".ds-cloth-bg { background: #1f4a2b; padding: 16px; } .ds-cloth-btn { display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 4px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif; font-size: 12px; font-weight: 500; color: #f4f8f5; background: transparent; box-shadow: inset 0 0 0 1px rgba(244,248,245,0.32); text-decoration: none; } .ds-cloth-btn:hover { background: rgba(244,248,245,0.1); } .ds-cloth-btn:focus-visible { outline: 2px solid #94ce9a; outline-offset: 2px; }"
+    },
+    {
+      "name": "Solid Button",
+      "kind": "button",
+      "refersTo": "button-solid",
+      "description": "Radix solid button on the ground, fill darkened so white text clears 4.5:1 (a11y.css).",
+      "html": "<button class=\"ds-btn-solid\">Download</button>",
+      "css": ".ds-btn-solid { height: 32px; padding: 0 12px; border: none; border-radius: 4px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif; font-size: 14px; font-weight: 500; color: #fff; background: color-mix(in srgb, #46a758, black 22%); cursor: pointer; } .ds-btn-solid:hover { background: color-mix(in srgb, #46a758, black 30%); } .ds-btn-solid:focus-visible { outline: 2px solid #65ba74; outline-offset: 2px; }"
+    },
+    {
+      "name": "Index Entry",
+      "kind": "custom",
+      "refersTo": "index-entry",
+      "description": "A blog index row: Besley title, dotted leader, tabular date, first sentence, small-cap marks. The leader closes into a solid grass rule on hover or focus.",
+      "html": "<ol class=\"ds-index\"><li class=\"ds-entry\"><div class=\"ds-line\"><a class=\"ds-title\" href=\"#\">The queue kept growing<span class=\"ds-leader\" aria-hidden=\"true\"></span></a><span class=\"ds-date\">27 Oct 2026</span></div><p class=\"ds-summary\">Five incoming receipts a second kept the queue short.</p><p class=\"ds-marks\"><span class=\"ds-mark\">explanation</span> · <span class=\"ds-mark\">part 2 of 3 · saucier</span></p></li></ol>",
+      "css": ".ds-index { list-style: none; margin: 0; padding: 0; background: #f7f9f8; } .ds-entry { position: relative; padding-block: 0.3em; } .ds-line { display: flex; align-items: last baseline; column-gap: 0.5em; } .ds-title { flex: 1 1 auto; display: flex; align-items: baseline; font-family: Besley, Georgia, serif; font-size: 1.125rem; font-weight: 600; line-height: 1.3; color: #1a211e; text-decoration: none; } .ds-leader { position: relative; flex: 1; margin-inline-start: 0.5em; border-bottom: 2px dotted #b8bcba; } .ds-leader::after { content: ''; position: absolute; inset-inline: 0; bottom: -2px; height: 2px; background: #2a7e3b; opacity: 0; transition: opacity 120ms ease-out; } .ds-entry:hover .ds-leader::after, .ds-entry:focus-within .ds-leader::after { opacity: 1; } .ds-entry:hover .ds-title, .ds-entry:focus-within .ds-title { color: #2a7e3b; } .ds-title:focus-visible { outline: 2px solid #65ba74; outline-offset: 2px; border-radius: 3px; } .ds-date { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif; font-size: 14px; font-variant-numeric: tabular-nums; color: #5f6563; white-space: nowrap; } .ds-summary { margin: 0; max-width: 65ch; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif; font-size: 14px; line-height: 20px; color: #5f6563; } .ds-marks { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif; font-size: 12px; line-height: 16px; color: #5f6563; } .ds-mark { font-variant-caps: all-small-caps; letter-spacing: 0.05em; font-weight: 600; } @media (prefers-reduced-motion: reduce) { .ds-leader::after { transition: none; } }"
+    },
+    {
+      "name": "Type Mark",
+      "kind": "chip",
+      "refersTo": "type-mark",
+      "description": "A post's kind as small caps in muted ink; never a filled or coloured chip.",
+      "html": "<span class=\"ds-type-mark\">tutorial</span>",
+      "css": ".ds-type-mark { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; font-variant-caps: all-small-caps; color: #5f6563; white-space: nowrap; cursor: default; }"
+    },
+    {
+      "name": "Text Link",
+      "kind": "custom",
+      "refersTo": "link",
+      "description": "Grass link in running text, underlined in its own colour.",
+      "html": "<p class=\"ds-p\">See the <a class=\"ds-link\" href=\"#\">saved report</a> for every trial.</p>",
+      "css": ".ds-p { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif; font-size: 1.125rem; color: #1a211e; max-width: 40rem; } .ds-link { color: #2a7e3b; text-decoration: underline; text-decoration-color: currentColor; text-decoration-thickness: 1px; text-underline-offset: 0.2em; } .ds-link:focus-visible { outline: 2px solid #65ba74; outline-offset: 2px; border-radius: 3px; }"
+    },
+    {
+      "name": "Proportion Table",
+      "kind": "card",
+      "refersTo": "proportion-table",
+      "description": "Data table ruled like a printed table of proportions.",
+      "html": "<table class=\"ds-table\"><thead><tr><th>Pair</th><th>FIFO</th><th>Protected</th></tr></thead><tbody><tr><td>0</td><td>1,175</td><td>1,135</td></tr><tr><td>1</td><td>1,176</td><td>1,127</td></tr></tbody></table>",
+      "css": ".ds-table { border-collapse: collapse; border-top: 2px solid #1a211e; border-bottom: 2px solid #1a211e; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', system-ui, sans-serif; color: #1a211e; } .ds-table th, .ds-table td { border: none; padding: 0.75em 1em; font-size: 1rem; font-variant-numeric: tabular-nums; text-align: left; } .ds-table th { font-weight: 600; } .ds-table thead th { border-bottom: 1px solid #b8bcba; }"
+    },
+    {
+      "name": "Code Block",
+      "kind": "card",
+      "refersTo": "code-block",
+      "description": "Framed code block with a language strip and copy button.",
+      "html": "<div class=\"ds-code\"><div class=\"ds-code-head\"><span>bash</span><button class=\"ds-copy\" aria-label=\"Copy\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><rect x=\"9\" y=\"9\" width=\"13\" height=\"13\" rx=\"2\"/><path d=\"M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1\"/></svg></button></div><pre class=\"ds-pre\">uv run vramfit plan</pre></div>",
+      "css": ".ds-code { border: 1px solid #dfe2e0; border-radius: 4px; overflow: hidden; } .ds-code-head { display: flex; align-items: center; justify-content: space-between; gap: 0.5em; padding: 0.25em 0.25em 0.25em 0.75em; background: #eef1f0; border-bottom: 1px solid #dfe2e0; font-family: Menlo, Consolas, monospace; font-size: 12px; color: #5f6563; } .ds-copy { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; min-height: 32px; border: none; border-radius: 4px; background: transparent; color: #5f6563; cursor: pointer; } .ds-copy:hover { background: #dfe2e0; } .ds-copy:focus-visible { outline: 2px solid #65ba74; outline-offset: 1px; } .ds-pre { margin: 0; padding: 12px 16px; font-family: Menlo, Consolas, monospace; font-size: 14px; background: #fbfdfc; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Clothbound Trade Reference",
+    "overview": "The site reads as an early-1900s trade reference: a bottle-green cloth binding at the top and bottom of every page, a cool green-gray paper between, a Clarendon for the things a reader looks up, and a plain sans for the reading itself. Posts are entries in an index, not cards in a feed; data is set as printed tables of proportions. The frame is there to be found and then forgotten.\n\nDensity is a reference book's: tight index rows, a 48em page column, a 40rem reading measure inside an 880px post column that tables, figures and code are allowed to fill. Colour is spent sparingly. One green ink marks what can be followed and where the reader stands; everything else is graphite on paper. The cloth is identical in light and dark themes, so the binding never changes while the paper does.\n\nMotion is a single gesture: an index row's dotted leader closes into a solid rule. Nothing else on the site animates beyond the table of contents' disclosure caret.",
+    "keyCharacteristics": [
+      "A fixed bottle-green cloth band for masthead and footer in both themes.",
+      "A green-tinted neutral ground (Radix sage), never cream, never pure white.",
+      "Besley, a self-hosted variable Clarendon, for wordmark, titles, section headings and index entries; system sans for everything read at length.",
+      "One accent ink (Radix grass step 11) for links, hover and the current page.",
+      "Kinds are set as small-cap marks, never as coloured badges or chips.",
+      "Tables ruled like printed proportions: heavy rule above and below, hairline under the head, no verticals, no fills, tabular figures."
+    ],
+    "rules": [
+      {
+        "name": "The One Ink Rule",
+        "body": "The accent green marks only what can be followed (links) and where the reader stands (hover, current page, focus). Inline code, kinds, dates and decoration never take it.",
+        "section": "colors"
+      },
+      {
+        "name": "The Fixed Binding Rule",
+        "body": "The cloth and its five companion values are literals, identical in both themes. Never re-express them as Radix steps that would flip in dark mode.",
+        "section": "colors"
+      },
+      {
+        "name": "The Look-Up Face Rule",
+        "body": "Besley sets only what a reader looks up: wordmark, page and post titles, section headings, years, index entries. Navigation, labels, tables and running text stay in the sans.",
+        "section": "typography"
+      },
+      {
+        "name": "The Struck Kind Rule",
+        "body": "A kind is told apart by its letterforms (small caps in muted ink), never by a hue or a filled chip.",
+        "section": "typography"
+      },
+      {
+        "name": "The Ruled, Not Raised Rule",
+        "body": "Separate with a rule or with space, never with a shadow or a card fill.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** take every page colour from the Radix grass and sage steps, and the binding from the six `--cloth*` literals in `identity.css`.",
+      "**Do** underline links that sit in running text or runs (0.2em offset, 1px), since the grass ink alone falls under 3:1 against dark-theme text.",
+      "**Do** set headings in Besley through `--heading-font-family` so `rt-Heading` picks it up; keep its fallback stack intact so wraps do not move on swap.",
+      "**Do** keep a post's running text in the 40rem measure and let tables, figures and code use the 880px column.",
+      "**Do** rule tables heavy-hairline-heavy with tabular figures.",
+      "**Do** remove the leader transition under `prefers-reduced-motion`."
+    ],
+    "donts": [
+      "**Don't** colour a kind, tag or status; set it as a small-cap mark in muted ink.",
+      "**Don't** put the accent on inline code, dates, headings at rest or decoration.",
+      "**Don't** wrap posts in bordered cards or give surfaces shadows.",
+      "**Don't** set a cream or warm ground; the paper is sage.",
+      "**Don't** add vertical rules or zebra fills to tables.",
+      "**Don't** add motion beyond the leader's close and the contents caret."
+    ]
+  }
+}

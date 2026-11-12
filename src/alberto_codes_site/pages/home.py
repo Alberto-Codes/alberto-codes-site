@@ -98,7 +98,7 @@ def _latest_post_card(meta: dict) -> rx.Component:
                 rx.text(
                     time_el(meta.get("date", "")),
                     size="1",
-                    color=rx.color("slate", 11),
+                    color=rx.color("gray", 11),
                 ),
                 rx.heading(
                     meta.get("title", "Untitled"), as_="h3", size="3", weight="bold"
@@ -106,7 +106,7 @@ def _latest_post_card(meta: dict) -> rx.Component:
                 rx.text(
                     meta.get("summary", ""),
                     size="2",
-                    color=rx.color("slate", 11),
+                    color=rx.color("gray", 11),
                     style={
                         "display": "-webkit-box",
                         "-webkit-line-clamp": "2",
@@ -131,13 +131,13 @@ def _building_card(project: dict) -> rx.Component:
         rx.card(
             rx.vstack(
                 rx.heading(project["title"], as_="h3", size="4", weight="bold"),
-                rx.text(project["proof"], size="2", color=rx.color("slate", 11)),
+                rx.text(project["proof"], size="2", color=rx.color("gray", 11)),
                 rx.spacer(),
                 rx.text(
                     "Read the writeup \u2192",
                     size="2",
                     weight="medium",
-                    color=rx.color("blue", 11),
+                    color=rx.color("accent", 11),
                 ),
                 spacing="2",
                 height="100%",
@@ -167,7 +167,7 @@ def home_page() -> rx.Component:
                 object_fit="cover",
                 box_shadow="0 4px 12px rgba(0,0,0,0.15)",
             ),
-            rx.text("Hello, I'm", size="4", color=rx.color("slate", 11)),
+            rx.text("Hello, I'm", size="4", color=rx.color("gray", 11)),
             rx.heading(
                 "Alberto Nieto",
                 as_="h1",
@@ -179,7 +179,7 @@ def home_page() -> rx.Component:
                 as_child=True,
                 size=rx.breakpoints(initial="3", md="6"),
                 weight="medium",
-                color=rx.color("blue", 11),
+                color=rx.color("gray", 11),
                 text_align="center",
             ),
             rx.text(
@@ -189,7 +189,7 @@ def home_page() -> rx.Component:
                 "source tools that test what models actually do, then publish "
                 "the evidence.",
                 size="3",
-                color=rx.color("slate", 11),
+                color=rx.color("gray", 11),
                 max_width=["100%", "100%", "36em", "36em", "36em"],
                 text_align="center",
             ),
@@ -214,26 +214,26 @@ def home_page() -> rx.Component:
             #                       and names every page that repeats it
             rx.hstack(
                 rx.hstack(
-                    rx.icon("award", size=16, color=rx.color("blue", 9)),
-                    rx.text("2x Top Performer", size="2", color=rx.color("slate", 11)),
+                    rx.icon("award", size=16, color=rx.color("gray", 11)),
+                    rx.text("2x Top Performer", size="2", color=rx.color("gray", 11)),
                     spacing="1",
                     align="center",
                 ),
                 rx.hstack(
-                    rx.icon("file-check", size=16, color=rx.color("blue", 9)),
-                    rx.text("3 Patents Pending", size="2", color=rx.color("slate", 11)),
+                    rx.icon("file-check", size=16, color=rx.color("gray", 11)),
+                    rx.text("3 Patents Pending", size="2", color=rx.color("gray", 11)),
                     spacing="1",
                     align="center",
                 ),
                 rx.hstack(
-                    rx.icon("building", size=16, color=rx.color("blue", 9)),
-                    rx.text(f"{years} Years", size="2", color=rx.color("slate", 11)),
+                    rx.icon("building", size=16, color=rx.color("gray", 11)),
+                    rx.text(f"{years} Years", size="2", color=rx.color("gray", 11)),
                     spacing="1",
                     align="center",
                 ),
                 rx.hstack(
-                    rx.icon("package", size=16, color=rx.color("blue", 9)),
-                    rx.text("8 PyPI Packages", size="2", color=rx.color("slate", 11)),
+                    rx.icon("package", size=16, color=rx.color("gray", 11)),
+                    rx.text("8 PyPI Packages", size="2", color=rx.color("gray", 11)),
                     spacing="1",
                     align="center",
                 ),

@@ -248,7 +248,7 @@ def _project_links(
                 ),
                 href=github,
                 is_external=True,
-                color=rx.color("blue", 11),
+                color=rx.color("accent", 11),
                 underline="hover",
             )
         )
@@ -263,7 +263,7 @@ def _project_links(
                 ),
                 href=link,
                 is_external=True,
-                color=rx.color("blue", 11),
+                color=rx.color("accent", 11),
                 underline="hover",
             )
         )
@@ -278,7 +278,7 @@ def _project_links(
                 ),
                 href=docs,
                 is_external=True,
-                color=rx.color("blue", 11),
+                color=rx.color("accent", 11),
                 underline="hover",
             )
         )
@@ -293,7 +293,7 @@ def _project_links(
                 ),
                 href=model,
                 is_external=True,
-                color=rx.color("blue", 11),
+                color=rx.color("accent", 11),
                 underline="hover",
             )
         )
@@ -326,7 +326,7 @@ def project_card(project: dict) -> rx.Component:
             rx.text(
                 project["description"],
                 size="2",
-                color=rx.color("slate", 11),
+                color=rx.color("gray", 11),
                 line_height="1.7",
             ),
             meta_list(project["tags"]),
@@ -351,11 +351,11 @@ def projects_page() -> rx.Component:
         rx.vstack(
             rx.box(height="4em"),
             rx.heading("Projects", as_="h1", size="8", weight="bold"),
-            rx.separator(size="4", color_scheme="blue"),
+            rx.separator(size="4", color_scheme="gray"),
             rx.text(
                 "Key technical work and initiatives.",
                 size="3",
-                color=rx.color("slate", 11),
+                color=rx.color("gray", 11),
             ),
             rx.box(height="1em"),
             rx.grid(
@@ -377,7 +377,7 @@ def projects_page() -> rx.Component:
                         rx.text(
                             "Check out my GitHub for more projects, or get in touch.",
                             size="2",
-                            color=rx.color("slate", 11),
+                            color=rx.color("gray", 11),
                         ),
                         spacing="1",
                     ),

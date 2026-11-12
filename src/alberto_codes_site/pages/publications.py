@@ -187,7 +187,7 @@ def _attribution_row(label: str, value: rx.Component | str) -> rx.Component:
         rx.text(
             label,
             size="1",
-            color=rx.color("slate", 11),
+            color=rx.color("gray", 11),
             weight="medium",
             width="7em",
             flex_shrink="0",
@@ -224,7 +224,7 @@ def _publication_links(links: list[tuple[str, str, str]]) -> rx.Component:
                 ),
                 href=url,
                 is_external=url.startswith("http"),
-                color=rx.color("blue", 11),
+                color=rx.color("accent", 11),
                 underline="hover",
             )
             for label, icon, url in links
@@ -253,11 +253,11 @@ def publication_card(publication: dict) -> rx.Component:
     return rx.card(
         rx.vstack(
             rx.hstack(
-                meta_label(publication["kind"], color_scheme="violet"),
+                meta_label(publication["kind"], mark=True),
                 rx.text(
                     time_el(publication["date"]),
                     size="1",
-                    color=rx.color("slate", 11),
+                    color=rx.color("gray", 11),
                 ),
                 spacing="2",
                 align="center",
@@ -266,7 +266,7 @@ def publication_card(publication: dict) -> rx.Component:
             rx.text(
                 publication["summary"],
                 size="2",
-                color=rx.color("slate", 11),
+                color=rx.color("gray", 11),
                 line_height="1.7",
             ),
             rx.separator(size="4"),
@@ -277,7 +277,7 @@ def publication_card(publication: dict) -> rx.Component:
                         rx.text(publication["base_model"], size="2"),
                         href=publication["base_model_url"],
                         is_external=True,
-                        color=rx.color("blue", 11),
+                        color=rx.color("accent", 11),
                         underline="hover",
                     ),
                 ),
@@ -286,7 +286,7 @@ def publication_card(publication: dict) -> rx.Component:
                     rx.text(
                         publication["relation"],
                         size="2",
-                        color=rx.color("slate", 11),
+                        color=rx.color("gray", 11),
                     ),
                 ),
                 _attribution_row(
@@ -294,7 +294,7 @@ def publication_card(publication: dict) -> rx.Component:
                     rx.text(
                         publication["license"],
                         size="2",
-                        color=rx.color("slate", 11),
+                        color=rx.color("gray", 11),
                     ),
                 ),
                 _attribution_row(
@@ -302,7 +302,7 @@ def publication_card(publication: dict) -> rx.Component:
                     rx.text(
                         publication["contribution"],
                         size="2",
-                        color=rx.color("slate", 11),
+                        color=rx.color("gray", 11),
                         line_height="1.6",
                     ),
                 ),
@@ -325,14 +325,14 @@ def publications_page() -> rx.Component:
         rx.vstack(
             rx.box(height="4em"),
             rx.heading("Publications", as_="h1", size="8", weight="bold"),
-            rx.separator(size="4", color_scheme="blue"),
+            rx.separator(size="4", color_scheme="gray"),
             rx.text(
                 "Artifacts I have published, with what I contributed, what "
                 "they derive from, and the evidence behind them. Every entry "
                 "names its base model and license, because a derivative work "
                 "is not the same as an original one.",
                 size="3",
-                color=rx.color("slate", 11),
+                color=rx.color("gray", 11),
                 line_height="1.7",
             ),
             rx.box(height="1em"),
