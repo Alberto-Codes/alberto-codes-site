@@ -1004,7 +1004,9 @@ def _render_post(
             underline="none",
             color=rx.color("blue", 11),
         ),
-        rx.box(height="1em"),
+        # Phones drop the extra space under the back link, so the body's
+        # first lines reach the first screen.
+        rx.box(height="1em", display=rx.breakpoints(initial="none", sm="block")),
         rx.hstack(
             _type_badge(meta.get("type", "post"), size="2"),
             rx.text(
@@ -1071,15 +1073,27 @@ def _render_post(
                 },
                 "& :not(pre) > code": {"padding_inline_end": "0"},
                 # Body links sit in running text; colour alone is under 3:1
-                # against it in dark mode, so underline them.
-                "& .rt-Link": {"text_decoration_line": "underline"},
+                # against it in dark mode, so underline them in the link's
+                # own colour (Radix draws it at under 30% opacity).
+                "& .rt-Link": {
+                    "text_decoration_line": "underline",
+                    "text_decoration_color": "currentColor",
+                },
                 "& table": {
                     "border_collapse": "collapse",
                 },
+                # Phones get smaller, tighter cells so more columns fit
+                # before the table scrolls; desktop keeps the body size.
                 "& th, & td": {
                     "border": "1px solid var(--gray-6)",
-                    "padding": "0.75em 1em",
+                    "font_size": "var(--font-size-2)",
+                    "font_variant_numeric": "tabular-nums",
+                    "padding": "0.5em 0.625em",
                     "text_align": "left",
+                    "@media screen and (min-width: 768px)": {
+                        "font_size": "inherit",
+                        "padding": "0.75em 1em",
+                    },
                 },
                 "& th": {
                     "background": "var(--gray-3)",
@@ -1319,7 +1333,11 @@ def blog_post_page(slug: str, today: date | None = None) -> rx.Component:
         if meta.get("slug") == slug:
             return rx.container(
                 rx.vstack(
-                    rx.box(height="4em"),
+                    # Desktop only: on a phone this space pushed the post's
+                    # first paragraph off the first screen.
+                    rx.box(
+                        height="4em", display=rx.breakpoints(initial="none", sm="block")
+                    ),
                     _render_post(meta, body, posts),
                     spacing="4",
                     width="100%",
