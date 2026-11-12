@@ -4,7 +4,7 @@ import reflex as rx
 
 from alberto_codes_site.components.meta_label import meta_label
 from alberto_codes_site.dates import time_el
-from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
+from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y, SUMMARY_MEASURE
 
 PUBLICATIONS = [
     {
@@ -268,6 +268,7 @@ def publication_card(publication: dict) -> rx.Component:
                 size="2",
                 color=rx.color("gray", 11),
                 line_height="1.7",
+                max_width=SUMMARY_MEASURE,
             ),
             rx.separator(size="4"),
             rx.vstack(
@@ -304,6 +305,7 @@ def publication_card(publication: dict) -> rx.Component:
                         size="2",
                         color=rx.color("gray", 11),
                         line_height="1.6",
+                        max_width=SUMMARY_MEASURE,
                     ),
                 ),
                 spacing="2",

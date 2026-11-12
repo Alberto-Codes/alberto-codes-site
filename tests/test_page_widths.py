@@ -14,6 +14,7 @@ from alberto_codes_site.layout import (
     PAGE_PADDING_Y,
     READING_FONT_SIZE,
     READING_WIDTH,
+    SUMMARY_MEASURE,
 )
 from alberto_codes_site.pages.about import about_page
 from alberto_codes_site.pages.blog import _render_post, blog_page, blog_post_page
@@ -22,7 +23,7 @@ from alberto_codes_site.pages.experience import experience_page
 from alberto_codes_site.pages.home import home_page
 from alberto_codes_site.pages.not_found import not_found_page
 from alberto_codes_site.pages.projects import projects_page
-from alberto_codes_site.pages.publications import publications_page
+from alberto_codes_site.pages.publications import PUBLICATIONS, publications_page
 
 PAGES = {
     "home": home_page,
@@ -116,3 +117,9 @@ def test_post_table_cells_are_compact_on_phones_with_tabular_figures():
         '["@media screen and (min-width: 768px)"] : '
         '({ ["fontSize"] : "inherit", ["padding"] : "0.75em 1em" }) })'
     ) in jsx
+
+
+def test_publication_text_keeps_a_measure():
+    """Each publication's summary and contribution are capped, not column-wide."""
+    jsx = str(publications_page())
+    assert jsx.count(f'["maxWidth"] : "{SUMMARY_MEASURE}"') == 2 * len(PUBLICATIONS)
