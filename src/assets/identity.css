@@ -101,8 +101,19 @@ html {
   scrollbar-color: var(--gray-8) var(--color-background);
 }
 
+/*
+ * One focus ring. On the ground it is the link ink (grass 11), at least 3:1
+ * against the ground in both themes, where grass 8 fell to about 2.3:1 in
+ * light; on the cloth it is the cloth mark. Radix components draw theirs
+ * from --focus-8, so that follows too.
+ */
+.radix-themes {
+  --focus-ring: var(--accent-11);
+  --focus-8: var(--focus-ring);
+}
+
 :focus-visible {
-  outline: 2px solid var(--accent-8);
+  outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
@@ -118,8 +129,9 @@ a {
   color: var(--cloth-ink);
 }
 
-.cloth :focus-visible {
-  outline-color: var(--cloth-mark);
+.cloth {
+  --focus-ring: var(--cloth-mark);
+  --focus-8: var(--focus-ring);
 }
 
 .cloth .nav-link {
@@ -153,6 +165,72 @@ a {
   .cloth .rt-Button:hover,
   .cloth .rt-IconButton:hover {
     background-color: var(--cloth-hover);
+  }
+}
+
+/*
+ * A post table too wide for its column (pages/blog.py, _table) shades the
+ * edge where columns are hidden. Right: a fixed shade under the viewport's
+ * edge, hidden by a ground-coloured cover that scrolls with the content and
+ * meets it only at the end, so it is absent when the table fits. The shade
+ * stops 1px short of the edge: on a half-pixel column the cover does not
+ * reach the last pixel. Left: where scroll timelines run, the sticky first
+ * column takes the ground and casts the shade only once the table has
+ * scrolled, so a table at rest renders as before; elsewhere the column always
+ * has the ground (blog.py) and only the right edge is shaded.
+ */
+.table-scroll > .rt-ScrollAreaViewport {
+  background:
+    linear-gradient(to left, var(--color-background) 50%, transparent) right / 2rem 100% no-repeat local,
+    linear-gradient(to left, var(--gray-a5), transparent) right 1px center / 1rem 100% no-repeat scroll;
+  /* Radix draws the ring inside the clipped root, from --focus-8. */
+  outline: none;
+}
+
+.table-scroll :is(th, td):first-child::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 100%;
+  width: 1rem;
+  background: linear-gradient(to right, var(--gray-a5), transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .table-scroll > .rt-ScrollAreaViewport {
+    scroll-timeline: --table-scroll x;
+  }
+
+  /* A table that fits has an inactive timeline, so no ground at all. */
+  html .table-scroll :is(th, td):first-child {
+    background-color: transparent;
+    animation: table-ground linear both;
+    animation-timeline: --table-scroll;
+    animation-range: 0 1px;
+  }
+
+  .table-scroll :is(th, td):first-child::after {
+    animation: table-shade linear both;
+    animation-timeline: --table-scroll;
+    animation-range: 0 1rem;
+  }
+}
+
+@keyframes table-ground {
+  from {
+    background-color: transparent;
+  }
+  to {
+    background-color: var(--color-background);
+  }
+}
+
+@keyframes table-shade {
+  to {
+    opacity: 1;
   }
 }
 

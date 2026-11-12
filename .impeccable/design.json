@@ -119,7 +119,7 @@
       "focus-ring": {
         "role": "secondary",
         "displayName": "Grass Focus Ring",
-        "canonical": "var(--accent-8), Radix grass 8",
+        "canonical": "var(--accent-11), Radix grass 11",
         "tonalRamp": [
           "#203c25",
           "#2a7e3b",
@@ -351,7 +351,7 @@
       "headingScrollMargin": "5rem"
     },
     "focus": {
-      "ground": "2px solid var(--accent-8), offset 2px",
+      "ground": "2px solid var(--accent-11), offset 2px",
       "cloth": "2px solid var(--cloth-mark)"
     },
     "radixTheme": {

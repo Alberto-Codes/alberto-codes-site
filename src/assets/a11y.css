@@ -30,7 +30,7 @@
   background: var(--gray-1);
   color: var(--accent-11);
   font-weight: 500;
-  outline: 2px solid var(--accent-8);
+  outline: 2px solid var(--focus-ring);
 }
 
 /* The main landmark takes focus from the skip link; no ring on the region. */

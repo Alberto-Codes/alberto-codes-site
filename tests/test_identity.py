@@ -17,9 +17,12 @@ from alberto_codes_site.pages.blog import (
     LEADER_CLOSE,
     TABLE_HAIRLINE,
     TABLE_HEAVY_RULE,
+    TABLE_SCROLL_CLASS,
+    TABLE_SCROLL_LABEL,
     _load_posts,
     _post_body,
     _render_post,
+    _table,
     blog_page,
     published_posts,
 )
@@ -97,6 +100,53 @@ def test_tables_are_ruled_like_printed_proportions():
     assert f'["& thead th"] : ({{ ["borderBottom"] : "{TABLE_HAIRLINE}" }})' in jsx
     assert "nth-child(even)" not in jsx
     assert '["& th"] : ({ ["fontWeight"] : "600" })' in jsx
+    # Separate borders keep the rules outside the sticky first column.
+    assert '["borderCollapse"] : "separate", ["borderSpacing"] : "0"' in jsx
+
+
+def test_a_wide_table_is_a_named_focusable_region():
+    """The scroll viewport takes Tab focus and has a name for screen readers."""
+    jsx = str(_table("cells"))
+    assert f'"aria-label":"{TABLE_SCROLL_LABEL}"' in jsx
+    assert 'role:"region"' in jsx
+    assert "tabIndex:0" in jsx
+    assert f'className:"{TABLE_SCROLL_CLASS}"' in jsx
+
+
+def test_a_scrolled_table_keeps_its_first_column_and_one_line_values():
+    """First column sticks on the ground; phone body cells do not wrap."""
+    jsx = str(_render_post({"title": "T"}, "| a | b |\n|---|---|\n| 1 | 2 |\n"))
+    assert (
+        '["& :is(th, td):first-child"] : ({ ["position"] : "sticky", '
+        '["left"] : "0", ["backgroundColor"] : "var(--color-background)" })'
+    ) in jsx
+    assert (
+        '["@media screen and (max-width: 767.98px)"] : '
+        '({ ["& td"] : ({ ["whiteSpace"] : "nowrap" }) })'
+    ) in jsx
+
+
+def test_table_edge_shade_is_css_only_and_absent_when_it_fits():
+    """A fixed shade under a scrolling cover, and a scroll-timeline left shade."""
+    css = (ASSETS / "identity.css").read_text()
+    rule = re.search(r"\.table-scroll > \.rt-ScrollAreaViewport \{(.*?)\n\}", css, re.S)
+    assert rule is not None
+    assert "no-repeat local" in rule.group(1)
+    assert "no-repeat scroll" in rule.group(1)
+    assert "@supports (animation-timeline: scroll())" in css
+    assert "scroll-timeline: --table-scroll x" in css
+
+
+def test_focus_ring_is_one_token_that_clears_three_to_one():
+    """Grass 11 on the ground, the cloth mark on the cloth; never grass 8."""
+    css = (ASSETS / "identity.css").read_text() + (ASSETS / "a11y.css").read_text()
+    assert re.search(r"\.radix-themes \{[^}]*--focus-ring: var\(--accent-11\);", css)
+    assert re.search(r"\.cloth \{[^}]*--focus-ring: var\(--cloth-mark\);", css)
+    assert "outline: 2px solid var(--focus-ring);" in css
+    assert "accent-8" not in css
+    source = Path(__file__).resolve().parent.parent / "src" / "alberto_codes_site"
+    for path in source.rglob("*.py"):
+        assert "'accent', 8" not in path.read_text(), path
 
 
 def test_heading_face_is_self_hosted_with_its_licence():

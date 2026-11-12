@@ -279,7 +279,7 @@ def heading_anchor_style() -> dict:
         },
         "& .heading-anchor:hover": {"color": rx.color("accent", 11)},
         "& .heading-anchor:focus-visible": {
-            "outline": f"2px solid {rx.color('accent', 8)}",
+            "outline": "2px solid var(--focus-ring)",
             "outline_offset": "1px",
         },
         "@media (hover: none)": {"& .heading-anchor": {"opacity": "1"}},
