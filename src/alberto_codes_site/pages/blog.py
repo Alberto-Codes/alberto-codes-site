@@ -60,11 +60,36 @@ TABLE_HEAVY_RULE = f"2px solid {rx.color('gray', 12)}"
 TABLE_HAIRLINE = f"1px solid {rx.color('gray', 8)}"
 
 
+_DOUBLE_QUOTED_ESCAPE = re.compile(r"\\([\"\\])")
+
+
+def _unquote(value: str) -> str:
+    r"""Return a YAML quoted scalar's text; any other value comes back unchanged.
+
+    A value wrapped in a matching pair of double quotes loses the pair and has
+    ``\"`` and ``\\`` unescaped; one wrapped in single quotes loses the pair
+    and has ``''`` unescaped. A quote at one end only, or inside the value, is
+    part of the text.
+
+    Args:
+        value: A stripped front-matter value.
+
+    Returns:
+        The value without its quoting.
+    """
+    if len(value) < 2 or value[0] != value[-1] or value[0] not in "\"'":
+        return value
+    inner = value[1:-1]
+    if value[0] == '"':
+        return _DOUBLE_QUOTED_ESCAPE.sub(r"\1", inner)
+    return inner.replace("''", "'")
+
+
 def _parse_frontmatter(text: str) -> tuple[dict, str]:
     """Parse minimal YAML-style frontmatter from a markdown string.
 
     Supports:
-    - Top-level `key: value` pairs
+    - Top-level `key: value` pairs, with YAML quoting removed (``_unquote``)
     - Simple lists:
       ```yaml
       tags:
@@ -94,7 +119,7 @@ def _parse_frontmatter(text: str) -> tuple[dict, str]:
                 if ":" in line and not line.startswith("  "):
                     key, val = line.split(":", 1)
                     key = key.strip()
-                    val = val.strip()
+                    val = _unquote(val.strip())
                     metadata[key] = val
                     current_list_key = key if val == "" else None
             body = parts[2].strip()
@@ -183,16 +208,12 @@ LEADER_MIN_LENGTH = "3rem"
 # is not followed by a capital, so neither ends a sentence.
 _SENTENCE_END = re.compile(r"[.!?][\"'”’)\]]?(?=\s+[A-Z0-9\"“'‘])")
 
-# Opening quote marks and the closing mark each needs.
-_QUOTE_PAIRS = {'"': '"', "“": "”"}
-
 
 def first_sentence(summary: str) -> str:
     """Return a summary's first complete sentence, for the blog index.
 
     Never cuts mid-sentence and adds no ellipsis: with no sentence boundary,
-    the whole summary comes back. A summary written inside quotation marks
-    keeps them balanced, so its excerpt gets the closing mark.
+    the whole summary comes back.
 
     Args:
         summary: The post's front-matter summary.
@@ -208,19 +229,7 @@ def first_sentence(summary: str) -> str:
     """
     text = summary.strip()
     match = _SENTENCE_END.search(text)
-    if match is None:
-        return text
-    excerpt = text[: match.end()]
-    opener = text[:1]
-    closer = _QUOTE_PAIRS.get(opener)
-    if closer is not None:
-        if opener == closer:
-            unbalanced = excerpt.count(opener) % 2 == 1
-        else:
-            unbalanced = excerpt.count(opener) > excerpt.count(closer)
-        if unbalanced:
-            excerpt += closer
-    return excerpt
+    return text if match is None else text[: match.end()]
 
 
 # How long the leader takes to close into a solid rule on hover or focus.
@@ -349,7 +358,7 @@ def _index_style() -> dict:
         },
         "& .index-link:focus-visible": {"outline": "none"},
         "& .index-entry:focus-within": {
-            "outline": f"2px solid {rx.color('accent', 8)}",
+            "outline": "2px solid var(--focus-ring)",
             "outline_offset": "2px",
             "border_radius": "var(--radius-1)",
         },
@@ -603,7 +612,7 @@ def _code_block(value: object, **props) -> rx.Component:
             },
             "& .code-copy:hover": {"background": rx.color("gray", 5)},
             "& .code-copy:focus-visible": {
-                "outline": f"2px solid {rx.color('accent', 8)}",
+                "outline": "2px solid var(--focus-ring)",
                 "outline_offset": "1px",
             },
             # Announced to screen readers only.
@@ -622,14 +631,32 @@ def _code_block(value: object, **props) -> rx.Component:
     )
 
 
+TABLE_SCROLL_CLASS = "table-scroll"
+# Markdown tables have no caption, so every scroll region takes this name.
+TABLE_SCROLL_LABEL = "Table, scrollable"
+
+
 def _table(*children, **props) -> rx.Component:
-    """Let a wide table scroll sideways instead of clipping on a phone."""
+    """Let a wide table scroll sideways instead of clipping on a phone.
+
+    The scroll viewport is a named, focusable region, so a keyboard reader can
+    reach the hidden columns with the arrow keys. ``identity.css`` draws its
+    edge shading where columns are hidden; the post body keeps the first
+    column in view (``_render_post``).
+    """
     return rx.scroll_area(
         rx.el.table(*children, **props, style={"min_width": "100%"}),
         type="auto",
         scrollbars="horizontal",
         width="100%",
         margin_y="1.5em",
+        class_name=TABLE_SCROLL_CLASS,
+        # Radix passes these to the viewport, the element that scrolls.
+        custom_attrs={
+            "tabIndex": 0,
+            "role": "region",
+            "aria-label": TABLE_SCROLL_LABEL,
+        },
         style={
             "& .rt-ScrollAreaScrollbar": {"background": rx.color("gray", 4)},
             "& .rt-ScrollAreaThumb": {"background": rx.color("gray", 11)},
@@ -720,7 +747,7 @@ def _series_box(meta: dict, series: Series) -> rx.Component:
                 "text_decoration_line": "underline",
             },
             "& .rt-Link:focus-visible": {
-                "outline": f"2px solid {rx.color('accent', 8)}",
+                "outline": "2px solid var(--focus-ring)",
                 "outline_offset": "2px",
                 "border_radius": "var(--radius-1)",
             },
@@ -867,7 +894,7 @@ def _table_of_contents(outline: list[TocEntry]) -> rx.Component | None:
             },
             "& .toc-link:hover": {"text_decoration": "underline"},
             "& :is(.toc-link, .toc-summary):focus-visible": {
-                "outline": f"2px solid {rx.color('accent', 8)}",
+                "outline": "2px solid var(--focus-ring)",
                 "outline_offset": "2px",
                 "border_radius": "var(--radius-1)",
             },
@@ -1175,7 +1202,7 @@ def _post_end(
                 "text_decoration_line": "underline",
             },
             "& :is(.post-end-link, .rt-Link):focus-visible": {
-                "outline": f"2px solid {rx.color('accent', 8)}",
+                "outline": "2px solid var(--focus-ring)",
                 "outline_offset": "2px",
                 "border_radius": "var(--radius-1)",
             },
@@ -1325,9 +1352,12 @@ def _render_post(
                 },
                 # Tables are ruled like printed proportions: a heavy rule
                 # above the head and below the last row, a hairline under
-                # the head, no vertical lines and no fills.
+                # the head, no vertical lines and no fills. Separate borders
+                # keep the table's rules outside the cells, so the sticky
+                # first column's ground cannot cover them.
                 "& table": {
-                    "border_collapse": "collapse",
+                    "border_collapse": "separate",
+                    "border_spacing": "0",
                     "border_top": TABLE_HEAVY_RULE,
                     "border_bottom": TABLE_HEAVY_RULE,
                 },
@@ -1346,6 +1376,20 @@ def _render_post(
                 },
                 "& th": {"font_weight": "600"},
                 "& thead th": {"border_bottom": TABLE_HAIRLINE},
+                # A scrolled table keeps each row's label beside its values,
+                # on the ground so the passing columns slide under it. Where
+                # scroll timelines run, identity.css lays the ground only
+                # once the table has scrolled.
+                "& :is(th, td):first-child": {
+                    "position": "sticky",
+                    "left": "0",
+                    "background_color": "var(--color-background)",
+                },
+                # Phones keep a value on one line and scroll the table
+                # instead; desktop tables fit, wrapping as before.
+                "@media screen and (max-width: 767.98px)": {
+                    "& td": {"white_space": "nowrap"},
+                },
                 "& blockquote": {
                     "border_left": f"1px solid {rx.color('gray', 8)}",
                     "padding": "0.25em 0 0.25em 1.25em",

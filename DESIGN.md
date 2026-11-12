@@ -9,7 +9,7 @@ colors:
   cloth-rule: "rgba(244, 248, 245, 0.32)"
   cloth-hover: "rgba(244, 248, 245, 0.1)"
   link-ink: "#2a7e3b"
-  focus-ring: "#65ba74"
+  focus-ring: "#2a7e3b"
   ground: "#f7f9f8"
   ink: "#1a211e"
   ink-muted: "#5f6563"
@@ -175,7 +175,7 @@ Colour values in the frontmatter are the light-theme resolutions. In source they
 
 ### Secondary
 - **Grass Link Ink** (`var(--accent-11)`, grass 11; dark theme resolves to grass 11 dark): every link, the hovered index entry, the leader's closed rule, the RSS link, the copy confirmation, the text caret. Clears 4.5:1 on the ground in both themes.
-- **Grass Focus Ring** (`var(--accent-8)`): 2px focus outlines on the ground.
+- **Grass Focus Ring** (`var(--accent-11)`): 2px focus outlines on the ground.
 - **Selection** (`var(--accent-a5)`): text selection wash, keeping the text's own colour.
 
 ### Neutral
@@ -255,12 +255,12 @@ Square by default. Tables have no radius and no fills. Radii appear only on cont
 ### Buttons
 - **On the cloth:** transparent with a 1px inset cloth-rule outline, cloth ink text, hover wash `--cloth-hover` on hover-capable devices; ghost icon buttons drop the outline.
 - **Solid (on the ground):** accent 9 darkened 22% with black, 30% on hover, so white text clears 4.5:1 (`a11y.css`).
-- **Focus:** 2px accent-8 outline, offset 2px; cloth-mark on the cloth.
+- **Focus:** 2px accent-11 outline, offset 2px; cloth-mark on the cloth.
 
 ### Index Entry (signature)
 - **Character:** a line from a book's index.
 - **Structure:** Besley title left, a dotted 2px hairline leader from the title's last word to the date, date right in 14px tabular figures; beneath, the summary's first sentence in muted 14px sans; beneath that, the kind and series as small-cap marks separated by middots.
-- **Hover / Focus:** the whole row is the hit area. The title turns grass 11 and the leader closes into a solid 2px grass-11 rule over 120ms ease-out; keyboard focus draws a 2px accent-8 ring around the row. Under reduced motion the change is immediate.
+- **Hover / Focus:** the whole row is the hit area. The title turns grass 11 and the leader closes into a solid 2px grass-11 rule over 120ms ease-out; keyboard focus draws a 2px accent-11 ring around the row. Under reduced motion the change is immediate.
 - **Grouping:** rows are grouped under year headings, newest first.
 
 ### Proportion Table

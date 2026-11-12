@@ -8,8 +8,6 @@ import pytest
 
 from alberto_codes_site.pages.blog import _load_posts, first_sentence, published_posts
 
-_OPENERS = {'"': '"', "“": "”"}
-
 
 @pytest.mark.parametrize(
     ("summary", "expected"),
@@ -26,9 +24,6 @@ _OPENERS = {'"': '"', "“": "”"}
         ("It ended. v0.6.0 records more.", "It ended. v0.6.0 records more."),
         ("One sentence only, with no end", "One sentence only, with no end"),
         ("Only one sentence.", "Only one sentence."),
-        ('"Quoted first. Second."', '"Quoted first."'),
-        ("“Curly first. Second.”", "“Curly first.”"),
-        ('"Whole quoted summary."', '"Whole quoted summary."'),
     ],
 )
 def test_first_sentence(summary, expected):
@@ -45,8 +40,4 @@ def test_every_excerpt_is_a_whole_sentence_from_its_summary(meta):
     excerpt = first_sentence(summary)
     assert excerpt
     assert excerpt[-1] in '.!?"”’)'
-    prefix = excerpt
-    closer = _OPENERS.get(summary[:1])
-    if closer and not summary.startswith(excerpt) and excerpt.endswith(closer):
-        prefix = excerpt[: -len(closer)]  # the closing mark added for balance
-    assert summary.startswith(prefix)
+    assert summary.startswith(excerpt)
