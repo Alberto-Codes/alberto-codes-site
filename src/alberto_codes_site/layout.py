@@ -39,7 +39,8 @@ READING_FONT_SIZE = "1.125rem"
 # centred in the wider post column.
 READING_COLUMN = {"max_width": READING_WIDTH, "margin_inline": "auto"}
 
-# The widest a block of 14px secondary text may run: an index summary, a
-# publication's description. In that sans the "0" is wider than the average
-# letter, so 65ch sets about 80 characters to a line.
+# The widest a block of secondary text may run: an index summary, a
+# publication's description, a page's introduction. In the site's sans the
+# "0" is wider than the average letter, so 65ch sets about 80 characters to
+# a line.
 SUMMARY_MEASURE = "65ch"

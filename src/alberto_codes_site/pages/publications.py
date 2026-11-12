@@ -336,6 +336,7 @@ def publications_page() -> rx.Component:
                 size="3",
                 color=rx.color("gray", 11),
                 line_height="1.7",
+                max_width=SUMMARY_MEASURE,
             ),
             rx.box(height="1em"),
             rx.vstack(
