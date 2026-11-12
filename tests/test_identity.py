@@ -26,6 +26,11 @@ from alberto_codes_site.pages.blog import (
     blog_page,
     published_posts,
 )
+from alberto_codes_site.pages.home import (
+    LATEST_POST_COUNT,
+    _latest_posts,
+    _latest_writing,
+)
 
 ASSETS = Path(__file__).resolve().parent.parent / "src" / "assets"
 FUTURE = date(2100, 1, 1)
@@ -66,6 +71,20 @@ def test_blog_index_is_an_index_not_cards():
     for year in years:
         assert f'"aria-label":"Posts from {year}"' in jsx
     assert jsx.count('className:"index-leader"') == len(posts)
+
+
+def test_home_latest_writing_is_index_rows_not_cards():
+    """Home's latest posts are blog index rows, with the index's own styles."""
+    jsx = str(_latest_writing(today=FUTURE))
+    count = len(_latest_posts(today=FUTURE))
+    assert count == LATEST_POST_COUNT
+    assert "RadixThemesCard" not in jsx
+    assert jsx.count('className:"index-entry"') == count
+    assert jsx.count('className:"index-leader"') == count
+    assert jsx.count('className:"index-summary"') == count
+    # The same leader close as /blog, not a copy that could drift.
+    assert f'["transition"] : "opacity {LEADER_CLOSE}"' in jsx
+    assert '["& .index-entry:is(:hover, :focus-within) .index-leader::after"]' in jsx
 
 
 def test_index_leader_closes_in_120ms_and_not_under_reduced_motion():

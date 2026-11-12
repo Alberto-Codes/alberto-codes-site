@@ -224,7 +224,7 @@ Every page sits in a Radix `size="3"` container (880px inner) with `var(--space-
 
 The masthead is sticky, with side padding `var(--space-4)` on phones and `var(--space-6)` from the md breakpoint; headings reached by fragment links carry a 5rem scroll margin so the band does not cover them.
 
-The one responsive hinge is 768px. Below it: body at 16px, headings one step down, the index has no leader and puts the date beside the marks, titles balance; table cells shrink to 14px with 0.5em 0.625em padding. Above it: body at 18px, the leader is drawn, the date sits right-aligned on the title's last line, table cells at 0.75em 1em.
+The main responsive hinge is 768px; the only other is 1400px, where a long post's contents move into the right margin as a rail. Below 768px: body at 16px, headings one step down, the index has no leader and puts the date beside the marks, titles balance; table cells shrink to 14px with 0.5em 0.625em padding. Above it: body at 18px, the leader is drawn, the date sits right-aligned on the title's last line, table cells at 0.75em 1em.
 
 The index is tight on purpose: rows carry 0.3em of block padding, the intro, legend and series run share `space-1` gaps so the first year heading lands high on the first screen.
 
@@ -271,6 +271,12 @@ Square by default. Tables have no radius and no fills. Radii appear only on cont
 
 ### Series Box and Contents
 - **Style:** both sit in the reading measure, closed by a soft 1px rule. The contents summary is a small-cap 14px mark with a CSS caret; entries are grass-11 links on hairline-ruled lines. Series links in runs are underlined because colour alone falls under 3:1 in dark mode.
+- **Contents by width:** one `nav` named "On this page" holds the list twice as native `details`. Below 768px the closed copy shows, so the body starts on the first screen; from 768px the open copy shows. The other copy is `display: none`, out of the tab order and the accessibility tree. No script decides; the page is prerendered.
+- **Contents rail:** from 1400px the open copy leaves the reading measure for the right margin, 2.5rem past the 880px column and up to 16rem wide, and stays in view below the masthead (`position: sticky`, 5rem) through the body and the post end, stopping before the footer. Same summary, same 14px sans links in grass 11 on hairline-ruled lines, same soft closing rule; long headings wrap, and a rail taller than the screen scrolls on its own. The inline block is gone at these widths, so the list appears once.
+- **Current section:** where the browser supports scroll target groups, the rail's link to the section in view is set in graphite with a 1px underline, so the mark never rewraps the entry. No fill, no weight change, no motion; elsewhere the rail simply has no mark.
+
+### Latest Writing (home)
+- **Style:** the home page's newest three posts are Index Entry rows, built by the blog index's own component and styles, under the "Latest writing" heading and its "All posts" link. No cards.
 
 ## Do's and Don'ts
 
@@ -292,4 +298,4 @@ Square by default. Tables have no radius and no fills. Radii appear only on cont
 
 ### Known gaps
 
-Recorded so they are not mistaken for rules. Link-preview (OG) images in `src/assets/og/` still carry the previous look and do not yet show the cloth or Besley. The table of contents does not track scroll position. Pages other than the blog index and posts inherit the theme, the cloth and the shared columns but have not been restructured into this world; their internal layouts are not evidence for this system.
+Recorded so they are not mistaken for rules. Link-preview (OG) images in `src/assets/og/` still carry the previous look and do not yet show the cloth or Besley. The contents mark the section in view only in the rail, and only where the browser supports scroll target groups. Pages other than the blog index and posts inherit the theme, the cloth and the shared columns but have not been restructured into this world; their internal layouts are not evidence for this system.

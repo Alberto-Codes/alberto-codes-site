@@ -22,7 +22,13 @@ from alberto_codes_site.headings import (
     heading_labels,
     heading_lines,
 )
-from alberto_codes_site.pages.blog import TOC_MIN_SECTIONS, _render_post
+from alberto_codes_site.layout import RAIL_MIN_VIEWPORT, RAIL_WIDTH
+from alberto_codes_site.pages.blog import (
+    TOC_FOLDED_CLASS,
+    TOC_MIN_SECTIONS,
+    TOC_OPEN_CLASS,
+    _render_post,
+)
 
 PAGES = {page.route: page.component for page in app._unevaluated_pages.values()}
 POST_ROUTES = sorted(
@@ -51,12 +57,21 @@ def _toc_targets(component: Component) -> list[str] | None:
     if not navs:
         return None
     (nav,) = navs
-    return [
-        # A router link's target compiles to a JS string literal; decode it.
-        json.loads(str(node.to)).removeprefix("#")
-        for node in _walk(nav)
-        if "toc-link" in _classes(node)
+    # The nav holds the list twice (folded for phones, open from 768px); both
+    # copies must link the same headings.
+    copies = [
+        [
+            # A router link's target compiles to a JS string literal; decode it.
+            json.loads(str(node.to)).removeprefix("#")
+            for node in _walk(details)
+            if "toc-link" in _classes(node)
+        ]
+        for details in _walk(nav)
+        if details.tag == "details"
     ]
+    assert len(copies) == 2
+    assert copies[0] == copies[1]
+    return copies[0]
 
 
 def _rendered_headings(component: Component) -> list[tuple[int, str]]:
@@ -122,6 +137,66 @@ def test_toc_is_a_labelled_nav_without_a_heading():
     assert not [
         n for n in _walk(nav) if n.tag and n.tag[0] == "h" and n.tag[1:].isdigit()
     ]
+
+
+LONG_BODY = "".join(f"## Part {n}\n\n### Detail {n}\n\n" for n in "1234")
+
+
+def test_toc_is_folded_on_phones_and_open_from_768px():
+    """One closed copy shows below 768px, one open copy from 768px up."""
+    jsx = str(_render_post({"title": "T"}, LONG_BODY))
+    assert f'jsx("details",{{className:"{TOC_FOLDED_CLASS}",open:false}}' in jsx
+    assert f'jsx("details",{{className:"{TOC_OPEN_CLASS}",open:true}}' in jsx
+    assert (
+        '["@media screen and (max-width: 767.98px)"] : '
+        f'({{ ["& .{TOC_OPEN_CLASS}"] : ({{ ["display"] : "none" }})'
+    ) in jsx
+    # The folded band is a full-height tap target, and paper gets one copy.
+    assert '["& .toc-summary"] : ({ ["minHeight"] : "44px" })' in jsx
+    assert (
+        '["@media print"] : '
+        f'({{ ["& .{TOC_FOLDED_CLASS}"] : ({{ ["display"] : "none" }}) }})'
+    ) in jsx
+    assert (
+        '["@media screen and (min-width: 768px)"] : '
+        f'({{ ["& .{TOC_FOLDED_CLASS}"] : ({{ ["display"] : "none" }}) }})'
+    ) in jsx
+
+
+@pytest.mark.parametrize("route", POST_ROUTES)
+def test_no_element_id_is_rendered_twice(route):
+    """The two copies of the contents add no id that the page repeats."""
+    ids = [
+        str(node.id)
+        for node in _walk(PAGES[route])
+        if getattr(node, "id", None) is not None
+    ]
+    assert len(ids) == len(set(ids))
+    headings = [heading_id for _, heading_id in _rendered_headings(PAGES[route])]
+    assert len(headings) == len(set(headings))
+
+
+def test_toc_becomes_a_sticky_named_rail_on_wide_screens():
+    """From the rail width the one nav sticks below the masthead, in its track."""
+    page = _render_post({"title": "T"}, LONG_BODY)
+    (nav,) = [n for n in _walk(page) if n.tag == "nav"]
+    assert nav.custom_attrs["aria-label"] == "On this page"
+    jsx = str(page)
+    rail = f'["@media screen and (min-width: {RAIL_MIN_VIEWPORT})"] : '
+    assert f'{rail}({{ ["position"] : "sticky", ["top"] : "{SCROLL_MARGIN}"' in jsx
+    assert '["overflowY"] : "auto"' in jsx
+    assert f'["gridTemplateColumns"] : "100% {RAIL_WIDTH}"' in jsx
+    assert '["& > .toc"] : ({ ["gridColumn"] : "2", ["gridRow"] : "1 / 3" })' in jsx
+    # The section in view, by CSS alone where the browser supports it.
+    assert '["scrollTargetGroup"] : "auto"' in jsx
+    assert '["& .toc-link:target-current"] : ({ ["color"] : "var(--gray-12)"' in jsx
+
+
+def test_short_post_has_no_rail():
+    """Without a contents list the post column stays a single stack."""
+    jsx = str(_render_post({"title": "T"}, "## One\n\n## Two\n"))
+    assert RAIL_MIN_VIEWPORT not in jsx
+    assert RAIL_WIDTH not in jsx
 
 
 def test_headings_clear_the_sticky_header():

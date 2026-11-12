@@ -6,9 +6,15 @@ import reflex as rx
 
 from alberto_codes_site.components.button_link import button_link
 from alberto_codes_site.components.meta_label import meta_list
-from alberto_codes_site.dates import time_el
 from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
-from alberto_codes_site.pages.blog import _load_posts, published_posts
+from alberto_codes_site.pages.blog import (
+    _index_entry,
+    _index_style,
+    _load_posts,
+    _series_label,
+    published_posts,
+)
+from alberto_codes_site.series import build_series
 from alberto_codes_site.tenure import years_at_wells_fargo
 
 LATEST_POST_COUNT = 3
@@ -90,38 +96,27 @@ def _section_heading(title: str, link_text: str, href: str) -> rx.Component:
     )
 
 
-def _latest_post_card(meta: dict) -> rx.Component:
-    """Render a compact post card: date, title and a two-line summary."""
-    return rx.link(
-        rx.card(
-            rx.vstack(
-                rx.text(
-                    time_el(meta.get("date", "")),
-                    size="1",
-                    color=rx.color("gray", 11),
-                ),
-                rx.heading(
-                    meta.get("title", "Untitled"), as_="h3", size="3", weight="bold"
-                ),
-                rx.text(
-                    meta.get("summary", ""),
-                    size="2",
-                    color=rx.color("gray", 11),
-                    style={
-                        "display": "-webkit-box",
-                        "-webkit-line-clamp": "2",
-                        "-webkit-box-orient": "vertical",
-                        "overflow": "hidden",
-                    },
-                ),
-                spacing="1",
-            ),
-            width="100%",
-            _hover={"box_shadow": "0 2px 8px rgba(0,0,0,0.1)"},
-        ),
-        href=f"/blog/{meta.get('slug', '')}",
-        underline="none",
-        width="100%",
+def _latest_writing(today: date | None = None) -> rx.Component:
+    """Render the newest posts as rows of the blog index, with its styles.
+
+    The rows are the blog index's own (``_index_entry``, ``_index_style``),
+    so the two pages cannot drift apart: title and leader, date, the
+    summary's first sentence, then the type and series marks.
+
+    Args:
+        today: The date to treat as now. Defaults to the build date.
+
+    Returns:
+        The ``ol`` of rows.
+    """
+    all_series = build_series(published_posts(_load_posts(), today=today))
+    return rx.el.ol(
+        *[
+            _index_entry(meta, _series_label(meta, all_series))
+            for meta in _latest_posts(today)
+        ],
+        class_name="latest-writing",
+        style=_index_style(),
     )
 
 
@@ -254,7 +249,7 @@ def home_page() -> rx.Component:
             rx.box(height="2em"),
             rx.vstack(
                 _section_heading("Latest writing", "All posts \u2192", "/blog"),
-                *[_latest_post_card(meta) for meta in _latest_posts()],
+                _latest_writing(),
                 spacing="3",
                 width="100%",
             ),
