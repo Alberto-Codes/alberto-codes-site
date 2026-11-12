@@ -63,7 +63,7 @@ MAIN_CONTENT_ID = "main-content"
 PAGES_DIR = Path(__file__).resolve().parent / "pages"
 
 
-def layout(page: rx.Component) -> rx.Component:
+def layout(page: rx.Component, route: str | None = None) -> rx.Component:
     """Wrap a page component with the shared navbar and footer.
 
     The first focusable element is a skip link to the ``<main>`` landmark;
@@ -74,6 +74,7 @@ def layout(page: rx.Component) -> rx.Component:
 
     Args:
         page: The page content to wrap.
+        route: The page's route, which the navbar marks as current.
 
     Returns:
         A vstack with a skip link, navbar, page content in ``<main>``, and footer.
@@ -89,7 +90,7 @@ def layout(page: rx.Component) -> rx.Component:
             href=f"#{MAIN_CONTENT_ID}",
             class_name="skip-link",
         ),
-        navbar(),
+        navbar(current=route),
         rx.el.main(page, id=MAIN_CONTENT_ID, tab_index=-1, flex="1", width="100%"),
         footer(),
         spacing="0",
@@ -104,7 +105,16 @@ def layout(page: rx.Component) -> rx.Component:
 app = rx.App(
     overlay_component=rx.fragment,
     enable_state=False,
+    # Grass 11 clears 4.5:1 for links on the sage ground in both themes.
+    theme=rx.theme(accent_color="grass", gray_color="sage"),
     head_components=[
+        # The heading face, fetched before the stylesheet asks for it.
+        rx.el.link(
+            rel="preload",
+            href="/fonts/Besley-wght.woff2",
+            type="font/woff2",
+            custom_attrs={"as": "font", "crossOrigin": "anonymous"},
+        ),
         # Feed autodiscovery on every page (#41).
         rx.el.link(
             rel="alternate",
@@ -119,7 +129,7 @@ app = rx.App(
         rx.el.link(rel="apple-touch-icon", href="/apple-touch-icon.png"),
         rx.el.link(rel="manifest", href="/site.webmanifest"),
     ],
-    stylesheets=["/a11y.css"],
+    stylesheets=["/identity.css", "/a11y.css"],
 )
 
 # Rebuilt on every import so `reflex run` and `reflex export` both ship a
@@ -167,7 +177,7 @@ def add_page(
         structured_data=structured_data,
     )
     app.add_page(
-        layout(page),
+        layout(page, route),
         route=route,
         title=title,
         description=description,

@@ -281,14 +281,14 @@ def test_render_post_without_a_series_has_no_series_parts():
     assert 'className:"post-end-series"' not in jsx
 
 
-def test_blog_index_lists_series_and_labels_cards():
-    """The index names each series with its size, and labels its cards."""
+def test_blog_index_lists_series_and_labels_entries():
+    """The index names each series with its size, and marks its entries."""
     jsx = str(PAGES["blog"])
     nav = jsx[jsx.index('"aria-label":"Series"') :]
     for series in SERIES:
         assert json.dumps(series.route) in nav
         parts = "1 part" if len(series) == 1 else f"{len(series)} parts"
-        assert f" \\u00b7 {parts}" in nav
+        assert f", {parts}" in nav
     for meta in SERIES_POSTS:
         series = series_of(meta, SERIES)
         label = f"Part {series.number(meta['slug'])} of {len(series)} \\u00b7 "

@@ -108,7 +108,7 @@ def timeline_item(role: dict) -> rx.Component:
                 width="12px",
                 height="12px",
                 border_radius="50%",
-                background_color=rx.color("blue", 9),
+                background_color=rx.color("gray", 9),
                 flex_shrink="0",
             ),
             rx.box(
@@ -130,13 +130,13 @@ def timeline_item(role: dict) -> rx.Component:
                     flex_direction=["column", "column", "row", "row", "row"],
                     gap="2",
                 ),
-                rx.text(role["company"], size="2", color=rx.color("slate", 11)),
+                rx.text(role["company"], size="2", color=rx.color("gray", 11)),
                 *(
                     [
                         rx.text(
                             role["location"],
                             size="1",
-                            color=rx.color("slate", 8),
+                            color=rx.color("gray", 11),
                         )
                     ]
                     if role["location"]
@@ -147,10 +147,10 @@ def timeline_item(role: dict) -> rx.Component:
                         rx.hstack(
                             rx.text(
                                 "\u2022",
-                                color=rx.color("blue", 11),
+                                color=rx.color("gray", 9),
                                 flex_shrink="0",
                             ),
-                            rx.text(bullet, size="2", color=rx.color("slate", 11)),
+                            rx.text(bullet, size="2", color=rx.color("gray", 11)),
                             align="start",
                         )
                         for bullet in role["bullets"]
@@ -173,12 +173,12 @@ def experience_page() -> rx.Component:
         rx.vstack(
             rx.box(height="4em"),
             rx.heading("Experience", as_="h1", size="8", weight="bold"),
-            rx.separator(size="4", color_scheme="blue"),
+            rx.separator(size="4", color_scheme="gray"),
             rx.text(
                 "From banking operations to enterprise AI \u2014 a "
                 f"{years_at_wells_fargo()}-year career built at Wells Fargo.",
                 size="3",
-                color=rx.color("slate", 11),
+                color=rx.color("gray", 11),
             ),
             rx.box(height="1em"),
             rx.vstack(
@@ -198,7 +198,7 @@ def experience_page() -> rx.Component:
                     rx.text(
                         "Bachelor of Science, Accounting Information Systems",
                         size="2",
-                        color=rx.color("slate", 11),
+                        color=rx.color("gray", 11),
                     ),
                     spacing="1",
                 ),

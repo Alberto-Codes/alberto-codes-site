@@ -12,7 +12,7 @@ def about_page() -> rx.Component:
         rx.vstack(
             rx.box(height="4em"),
             rx.heading("About Me", as_="h1", size="8", weight="bold"),
-            rx.separator(size="4", color_scheme="blue"),
+            rx.separator(size="4", color_scheme="gray"),
             rx.box(height="1em"),
             rx.hstack(
                 rx.image(
@@ -36,7 +36,7 @@ def about_page() -> rx.Component:
                         "I've grown into a principal-level engineering role leading "
                         "enterprise AI initiatives.",
                         size="3",
-                        color=rx.color("slate", 11),
+                        color=rx.color("gray", 11),
                         line_height="1.8",
                     ),
                     rx.text(
@@ -47,7 +47,7 @@ def about_page() -> rx.Component:
                         "two-time Top Performer award recipient, and I'm bilingual "
                         "in English and Spanish.",
                         size="3",
-                        color=rx.color("slate", 11),
+                        color=rx.color("gray", 11),
                         line_height="1.8",
                     ),
                     rx.text(
@@ -61,7 +61,7 @@ def about_page() -> rx.Component:
                         "for typed answers from open models, and judgevet "
                         "for TypeSafe's Jev. All eight are on PyPI.",
                         size="3",
-                        color=rx.color("slate", 11),
+                        color=rx.color("gray", 11),
                         line_height="1.8",
                     ),
                     spacing="4",

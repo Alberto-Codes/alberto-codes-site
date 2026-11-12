@@ -33,8 +33,22 @@ def fragment_link(*children, **props) -> rx.Component:
     return rx.el.a(*children, **props)
 
 
-# Reflex's default markdown heading sizes, kept so ids do not change the look.
+# Reflex's default markdown heading sizes; ``heading_scale_style`` overrides
+# the font size of the levels posts use.
 _MARKDOWN_HEADING_SIZES = {1: "6", 2: "5", 3: "4", 4: "3", 5: "2", 6: "1"}
+
+# A section heading opens with more room above it than below, so it reads as
+# the start of what follows rather than the end of what came before.
+HEADING_SPACE_ABOVE = "2em"
+HEADING_SPACE_BELOW = "0.5em"
+
+# Body heading sizes: phones first, then from the md breakpoint (768px), where
+# the body sets at 18px. Each stays clearly above the body size it sits in.
+HEADING_SIZES = {
+    "h2": ("1.375rem", "1.5rem"),
+    "h3": ("1.1875rem", "1.25rem"),
+    "h4": ("1.0625rem", "1.125rem"),
+}
 
 # Room above a heading that a fragment link scrolls to, so the sticky site
 # header (about 57px tall) does not cover it.
@@ -189,7 +203,8 @@ def heading_component_map(
                     value,
                     as_=f"h{_level}",
                     size=_size,
-                    margin_y="0.5em",
+                    margin_top=HEADING_SPACE_ABOVE,
+                    margin_bottom=HEADING_SPACE_BELOW,
                     id=lookup,
                 ),
                 fragment_link(
@@ -204,6 +219,30 @@ def heading_component_map(
         )
         for level, size in _MARKDOWN_HEADING_SIZES.items()
     }
+
+
+def heading_scale_style() -> dict:
+    """Return the post body style that sizes section headings.
+
+    Headings set in the display face (``--heading-font-family``) at the
+    sizes in ``HEADING_SIZES``, balanced across lines.
+
+    Returns:
+        A style dict for the element that holds the post body.
+    """
+    phone = {
+        f"& {tag}.rt-Heading": {
+            "font_size": small,
+            "line_height": "1.25",
+            "letter_spacing": "-0.005em",
+        }
+        for tag, (small, _large) in HEADING_SIZES.items()
+    }
+    desktop = {
+        f"& {tag}.rt-Heading": {"font_size": large}
+        for tag, (_small, large) in HEADING_SIZES.items()
+    }
+    return {**phone, "@media screen and (min-width: 768px)": desktop}
 
 
 def heading_anchor_style() -> dict:
@@ -238,9 +277,9 @@ def heading_anchor_style() -> dict:
         "& .heading-wrap:hover .heading-anchor, & .heading-anchor:focus-visible": {
             "opacity": "1",
         },
-        "& .heading-anchor:hover": {"color": rx.color("blue", 11)},
+        "& .heading-anchor:hover": {"color": rx.color("accent", 11)},
         "& .heading-anchor:focus-visible": {
-            "outline": f"2px solid {rx.color('blue', 8)}",
+            "outline": f"2px solid {rx.color('accent', 8)}",
             "outline_offset": "1px",
         },
         "@media (hover: none)": {"& .heading-anchor": {"opacity": "1"}},

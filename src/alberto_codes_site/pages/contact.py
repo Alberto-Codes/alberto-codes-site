@@ -24,7 +24,7 @@ def contact_link(icon_name: str, label: str, href: str) -> rx.Component:
     return rx.link(
         rx.card(
             rx.hstack(
-                rx.icon(icon_name, size=24, color=rx.color("blue", 9)),
+                rx.icon(icon_name, size=24, color=rx.color("gray", 11)),
                 rx.vstack(
                     rx.text(label, size="3", weight="medium"),
                     rx.text(
@@ -32,7 +32,7 @@ def contact_link(icon_name: str, label: str, href: str) -> rx.Component:
                         .replace("https://", "")
                         .replace("/Alberto_Nieto_Resume.pdf", "Download PDF"),
                         size="2",
-                        color=rx.color("slate", 11),
+                        color=rx.color("gray", 11),
                     ),
                     spacing="1",
                 ),
@@ -54,7 +54,7 @@ def contact_page() -> rx.Component:
         rx.vstack(
             rx.box(height="4em"),
             rx.heading("Contact", as_="h1", size="8", weight="bold"),
-            rx.separator(size="4", color_scheme="blue"),
+            rx.separator(size="4", color_scheme="gray"),
             rx.box(height="1em"),
             rx.text(
                 "Email is the best way to reach me. Questions about a post, a "
@@ -63,7 +63,7 @@ def contact_page() -> rx.Component:
                 "request, an issue on the tool's GitHub repository reaches me "
                 "just as well, and it helps the next person who runs into it.",
                 size="3",
-                color=rx.color("slate", 11),
+                color=rx.color("gray", 11),
                 line_height="1.8",
                 max_width=READING_WIDTH,
             ),

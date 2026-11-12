@@ -79,19 +79,21 @@ def test_post_text_is_larger_on_desktop_only():
     assert f'["fontSize"] : "{READING_FONT_SIZE}"' in jsx
 
 
-def test_post_header_spacers_are_desktop_only():
-    """Below 768px the post drops its top spacers so body text reaches screen one.
+def test_post_header_spacers_keep_body_text_on_screen_one():
+    """A post has no spacer above it, and the one under the back link is desktop-only.
 
     At 390x844 the first paragraph sat at 787px; hiding the 4em page spacer and
     the 1em space under the back link moved it to 675px (measured in a browser).
+    The 4em spacer is now gone at every width, so a post starts the same
+    distance below the masthead as the index does.
     """
     jsx = str(blog_post_page("2026-10-28-urgent-receipts-bulk-import"))
-    for height in ("4em", "1em"):
-        assert (
-            f'["height"] : "{height}", '
-            '["@media screen and (min-width: 0px)"] : ({ ["display"] : "none" }), '
-            '["@media screen and (min-width: 48em)"] : ({ ["display"] : "block" })'
-        ) in jsx
+    assert '["height"] : "4em"' not in jsx
+    assert (
+        '["height"] : "1em", '
+        '["@media screen and (min-width: 0px)"] : ({ ["display"] : "none" }), '
+        '["@media screen and (min-width: 48em)"] : ({ ["display"] : "block" })'
+    ) in jsx
 
 
 def test_post_body_links_underline_in_their_own_colour():
@@ -107,7 +109,7 @@ def test_post_table_cells_are_compact_on_phones_with_tabular_figures():
     """Cells are 14px with tighter padding below 768px; figures align at all widths."""
     jsx = str(_render_post({"title": "T"}, "| a |\n|---|\n| 1 |\n"))
     assert (
-        '["& th, & td"] : ({ ["border"] : "1px solid var(--gray-6)", '
+        '["& th, & td"] : ({ ["border"] : "none", '
         '["fontSize"] : "var(--font-size-2)", '
         '["fontVariantNumeric"] : "tabular-nums", ["padding"] : "0.5em 0.625em", '
         '["textAlign"] : "left", '

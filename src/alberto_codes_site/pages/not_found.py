@@ -31,14 +31,14 @@ def not_found_page() -> rx.Component:
     return rx.container(
         rx.vstack(
             rx.box(height="4em"),
-            rx.text("404", size="2", weight="medium", color=rx.color("blue", 11)),
+            rx.text("404", size="2", weight="medium", color=rx.color("gray", 11)),
             rx.heading("Page not found", as_="h1", size="8", weight="bold"),
-            rx.separator(size="4", color_scheme="blue"),
+            rx.separator(size="4", color_scheme="gray"),
             rx.text(
                 "That link leads nowhere. The page may have moved, or the "
                 "address may have a typo. These will get you back on track:",
                 size="3",
-                color=rx.color("slate", 11),
+                color=rx.color("gray", 11),
             ),
             rx.box(height="1em"),
             rx.flex(

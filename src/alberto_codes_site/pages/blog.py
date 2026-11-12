@@ -8,6 +8,7 @@ hidden until the first build on or after its date; deploys rebuild.
 """
 
 import math
+import re
 from datetime import date
 from pathlib import Path
 from urllib.parse import urlparse
@@ -31,6 +32,7 @@ from alberto_codes_site.headings import (
     heading_label,
     heading_labels,
     heading_lines,
+    heading_scale_style,
 )
 from alberto_codes_site.layout import (
     PAGE_COLUMN,
@@ -48,12 +50,13 @@ from alberto_codes_site.social import (
 
 POSTS_DIR = Path(__file__).resolve().parent.parent.parent / "posts"
 
-DIATAXIS_COLORS = {
-    "tutorial": "green",
-    "how-to": "orange",
-    "explanation": "violet",
-    "reference": "cyan",
-}
+# The md breakpoint, where a post's running text moves up to 18px.
+_DESKTOP = "@media screen and (min-width: 768px)"
+
+# A post table's rules: heavy above the head and below the last row, a
+# hairline under the head.
+TABLE_HEAVY_RULE = f"2px solid {rx.color('gray', 12)}"
+TABLE_HAIRLINE = f"1px solid {rx.color('gray', 8)}"
 
 
 def _parse_frontmatter(text: str) -> tuple[dict, str]:
@@ -160,63 +163,265 @@ def published_posts(
     return [(m, b) for _, m, b in kept]
 
 
-def _type_badge(post_type: str, size: str = "1") -> rx.Component:
-    """Render the Diataxis type as a label in its colour, not as a button."""
-    color = DIATAXIS_COLORS.get(post_type, "gray")
-    return meta_label(post_type, color_scheme=color, size=size)
+def _type_mark(post_type: str, size: str = "1") -> rx.Component:
+    """Render the Diataxis type as a small-cap mark, not as a coloured badge."""
+    return meta_label(post_type, mark=True, size=size)
 
 
-def _post_card(meta: dict, series_label: str | None = None) -> rx.Component:
-    """Render a blog post summary card linking to the full post.
+# The widest an index summary may run. Summaries are shown whole, so the
+# measure is the full 65ch; in the 14px sans, whose "0" is wider than its
+# average letter, that sets about 80 characters to a line.
+INDEX_SUMMARY_MEASURE = "65ch"
+
+# The leader is drawn this wide and clipped by its title, so it runs from the
+# title's last word to the date whatever the line length; its negative margin
+# keeps it out of line breaking except for this much length of its own. It is
+# bound to the title's last two words, so when the line is too full for it,
+# they wrap with it: no leader and no single word ends a title on its own line.
+LEADER_DRAWN_WIDTH = "100vw"
+LEADER_MIN_LENGTH = "3rem"
+
+# A sentence ends at ".", "!" or "?", optionally closed by a quote or bracket,
+# then whitespace and a capital, a digit or an opening quote. A full stop inside
+# "v0.5.0" or "4.5 bits" has no space after it, and one before a lowercase word
+# is not followed by a capital, so neither ends a sentence.
+_SENTENCE_END = re.compile(r"[.!?][\"'”’)\]]?(?=\s+[A-Z0-9\"“'‘])")
+
+# Opening quote marks and the closing mark each needs.
+_QUOTE_PAIRS = {'"': '"', "“": "”"}
+
+
+def first_sentence(summary: str) -> str:
+    """Return a summary's first complete sentence, for the blog index.
+
+    Never cuts mid-sentence and adds no ellipsis: with no sentence boundary,
+    the whole summary comes back. A summary written inside quotation marks
+    keeps them balanced, so its excerpt gets the closing mark.
+
+    Args:
+        summary: The post's front-matter summary.
+
+    Returns:
+        The first sentence, or the whole summary.
+
+    Examples:
+        ```python
+        first_sentence("It fit. Then it broke.")  # "It fit."
+        first_sentence("v0.5.0 shipped 4.5 bits. Then...")  # "v0.5.0 shipped 4.5 bits."
+        ```
+    """
+    text = summary.strip()
+    match = _SENTENCE_END.search(text)
+    if match is None:
+        return text
+    excerpt = text[: match.end()]
+    opener = text[:1]
+    closer = _QUOTE_PAIRS.get(opener)
+    if closer is not None:
+        if opener == closer:
+            unbalanced = excerpt.count(opener) % 2 == 1
+        else:
+            unbalanced = excerpt.count(opener) > excerpt.count(closer)
+        if unbalanced:
+            excerpt += closer
+    return excerpt
+
+
+# How long the leader takes to close into a solid rule on hover or focus.
+LEADER_CLOSE = "120ms ease-out"
+
+
+def _marks(*items: rx.Component) -> list[rx.Component]:
+    """Interleave index marks with middot separators."""
+    out: list[rx.Component] = []
+    for item in items:
+        if out:
+            out.append(rx.el.span(" · ", aria_hidden="true"))
+        out.append(item)
+    return out
+
+
+def _index_entry(
+    meta: dict, series_label: str | None = None, level: str = "h3"
+) -> rx.Component:
+    """Render one row of the blog index, set like a book's index entry.
+
+    The title links the post; a dotted leader runs from its last word to the
+    date, right-aligned in tabular figures. Beneath sit the summary's first
+    sentence (``first_sentence``) and, on their own line, the marks (the post
+    type and series position, small caps in the muted ink). On a phone the
+    leader and the trailing date give way, and the date joins the marks. The
+    link's hit area covers the row.
 
     Args:
         meta: The post's frontmatter.
-        series_label: A muted line such as "Part 2 of 7 · Saucier" for a
-            series part. It is plain text, since the whole card is a link.
+        series_label: "Part 2 of 7 · Saucier" for a series part, else None.
+        level: The heading level of the title, below its group's heading.
 
     Returns:
-        The card, wrapped in a link to the post.
+        The ``li`` for the post.
     """
-    label = [meta_label(series_label)] if series_label else []
-    return rx.link(
-        rx.card(
-            rx.vstack(
-                *label,
-                rx.hstack(
-                    _type_badge(meta.get("type", "post")),
-                    rx.text(
-                        time_el(meta.get("date", "")),
-                        size="1",
-                        color=rx.color("slate", 11),
+    day = meta.get("date", "")
+    marks = [_type_mark(meta.get("type", "post"))]
+    if series_label:
+        marks.append(meta_label(series_label, mark=True))
+    # The last two words and the leader wrap as one piece (from the md
+    # breakpoint, where the leader shows), so a wrapped title's last line holds
+    # two words and at least LEADER_MIN_LENGTH of leader.
+    words = meta.get("title", "Untitled").split(" ")
+    head, last = " ".join(words[:-2]), " ".join(words[-2:])
+    return rx.el.li(
+        rx.el.div(
+            rx.heading(
+                rx.link(
+                    f"{head} " if head else "",
+                    rx.el.span(
+                        last,
+                        rx.el.span(class_name="index-leader", aria_hidden="true"),
+                        class_name="index-tail",
                     ),
-                    rx.text(
-                        f"{meta.get('reading_time', 1)} min read",
-                        size="1",
-                        color=rx.color("slate", 11),
-                    ),
-                    spacing="2",
-                    align="center",
+                    href=f"/blog/{meta.get('slug', '')}",
+                    underline="none",
+                    class_name="index-link",
                 ),
-                rx.heading(
-                    meta.get("title", "Untitled"),
-                    as_="h2",
-                    size="4",
-                    weight="bold",
-                ),
-                rx.text(
-                    meta.get("summary", ""),
-                    size="2",
-                    color=rx.color("slate", 11),
-                ),
-                spacing="2",
+                as_=level,
+                size="4",
+                weight="bold",
+                class_name="index-title",
             ),
-            width="100%",
-            _hover={"box_shadow": "0 2px 8px rgba(0,0,0,0.1)"},
+            rx.el.span(time_el(day), class_name="index-date"),
+            class_name="index-line",
         ),
-        href=f"/blog/{meta.get('slug', '')}",
-        underline="none",
-        width="100%",
+        rx.el.p(first_sentence(meta.get("summary", "")), class_name="index-summary"),
+        rx.el.p(
+            rx.el.span(time_el(day), " · ", class_name="index-date-phone"),
+            *_marks(*marks),
+            class_name="index-marks",
+        ),
+        class_name="index-entry",
     )
+
+
+def _index_style() -> dict:
+    """Return the style of a list of index entries (``_index_entry``).
+
+    Desktop: the title with its leader, then the date, on one line; under it
+    the summary's first sentence at no more than ``INDEX_SUMMARY_MEASURE``,
+    then the marks. The leader starts after the title's last word and never
+    leaves its last two, and is clipped at the title's edge, so it always reaches the
+    date and keeps at least ``LEADER_MIN_LENGTH``. On hover or keyboard focus it
+    closes into a solid rule in the accent ink over ``LEADER_CLOSE``; under
+    reduced motion the change is immediate.
+    """
+    return {
+        "list_style": "none",
+        "margin": "0",
+        "padding": "0",
+        "width": "100%",
+        "& .index-entry": {
+            "position": "relative",
+            "display": "flex",
+            "flex_direction": "column",
+            "row_gap": "0.05em",
+            "padding_block": "0.3em",
+        },
+        "& .index-line": {
+            "display": "flex",
+            "align_items": "last baseline",
+            "column_gap": "0.5em",
+        },
+        "& .index-title": {
+            "flex": "1 1 auto",
+            "min_width": "0",
+            "margin": "0",
+            "font_size": "1.125rem",
+            "line_height": "1.3",
+            "letter_spacing": "0",
+            "font_weight": "600",
+            # Phones have no leader, so their titles balance; see the
+            # breakpoint below.
+            "text_wrap": "balance",
+            # Clips the drawn leader at the title's edge, by the date.
+            "overflow": "hidden",
+        },
+        "& .index-link": {"color": rx.color("gray", 12)},
+        # The whole row is the link's hit area.
+        "& .index-link::after": {
+            "content": '""',
+            "position": "absolute",
+            "inset": "0",
+        },
+        "& .index-link:focus-visible": {"outline": "none"},
+        "& .index-entry:focus-within": {
+            "outline": f"2px solid {rx.color('accent', 8)}",
+            "outline_offset": "2px",
+            "border_radius": "var(--radius-1)",
+        },
+        "& .index-leader": {
+            "display": "none",
+            "position": "relative",
+            "width": LEADER_DRAWN_WIDTH,
+            "height": "0",
+            "margin_inline_start": "0.5em",
+            # Takes only LEADER_MIN_LENGTH of the line; the rest is drawn
+            # past it and clipped.
+            "margin_inline_end": (
+                f"calc({LEADER_MIN_LENGTH} - {LEADER_DRAWN_WIDTH} - 0.5em)"
+            ),
+            "vertical_align": "0.3em",
+            "border_bottom": f"2px dotted {rx.color('gray', 8)}",
+        },
+        "& .index-leader::after": {
+            "content": '""',
+            "position": "absolute",
+            "inset_inline": "0",
+            "bottom": "-2px",
+            "height": "2px",
+            "background": rx.color("accent", 11),
+            "opacity": "0",
+            "transition": f"opacity {LEADER_CLOSE}",
+        },
+        "& .index-entry:is(:hover, :focus-within) .index-leader::after": {
+            "opacity": "1",
+        },
+        "& .index-entry:is(:hover, :focus-within) .index-link": {
+            "color": rx.color("accent", 11),
+        },
+        "& .index-date": {"display": "none"},
+        "& :is(.index-date, .index-date-phone)": {
+            "font_size": "var(--font-size-2)",
+            "font_variant_numeric": "tabular-nums",
+            "color": rx.color("gray", 11),
+            "white_space": "nowrap",
+        },
+        "& .index-summary": {
+            "margin": "0",
+            "max_width": INDEX_SUMMARY_MEASURE,
+            "font_size": "var(--font-size-2)",
+            "line_height": "var(--line-height-2)",
+            "color": rx.color("gray", 11),
+            "text_wrap": "pretty",
+        },
+        "& .index-marks": {
+            "margin": "0",
+            "font_size": "var(--font-size-1)",
+            "line_height": "var(--line-height-1)",
+            "color": rx.color("gray", 11),
+        },
+        "@media screen and (min-width: 768px)": {
+            # Balance would shorten the lines and strand the leader.
+            "& .index-title": {"text_wrap": "pretty"},
+            "& .index-leader": {"display": "inline-block"},
+            # Phones have no leader and wrap freely, so the glue never
+            # pushes a long pair past a narrow screen.
+            "& .index-tail": {"white_space": "nowrap"},
+            "& .index-date": {"display": "block"},
+            "& .index-date-phone": {"display": "none"},
+        },
+        "@media (prefers-reduced-motion: reduce)": {
+            "& .index-leader::after": {"transition": "none"},
+        },
+    }
 
 
 COPY_FEEDBACK_MS = 2000
@@ -402,7 +607,7 @@ def _code_block(value: object, **props) -> rx.Component:
             },
             "& .code-copy:hover": {"background": rx.color("gray", 5)},
             "& .code-copy:focus-visible": {
-                "outline": f"2px solid {rx.color('blue', 8)}",
+                "outline": f"2px solid {rx.color('accent', 8)}",
                 "outline_offset": "1px",
             },
             # Announced to screen readers only.
@@ -414,7 +619,7 @@ def _code_block(value: object, **props) -> rx.Component:
                 "clip_path": "inset(50%)",
                 "white_space": "nowrap",
             },
-            "& .code-copy-done": {"display": "none", "color": rx.color("green", 11)},
+            "& .code-copy-done": {"display": "none", "color": rx.color("accent", 11)},
             "& .code-copy[data-copied] .code-copy-idle": {"display": "none"},
             "& .code-copy[data-copied] .code-copy-done": {"display": "block"},
         },
@@ -506,22 +711,20 @@ def _series_box(meta: dict, series: Series) -> rx.Component:
             "align_items": "baseline",
             "justify_content": "space-between",
             "gap": "0.25em var(--space-4)",
-            "padding": "0.6em 1em",
-            "border": f"1px solid {rx.color('gray', 5)}",
-            "border_radius": "var(--radius-3)",
-            "background": rx.color("gray", 2),
+            "padding": "0.5em 0",
+            "border_bottom": f"1px solid {rx.color('gray', 6)}",
             "font_size": "var(--font-size-2)",
             "line_height": "var(--line-height-2)",
-            "color": rx.color("slate", 11),
+            "color": rx.color("gray", 11),
             "& p": {"margin": "0"},
             "& .series-steps": {"display": "flex", "gap": "var(--space-4)"},
             # Beside plain text, colour alone is under 3:1 in dark mode.
             "& .rt-Link": {
-                "color": rx.color("blue", 11),
+                "color": rx.color("accent", 11),
                 "text_decoration_line": "underline",
             },
             "& .rt-Link:focus-visible": {
-                "outline": f"2px solid {rx.color('blue', 8)}",
+                "outline": f"2px solid {rx.color('accent', 8)}",
                 "outline_offset": "2px",
                 "border_radius": "var(--radius-1)",
             },
@@ -617,27 +820,58 @@ def _table_of_contents(outline: list[TocEntry]) -> rx.Component | None:
         width="100%",
         style={
             **READING_COLUMN,
-            "border_left": f"3px solid {rx.color('gray', 6)}",
-            "padding": "0.25em 0 0.25em 1em",
+            # Set like a book's contents: the header's rule above, a hairline
+            # below, and each section on its own ruled line.
+            "border_bottom": f"1px solid {rx.color('gray', 6)}",
+            "padding": "0.5em 0",
             "& .toc-summary": {
                 "cursor": "pointer",
                 "font_size": "var(--font-size-2)",
                 "font_weight": "600",
+                "font_variant_caps": "all-small-caps",
+                "letter_spacing": "0.05em",
                 "color": rx.color("gray", 11),
+                # A drawn chevron replaces the browser's triangle.
+                "list_style": "none",
+                "display": "flex",
+                "align_items": "center",
+                "gap": "0.6em",
+            },
+            "& .toc-summary::-webkit-details-marker": {"display": "none"},
+            "& .toc-summary::before": {
+                "content": '""',
+                "width": "0.45em",
+                "height": "0.45em",
+                "border_right": "1.5px solid currentColor",
+                "border_bottom": "1.5px solid currentColor",
+                # Closed: points right. Open: points down.
+                "transform": "rotate(-45deg)",
+                "transition": f"transform {LEADER_CLOSE}",
+            },
+            "& details[open] > .toc-summary::before": {
+                "transform": "translateY(-0.15em) rotate(45deg)",
+            },
+            "@media (prefers-reduced-motion: reduce)": {
+                "& .toc-summary::before": {"transition": "none"},
             },
             "& ol": {"list_style": "none", "margin": "0", "padding": "0"},
-            "& details > ol": {"margin_top": "0.5em"},
+            "& details > ol": {"margin_top": "0.4em"},
+            "& details > ol > li": {
+                "border_top": f"1px solid {rx.color('gray', 4)}",
+                "padding_block": "0.3em",
+            },
             "& ol ol": {"padding_inline_start": "1em"},
-            "& li": {"margin": "0.25em 0"},
+            "& li": {"margin": "0"},
+            "& ol ol li": {"margin": "0.15em 0"},
             "& .toc-link": {
                 "font_size": "var(--font-size-2)",
                 "line_height": "var(--line-height-2)",
-                "color": rx.color("blue", 11),
+                "color": rx.color("accent", 11),
                 "text_decoration": "none",
             },
             "& .toc-link:hover": {"text_decoration": "underline"},
             "& :is(.toc-link, .toc-summary):focus-visible": {
-                "outline": f"2px solid {rx.color('blue', 8)}",
+                "outline": f"2px solid {rx.color('accent', 8)}",
                 "outline_offset": "2px",
                 "border_radius": "var(--radius-1)",
             },
@@ -905,8 +1139,8 @@ def _post_end(
             "gap": "var(--space-5)",
             "font_size": "var(--font-size-2)",
             "line_height": "var(--line-height-2)",
-            "color": rx.color("slate", 11),
-            "& p": {"margin": "0"},
+            "color": rx.color("gray", 11),
+            "& p": {"margin": "0", "text_wrap": "pretty"},
             "& .post-end-neighbours": {
                 "display": "grid",
                 "grid_template_columns": "1fr 1fr",
@@ -919,12 +1153,12 @@ def _post_end(
             },
             "& .post-end-label": {
                 "font_size": "var(--font-size-1)",
-                "color": rx.color("slate", 11),
+                "color": rx.color("gray", 11),
             },
             "& :is(.post-end-related, .post-end-series) .post-end-label": {
                 "margin_bottom": "0.25em",
             },
-            "& .post-end-title": {"color": rx.color("blue", 11)},
+            "& .post-end-title": {"color": rx.color("accent", 11)},
             "& .post-end-link:hover .post-end-title": {
                 "text_decoration": "underline",
             },
@@ -939,13 +1173,13 @@ def _post_end(
             },
             # These sit beside plain text; colour alone is under 3:1 against
             # it in dark mode, so underline them.
-            "& .series-link": {"color": rx.color("blue", 11)},
+            "& .series-link": {"color": rx.color("accent", 11)},
             "& :is(.post-end-profiles .rt-Link, .post-end-discussion, "
             "li .post-end-title, .series-link)": {
                 "text_decoration_line": "underline",
             },
             "& :is(.post-end-link, .rt-Link):focus-visible": {
-                "outline": f"2px solid {rx.color('blue', 8)}",
+                "outline": f"2px solid {rx.color('accent', 8)}",
                 "outline_offset": "2px",
                 "border_radius": "var(--radius-1)",
             },
@@ -985,7 +1219,7 @@ def _render_post(
                 "Updated ",
                 time_el(updated),
                 size="2",
-                color=rx.color("slate", 11),
+                color=rx.color("gray", 11),
                 class_name="post-updated",
             )
         ]
@@ -1002,39 +1236,49 @@ def _render_post(
             ),
             href="/blog",
             underline="none",
-            color=rx.color("blue", 11),
+            color=rx.color("accent", 11),
         ),
         # Phones drop the extra space under the back link, so the body's
         # first lines reach the first screen.
         rx.box(height="1em", display=rx.breakpoints(initial="none", sm="block")),
+        rx.heading(
+            meta.get("title", "Untitled"),
+            as_="h1",
+            size=rx.breakpoints(initial="7", sm="8"),
+            weight="bold",
+        ),
+        # The dateline follows the title, as in print; nothing sits above it.
         rx.hstack(
-            _type_badge(meta.get("type", "post"), size="2"),
+            _type_mark(meta.get("type", "post"), size="2"),
             rx.text(
-                time_el(meta.get("date", "")), size="2", color=rx.color("slate", 11)
+                time_el(meta.get("date", "")), size="2", color=rx.color("gray", 11)
             ),
             *updated_line,
             rx.text(
                 f"{meta.get('reading_time', 1)} min read",
                 size="2",
-                color=rx.color("slate", 11),
+                color=rx.color("gray", 11),
             ),
             spacing="2",
             align="center",
             wrap="wrap",
+            class_name="post-dateline",
         ),
-        rx.heading(
-            meta.get("title", "Untitled"),
-            as_="h1",
-            size="7",
-            weight="bold",
-        ),
+        # The summary sets at the body's own size, never below it.
         rx.text(
             meta.get("summary", ""),
-            size="3",
-            color=rx.color("slate", 11),
-            style={"font-style": "italic"},
+            color=rx.color("gray", 11),
+            class_name="post-summary",
+            style={
+                "font_size": "1rem",
+                "line_height": "1.55",
+                "text_wrap": "pretty",
+                "@media screen and (min-width: 768px)": {
+                    "font_size": READING_FONT_SIZE,
+                },
+            },
         ),
-        rx.separator(size="4", color_scheme="blue"),
+        rx.separator(size="4", color_scheme="gray"),
         spacing="4",
         width="100%",
         **READING_COLUMN,
@@ -1049,6 +1293,7 @@ def _render_post(
             style={
                 **figure_page_style(),
                 **heading_anchor_style(),
+                **{k: v for k, v in heading_scale_style().items() if k != _DESKTOP},
                 # Running text keeps to the measure; a paragraph that holds
                 # an image is a figure and keeps the full width. A heading's
                 # wrapper keeps it too, so its anchor link sits at the edge
@@ -1059,11 +1304,14 @@ def _render_post(
                 "& div.heading-wrap": READING_COLUMN,
                 # Desktop reads at 18px so the wider measure stays near 70
                 # characters; tables and code keep their own sizes.
-                "@media screen and (min-width: 768px)": {
+                _DESKTOP: {
                     "& :is(p:not(:has(> img)), li, blockquote)": {
                         "font_size": READING_FONT_SIZE,
                     },
+                    **heading_scale_style()[_DESKTOP],
                 },
+                # Paragraphs avoid a one-word last line.
+                "& p": {"text_wrap": "pretty"},
                 # Lists keep their 1.5rem bullet indent inside the measure.
                 "& :is(ul, ol)": {
                     "max_width": f"calc({READING_WIDTH} - 1.5rem)",
@@ -1079,13 +1327,18 @@ def _render_post(
                     "text_decoration_line": "underline",
                     "text_decoration_color": "currentColor",
                 },
+                # Tables are ruled like printed proportions: a heavy rule
+                # above the head and below the last row, a hairline under
+                # the head, no vertical lines and no fills.
                 "& table": {
                     "border_collapse": "collapse",
+                    "border_top": TABLE_HEAVY_RULE,
+                    "border_bottom": TABLE_HEAVY_RULE,
                 },
                 # Phones get smaller, tighter cells so more columns fit
                 # before the table scrolls; desktop keeps the body size.
                 "& th, & td": {
-                    "border": "1px solid var(--gray-6)",
+                    "border": "none",
                     "font_size": "var(--font-size-2)",
                     "font_variant_numeric": "tabular-nums",
                     "padding": "0.5em 0.625em",
@@ -1095,19 +1348,12 @@ def _render_post(
                         "padding": "0.75em 1em",
                     },
                 },
-                "& th": {
-                    "background": "var(--gray-3)",
-                    "font_weight": "600",
-                },
-                "& tr:nth-child(even)": {
-                    "background": "var(--gray-2)",
-                },
+                "& th": {"font_weight": "600"},
+                "& thead th": {"border_bottom": TABLE_HAIRLINE},
                 "& blockquote": {
-                    "border_left": "3px solid var(--blue-8)",
-                    "background": "var(--gray-2)",
-                    "padding": "0.75em 1.25em",
+                    "border_left": f"1px solid {rx.color('gray', 8)}",
+                    "padding": "0.25em 0 0.25em 1.25em",
                     "margin": "1.5em 0",
-                    "border_radius": "0 4px 4px 0",
                 },
                 "& blockquote p": {
                     "color": "var(--gray-11)",
@@ -1142,7 +1388,7 @@ def _parts(count: int) -> str:
 
 
 def _series_index(all_series: list[Series]) -> rx.Component:
-    """Render the blog index's "Series" line: each series, its size, its page.
+    """Render the blog index's series as one run of links, each with its size.
 
     Args:
         all_series: The series from ``build_series``, newest first.
@@ -1151,12 +1397,12 @@ def _series_index(all_series: list[Series]) -> rx.Component:
         A ``nav`` labelled with plain text, not a heading.
     """
     return rx.el.nav(
-        rx.el.span("Series", class_name="series-index-label"),
+        rx.el.span("Series:", class_name="series-index-label"),
         rx.el.ul(
             *[
                 rx.el.li(
                     rx.link(series.title, href=series.route),
-                    rx.el.span(f" · {_parts(len(series))}"),
+                    rx.el.span(f", {_parts(len(series))}"),
                 )
                 for series in all_series
             ]
@@ -1164,83 +1410,137 @@ def _series_index(all_series: list[Series]) -> rx.Component:
         aria_label="Series",
         width="100%",
         style={
-            "display": "flex",
-            "flex_wrap": "wrap",
-            "align_items": "baseline",
-            "gap": "0.25em var(--space-3)",
             "font_size": "var(--font-size-2)",
-            "line_height": "var(--line-height-2)",
-            "color": rx.color("slate", 11),
+            # Tighter than the body: on a phone the run takes six lines.
+            "line_height": "1.35",
+            "color": rx.color("gray", 11),
+            "text_wrap": "pretty",
+            # Run in on the same line as the series.
             "& .series-index-label": {
                 "font_weight": "600",
-                "color": rx.color("slate", 12),
+                "color": rx.color("gray", 12),
+                "margin_inline_end": "0.5em",
             },
-            "& ul": {
-                "display": "flex",
-                "flex_wrap": "wrap",
-                "gap": "0.25em var(--space-4)",
-                "list_style": "none",
+            "& ul": {"display": "inline", "margin": "0", "padding": "0"},
+            # A series, its size and the separator after it wrap as one
+            # piece, so no line starts with a separator.
+            "& li": {
+                "display": "inline-block",
+                "white_space": "nowrap",
                 "margin": "0",
                 "padding": "0",
             },
-            "& li": {"white_space": "nowrap"},
+            "& li:not(:last-child)::after": {
+                "content": '"\\00B7" / ""',
+                "margin_inline": "0.5em",
+                "color": rx.color("gray", 9),
+            },
             # Beside plain text, colour alone is under 3:1 in dark mode.
             "& .rt-Link": {
-                "color": rx.color("blue", 11),
+                "color": rx.color("accent", 11),
                 "text_decoration_line": "underline",
+                "line_height": "inherit",
             },
         },
     )
 
 
-# What each Diataxis type offers a reader, shown beside its label on /blog.
+# What each Diataxis type offers a reader, shown beside its mark on /blog;
+# the most common type first.
 DIATAXIS_DESCRIPTIONS = {
-    "tutorial": "learn by doing, step by step",
-    "how-to": "solve one specific problem",
-    "explanation": "understand why something works",
+    "explanation": "why something works",
+    "tutorial": "learn by doing",
+    "how-to": "solve one problem",
     "reference": "look up the details",
 }
 
 
 def _type_legend() -> rx.Component:
-    """Render the post types as a definition list: label, then what it means.
+    """Render the post types as one muted line: each mark, then what it means.
 
-    The labels stay inert text (issue #79) and the meanings are always
+    The marks stay inert text (issue #79) and the meanings are always
     visible rather than in a hover tooltip, which touch and keyboard readers
-    could not reach (issue #49). Two columns from the ``sm`` breakpoint, one
-    on phones.
+    could not reach (issue #49). It is still a definition list, set inline.
 
     Returns:
         A ``<dl>`` with one ``<dt>``/``<dd>`` pair per Diataxis type.
     """
     pairs = [
         rx.el.div(
-            rx.el.dt(_type_badge(label, size="2")),
-            rx.el.dd(
-                rx.text(description, as_="span", size="2"),
-                margin="0",
-                color=rx.color("slate", 11),
-            ),
-            display="flex",
-            align_items="baseline",
-            column_gap="0.5em",
-            flex_wrap="wrap",
+            rx.el.dt(_type_mark(label)),
+            rx.el.dd(description),
+            class_name="type-legend-pair",
         )
         for label, description in DIATAXIS_DESCRIPTIONS.items()
     ]
     return rx.el.dl(
         *pairs,
-        display="grid",
-        grid_template_columns=rx.breakpoints(initial="1fr", sm="repeat(2, 1fr)"),
-        column_gap="2em",
-        row_gap="0.25em",
-        margin="0",
+        class_name="type-legend",
         width="100%",
+        style={
+            "margin": "0",
+            "font_size": "var(--font-size-1)",
+            "line_height": "var(--line-height-2)",
+            "color": rx.color("gray", 11),
+            # Each pair and the separator after it wrap as one piece.
+            "& .type-legend-pair": {
+                "display": "inline-block",
+                "white_space": "nowrap",
+            },
+            "& .type-legend-pair:not(:last-child)::after": {
+                "content": '"\\00B7" / ""',
+                "margin_inline": "0.6em",
+                "color": rx.color("gray", 9),
+            },
+            "& dt, & dd": {"display": "inline", "margin": "0"},
+            "& dt": {"margin_inline_end": "0.35em"},
+            "& dt span": {"font_size": "inherit"},
+        },
     )
 
 
+def _year_groups(
+    posts: list[tuple[dict, str]], all_series: list[Series]
+) -> list[rx.Component]:
+    """Group the index entries under year headings, newest year first.
+
+    Args:
+        posts: The published posts, newest first.
+        all_series: The series, for each entry's series mark.
+
+    Returns:
+        One ``section`` per year: an h2 of the year over its entries.
+    """
+    years: dict[str, list[dict]] = {}
+    for meta, _body in posts:
+        day = post_date(meta)
+        years.setdefault(str(day.year) if day else "Undated", []).append(meta)
+    return [
+        rx.el.section(
+            rx.heading(
+                year, as_="h2", size="5", weight="bold", class_name="index-year"
+            ),
+            rx.el.ol(
+                *[_index_entry(m, _series_label(m, all_series)) for m in metas],
+                style=_index_style(),
+            ),
+            aria_label=f"Posts from {year}",
+            width="100%",
+            style={
+                "& .index-year": {
+                    "margin": "0",
+                    "padding_bottom": "0.2em",
+                    "border_bottom": f"1px solid {rx.color('gray', 7)}",
+                    "font_variant_numeric": "lining-nums",
+                },
+            },
+        )
+        for year, metas in years.items()
+    ]
+
+
 def blog_page(today: date | None = None) -> rx.Component:
-    """Render the blog index page listing the published posts.
+    """Render the blog index page: the posts as a book's index, by year.
 
     Args:
         today: The build date; posts dated after it are left out.
@@ -1256,17 +1556,17 @@ def blog_page(today: date | None = None) -> rx.Component:
             rx.vstack(
                 rx.box(height="4em"),
                 rx.heading("Blog", as_="h1", size="8", weight="bold"),
-                rx.separator(size="4", color_scheme="blue"),
+                rx.separator(size="4", color_scheme="gray"),
                 rx.box(height="4em"),
                 rx.vstack(
-                    rx.icon("notebook-pen", size=48, color=rx.color("slate", 7)),
+                    rx.icon("notebook-pen", size=48, color=rx.color("gray", 7)),
                     rx.heading(
-                        "Coming Soon", as_="h2", size="6", color=rx.color("slate", 9)
+                        "Coming Soon", as_="h2", size="6", color=rx.color("gray", 11)
                     ),
                     rx.text(
                         "Open source AI tooling, with the evidence.",
                         size="3",
-                        color=rx.color("slate", 11),
+                        color=rx.color("gray", 11),
                         text_align="center",
                         max_width="24em",
                     ),
@@ -1284,33 +1584,41 @@ def blog_page(today: date | None = None) -> rx.Component:
 
     return rx.container(
         rx.vstack(
-            rx.box(height="4em"),
             rx.hstack(
-                rx.heading("Blog", as_="h1", size="8", weight="bold"),
+                # One step smaller on phones, so three entries reach screen one.
+                rx.heading(
+                    "Blog",
+                    as_="h1",
+                    size=rx.breakpoints(initial="7", sm="8"),
+                    weight="bold",
+                ),
                 rx.link(
                     "RSS",
                     href="/feed.xml",
                     # A file, not a route: skip client-side navigation.
                     reload_document=True,
                     size="2",
-                    color=rx.color("blue", 11),
+                    color=rx.color("accent", 11),
                 ),
                 align="baseline",
                 justify="between",
                 width="100%",
             ),
-            rx.separator(size="4", color_scheme="blue"),
-            rx.box(height="1em"),
-            rx.text(
-                "Open source AI tooling, with the evidence.",
-                size="3",
-                color=rx.color("slate", 11),
+            # The introduction, legend and series sit close together, so the
+            # index itself starts as high as it can.
+            rx.vstack(
+                rx.text(
+                    "Open source AI tooling, with the evidence.",
+                    size="3",
+                    color=rx.color("gray", 11),
+                ),
+                _type_legend(),
+                *([_series_index(all_series)] if all_series else []),
+                spacing="1",
+                width="100%",
             ),
-            _type_legend(),
-            *([_series_index(all_series)] if all_series else []),
-            rx.box(height="1em"),
-            *[_post_card(m, _series_label(m, all_series)) for m, _ in posts],
-            spacing="4",
+            *_year_groups(posts, all_series),
+            spacing="2",
             **PAGE_COLUMN,
         ),
         size="3",
@@ -1331,13 +1639,10 @@ def blog_post_page(slug: str, today: date | None = None) -> rx.Component:
     posts = published_posts(_load_posts(), today=today)
     for meta, body in posts:
         if meta.get("slug") == slug:
+            # No spacer above the post: it starts at the page padding, the same
+            # distance below the masthead as the index's title.
             return rx.container(
                 rx.vstack(
-                    # Desktop only: on a phone this space pushed the post's
-                    # first paragraph off the first screen.
-                    rx.box(
-                        height="4em", display=rx.breakpoints(initial="none", sm="block")
-                    ),
                     _render_post(meta, body, posts),
                     spacing="4",
                     width="100%",
@@ -1351,9 +1656,9 @@ def blog_post_page(slug: str, today: date | None = None) -> rx.Component:
             rx.box(height="4em"),
             rx.heading("Post Not Found", as_="h1", size="7", weight="bold"),
             rx.text(
-                "Sorry, that post doesn't exist.", size="3", color=rx.color("slate", 11)
+                "Sorry, that post doesn't exist.", size="3", color=rx.color("gray", 11)
             ),
-            rx.link("Back to Blog", href="/blog", color=rx.color("blue", 11)),
+            rx.link("Back to Blog", href="/blog", color=rx.color("accent", 11)),
             spacing="4",
             align="center",
             min_height="60vh",
@@ -1403,32 +1708,24 @@ def series_page(slug: str, today: date | None = None) -> rx.Component:
                 ),
                 href="/blog",
                 underline="none",
-                color=rx.color("blue", 11),
+                color=rx.color("accent", 11),
             ),
             rx.heading(series.title, as_="h1", size="8", weight="bold"),
-            rx.separator(size="4", color_scheme="blue"),
+            rx.separator(size="4", color_scheme="gray"),
             rx.text(
                 f"A series in {_parts(len(series))}, ",
                 *span,
                 ".",
                 size="3",
-                color=rx.color("slate", 11),
+                color=rx.color("gray", 11),
             ),
             rx.el.ol(
                 *[
-                    rx.el.li(_post_card(part, f"Part {i} of {len(series)}"))
+                    _index_entry(part, f"Part {i} of {len(series)}", level="h2")
                     for i, part in enumerate(series.parts, start=1)
                 ],
                 class_name="series-parts",
-                style={
-                    "list_style": "none",
-                    "margin": "0",
-                    "padding": "0",
-                    "width": "100%",
-                    "display": "flex",
-                    "flex_direction": "column",
-                    "gap": "var(--space-4)",
-                },
+                style=_index_style(),
             ),
             spacing="4",
             **PAGE_COLUMN,

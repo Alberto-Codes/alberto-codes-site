@@ -55,6 +55,31 @@ VISUALLY_HIDDEN = {
 }
 
 
+def is_current(href: str, current: str | None) -> bool:
+    """Return whether the nav entry ``href`` is the page at route ``current``.
+
+    A post or series page counts as Blog; Home matches only the root.
+
+    Args:
+        href: A nav entry's route, from ``NAV_LINKS``.
+        current: The route of the page being rendered, or None.
+
+    Returns:
+        True when the entry should be marked as the current page.
+    """
+    if current is None:
+        return False
+    current = "/" + current.strip("/")
+    if href == "/":
+        return current == "/"
+    return current == href or current.startswith(f"{href}/")
+
+
+def _current_attrs(href: str, current: str | None) -> dict:
+    """Return ``aria-current="page"`` for the current page's entry, else nothing."""
+    return {"aria-current": "page"} if is_current(href, current) else {}
+
+
 def _resume_link(*, icon_size: int, size: str, **props) -> rx.Component:
     """Render the resume download as a link styled like an outline button.
 
@@ -85,7 +110,7 @@ def _resume_link(*, icon_size: int, size: str, **props) -> rx.Component:
     )
 
 
-def _mobile_menu() -> rx.Component:
+def _mobile_menu(current: str | None = None) -> rx.Component:
     """Render the hamburger button and the drawer it opens on small screens.
 
     The drawer is Vaul's, built on the Radix dialog, so the backdrop, the
@@ -94,6 +119,9 @@ def _mobile_menu() -> rx.Component:
     backdrop lives in the portal beside the panel so it covers the whole page
     rather than only the sticky header's stacking context. Each entry is
     wrapped in a drawer close, so following a link also shuts the menu.
+
+    Args:
+        current: The route of the page being rendered; its entry is marked.
 
     Returns:
         The drawer root holding the trigger, backdrop and menu panel.
@@ -121,7 +149,9 @@ def _mobile_menu() -> rx.Component:
                                     href=href,
                                     size="4",
                                     underline="none",
-                                    color=rx.color("slate", 11),
+                                    color=rx.color("gray", 11),
+                                    class_name="menu-link",
+                                    custom_attrs=_current_attrs(href, current),
                                 ),
                             )
                             for label, href in NAV_LINKS
@@ -152,8 +182,20 @@ def _mobile_menu() -> rx.Component:
     )
 
 
-def navbar() -> rx.Component:
-    """Render the top navigation bar with links and mobile drawer."""
+def navbar(current: str | None = None) -> rx.Component:
+    """Render the masthead: the wordmark and navigation on the cloth band.
+
+    The band's colours live in ``assets/identity.css`` (``.cloth``), so they
+    hold in both themes. The entry for the page being rendered carries
+    ``aria-current="page"``; pages are prerendered, so each one bakes its
+    own mark.
+
+    Args:
+        current: The route of the page being rendered, or None (the 404).
+
+    Returns:
+        The sticky masthead.
+    """
     return rx.box(
         rx.el.nav(
             rx.hstack(
@@ -162,13 +204,13 @@ def navbar() -> rx.Component:
                     rx.heading(
                         rx.el.span("Alberto.Codes"),
                         as_child=True,
-                        size="4",
+                        size="5",
                         weight="bold",
                         display="block",
                     ),
                     href="/",
                     underline="none",
-                    color=rx.color("slate", 12),
+                    color="var(--cloth-ink)",
                 ),
                 rx.spacer(),
                 rx.hstack(
@@ -179,8 +221,8 @@ def navbar() -> rx.Component:
                             size="2",
                             weight="medium",
                             underline="none",
-                            color=rx.color("slate", 11),
-                            _hover={"color": rx.color("slate", 12)},
+                            class_name="nav-link",
+                            custom_attrs=_current_attrs(href, current),
                         )
                         for label, href in NAV_LINKS
                     ],
@@ -190,17 +232,16 @@ def navbar() -> rx.Component:
                     align="center",
                     display=["none", "none", "flex", "flex", "flex"],
                 ),
-                _mobile_menu(),
+                _mobile_menu(current),
                 width="100%",
                 align="center",
             ),
             aria_label="Main",
             width="100%",
         ),
+        class_name="cloth",
         padding_x=SIDE_PADDING,
         padding_y="var(--space-4)",
-        border_bottom=f"1px solid {rx.color('gray', 4)}",
-        background_color=rx.color("gray", 2),
         position="sticky",
         top="0",
         z_index="10",
