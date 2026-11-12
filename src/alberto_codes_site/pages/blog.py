@@ -24,6 +24,7 @@ from alberto_codes_site.figures import (
     split_figures,
 )
 from alberto_codes_site.headings import (
+    SCROLL_MARGIN,
     Slugger,
     fragment_link,
     heading_anchor_style,
@@ -37,6 +38,9 @@ from alberto_codes_site.headings import (
 from alberto_codes_site.layout import (
     PAGE_COLUMN,
     PAGE_PADDING_Y,
+    RAIL_GAP,
+    RAIL_MIN_VIEWPORT,
+    RAIL_WIDTH,
     READING_COLUMN,
     READING_FONT_SIZE,
     READING_WIDTH,
@@ -53,6 +57,9 @@ POSTS_DIR = Path(__file__).resolve().parent.parent.parent / "posts"
 
 # The md breakpoint, where a post's running text moves up to 18px.
 _DESKTOP = "@media screen and (min-width: 768px)"
+_PHONE = "@media screen and (max-width: 767.98px)"
+# Where a long post's contents leave the column for the right margin.
+_RAIL = f"@media screen and (min-width: {RAIL_MIN_VIEWPORT})"
 
 # A post table's rules: heavy above the head and below the last row, a
 # hairline under the head.
@@ -802,13 +809,27 @@ def _toc_link(entry: TocEntry) -> rx.Component:
     return fragment_link(text, href=f"#{heading_id}", class_name="toc-link")
 
 
+# The two copies of a long post's contents: folded on a phone, so the body
+# starts on the first screen, and open from the md breakpoint up. Each is
+# ``display: none`` at the other width, which also takes it out of the
+# accessibility tree and the tab order. The site is prerendered, so the
+# choice is CSS rather than a script that changes the page after load.
+TOC_FOLDED_CLASS = "toc-folded"
+TOC_OPEN_CLASS = "toc-open"
+
+
 def _table_of_contents(outline: list[TocEntry]) -> rx.Component | None:
     """Render the "On this page" block for a post with enough sections.
 
     H2s are listed in order, each with its H3s nested beneath it; deeper
     headings are left out. The block is a ``nav`` named by its label rather
-    than a heading, so the post's heading outline is unchanged. It is a
-    ``details`` element, open on load, that a reader can fold away.
+    than a heading, so the post's heading outline is unchanged. It holds the
+    list twice, each in a ``details`` element a reader can fold and unfold:
+    ``TOC_FOLDED_CLASS``, closed on load, shows below the md breakpoint, and
+    ``TOC_OPEN_CLASS``, open on load, shows from it. From
+    ``RAIL_MIN_VIEWPORT`` the nav leaves the reading column and stays in view
+    in the right margin (``_post_main``); where the browser supports scroll
+    target groups, the link to the section in view is set at full weight.
 
     Args:
         outline: The post's headings from ``_post_body``.
@@ -825,19 +846,25 @@ def _table_of_contents(outline: list[TocEntry]) -> rx.Component | None:
             sections[-1][1].append(entry)
     if len(sections) < TOC_MIN_SECTIONS:
         return None
-    items = [
-        rx.el.li(
-            _toc_link(section),
-            *([rx.el.ol(*[rx.el.li(_toc_link(s)) for s in subs])] if subs else []),
-        )
-        for section, subs in sections
-    ]
-    return rx.el.nav(
-        rx.el.details(
+
+    def contents(class_name: str, is_open: bool) -> rx.Component:
+        items = [
+            rx.el.li(
+                _toc_link(section),
+                *([rx.el.ol(*[rx.el.li(_toc_link(s)) for s in subs])] if subs else []),
+            )
+            for section, subs in sections
+        ]
+        return rx.el.details(
             rx.el.summary("On this page", class_name="toc-summary"),
             rx.el.ol(*items),
-            open=True,
-        ),
+            open=is_open,
+            class_name=class_name,
+        )
+
+    return rx.el.nav(
+        contents(TOC_FOLDED_CLASS, is_open=False),
+        contents(TOC_OPEN_CLASS, is_open=True),
         aria_label="On this page",
         class_name="toc",
         width="100%",
@@ -847,6 +874,16 @@ def _table_of_contents(outline: list[TocEntry]) -> rx.Component | None:
             # below, and each section on its own ruled line.
             "border_bottom": f"1px solid {rx.color('gray', 6)}",
             "padding": "0.5em 0",
+            _PHONE: {
+                f"& .{TOC_OPEN_CLASS}": {"display": "none"},
+                # The whole ruled band is the tap target, not just the label.
+                "padding": "0",
+                "& .toc-summary": {"min_height": "44px"},
+                "& details[open]": {"padding_bottom": "0.5em"},
+            },
+            _DESKTOP: {f"& .{TOC_FOLDED_CLASS}": {"display": "none"}},
+            # Paper gets one contents list, not both copies.
+            "@media print": {f"& .{TOC_FOLDED_CLASS}": {"display": "none"}},
             "& .toc-summary": {
                 "cursor": "pointer",
                 "font_size": "var(--font-size-2)",
@@ -891,6 +928,7 @@ def _table_of_contents(outline: list[TocEntry]) -> rx.Component | None:
                 "line_height": "var(--line-height-2)",
                 "color": rx.color("accent", 11),
                 "text_decoration": "none",
+                "overflow_wrap": "break-word",
             },
             "& .toc-link:hover": {"text_decoration": "underline"},
             "& :is(.toc-link, .toc-summary):focus-visible": {
@@ -898,7 +936,72 @@ def _table_of_contents(outline: list[TocEntry]) -> rx.Component | None:
                 "outline_offset": "2px",
                 "border_radius": "var(--radius-1)",
             },
+            # The rail: out of the reading column and held below the
+            # masthead, scrolling on its own when taller than the screen. Its
+            # inline padding keeps the focus ring inside the scroll box,
+            # which would otherwise clip it.
+            _RAIL: {
+                "position": "sticky",
+                "top": SCROLL_MARGIN,
+                "max_width": "none",
+                "margin_inline": "0",
+                "max_height": f"calc(100vh - {SCROLL_MARGIN} - var(--space-4))",
+                "overflow_y": "auto",
+                "overscroll_behavior": "contain",
+                "padding": "0.5em 4px",
+                # Where scroll target groups run, the link whose section is
+                # in view; other browsers ignore both rules.
+                f"& .{TOC_OPEN_CLASS} > ol": {"scroll_target_group": "auto"},
+                # Ink and an underline rather than weight: a bolder link
+                # would rewrap in a rail this narrow and shift the entries
+                # below it mid-scroll.
+                "& .toc-link:target-current": {
+                    "color": rx.color("gray", 12),
+                    "text_decoration": "underline",
+                    "text_decoration_thickness": "1px",
+                    "text_underline_offset": "0.2em",
+                },
+            },
         },
+    )
+
+
+def _post_main(toc: rx.Component | None, *children: rx.Component) -> rx.Component:
+    """Stack a post's contents, body and end, with the contents as a rail.
+
+    Below ``RAIL_MIN_VIEWPORT`` they stack in one column. From it, a post with
+    contents is a two-column grid: the body and end keep the full post
+    column, and the contents take a second track past its right edge, in the
+    page margin, spanning both rows, so the rail stays in view through the
+    whole post and stops before the footer.
+
+    Args:
+        toc: The post's contents from ``_table_of_contents``, or None.
+        *children: The post body and the post end, in order.
+
+    Returns:
+        The stack.
+    """
+    style: dict = {
+        "display": "flex",
+        "flex_direction": "column",
+        "gap": "var(--space-4)",
+        "width": "100%",
+    }
+    if toc is not None:
+        style[_RAIL] = {
+            "display": "grid",
+            "grid_template_columns": f"100% {RAIL_WIDTH}",
+            "column_gap": RAIL_GAP,
+            "align_items": "start",
+            "& > .toc": {"grid_column": "2", "grid_row": "1 / 3"},
+            "& > :not(.toc)": {"grid_column": "1"},
+        }
+    return rx.box(
+        *([toc] if toc is not None else []),
+        *children,
+        class_name="post-main",
+        style=style,
     )
 
 
@@ -1309,105 +1412,107 @@ def _render_post(
     return rx.vstack(
         header,
         *([_series_box(meta, series)] if series is not None else []),
-        *([toc] if toc is not None else []),
-        rx.box(
-            *body_components,
-            width="100%",
-            style={
-                **figure_page_style(),
-                **heading_anchor_style(),
-                **{k: v for k, v in heading_scale_style().items() if k != _DESKTOP},
-                # Running text keeps to the measure; a paragraph that holds
-                # an image is a figure and keeps the full width. A heading's
-                # wrapper keeps it too, so its anchor link sits at the edge
-                # of the measure.
-                "& :is(p:not(:has(> img)), h2, h3, h4, h5, h6, blockquote)": (
-                    READING_COLUMN
-                ),
-                "& div.heading-wrap": READING_COLUMN,
-                # Desktop reads at 18px so the wider measure stays near 70
-                # characters; tables and code keep their own sizes.
-                _DESKTOP: {
-                    "& :is(p:not(:has(> img)), li, blockquote)": {
-                        "font_size": READING_FONT_SIZE,
-                    },
-                    **heading_scale_style()[_DESKTOP],
-                },
-                # Paragraphs avoid a one-word last line.
-                "& p": {"text_wrap": "pretty"},
-                # Lists keep their 1.5rem bullet indent inside the measure.
-                "& :is(ul, ol)": {
-                    "max_width": f"calc({READING_WIDTH} - 1.5rem)",
-                    "margin_inline_start": (
-                        f"calc(max(0px, (100% - {READING_WIDTH}) / 2) + 1.5rem)"
+        _post_main(
+            toc,
+            rx.box(
+                *body_components,
+                width="100%",
+                style={
+                    **figure_page_style(),
+                    **heading_anchor_style(),
+                    **{k: v for k, v in heading_scale_style().items() if k != _DESKTOP},
+                    # Running text keeps to the measure; a paragraph that holds
+                    # an image is a figure and keeps the full width. A heading's
+                    # wrapper keeps it too, so its anchor link sits at the edge
+                    # of the measure.
+                    "& :is(p:not(:has(> img)), h2, h3, h4, h5, h6, blockquote)": (
+                        READING_COLUMN
                     ),
-                },
-                "& :not(pre) > code": {"padding_inline_end": "0"},
-                # Body links sit in running text; colour alone is under 3:1
-                # against it in dark mode, so underline them in the link's
-                # own colour (Radix draws it at under 30% opacity).
-                "& .rt-Link": {
-                    "text_decoration_line": "underline",
-                    "text_decoration_color": "currentColor",
-                },
-                # Tables are ruled like printed proportions: a heavy rule
-                # above the head and below the last row, a hairline under
-                # the head, no vertical lines and no fills. Separate borders
-                # keep the table's rules outside the cells, so the sticky
-                # first column's ground cannot cover them.
-                "& table": {
-                    "border_collapse": "separate",
-                    "border_spacing": "0",
-                    "border_top": TABLE_HEAVY_RULE,
-                    "border_bottom": TABLE_HEAVY_RULE,
-                },
-                # Phones get smaller, tighter cells so more columns fit
-                # before the table scrolls; desktop keeps the body size.
-                "& th, & td": {
-                    "border": "none",
-                    "font_size": "var(--font-size-2)",
-                    "font_variant_numeric": "tabular-nums",
-                    "padding": "0.5em 0.625em",
-                    "text_align": "left",
-                    "@media screen and (min-width: 768px)": {
-                        "font_size": "inherit",
-                        "padding": "0.75em 1em",
+                    "& div.heading-wrap": READING_COLUMN,
+                    # Desktop reads at 18px so the wider measure stays near 70
+                    # characters; tables and code keep their own sizes.
+                    _DESKTOP: {
+                        "& :is(p:not(:has(> img)), li, blockquote)": {
+                            "font_size": READING_FONT_SIZE,
+                        },
+                        **heading_scale_style()[_DESKTOP],
+                    },
+                    # Paragraphs avoid a one-word last line.
+                    "& p": {"text_wrap": "pretty"},
+                    # Lists keep their 1.5rem bullet indent inside the measure.
+                    "& :is(ul, ol)": {
+                        "max_width": f"calc({READING_WIDTH} - 1.5rem)",
+                        "margin_inline_start": (
+                            f"calc(max(0px, (100% - {READING_WIDTH}) / 2) + 1.5rem)"
+                        ),
+                    },
+                    "& :not(pre) > code": {"padding_inline_end": "0"},
+                    # Body links sit in running text; colour alone is under 3:1
+                    # against it in dark mode, so underline them in the link's
+                    # own colour (Radix draws it at under 30% opacity).
+                    "& .rt-Link": {
+                        "text_decoration_line": "underline",
+                        "text_decoration_color": "currentColor",
+                    },
+                    # Tables are ruled like printed proportions: a heavy rule
+                    # above the head and below the last row, a hairline under
+                    # the head, no vertical lines and no fills. Separate borders
+                    # keep the table's rules outside the cells, so the sticky
+                    # first column's ground cannot cover them.
+                    "& table": {
+                        "border_collapse": "separate",
+                        "border_spacing": "0",
+                        "border_top": TABLE_HEAVY_RULE,
+                        "border_bottom": TABLE_HEAVY_RULE,
+                    },
+                    # Phones get smaller, tighter cells so more columns fit
+                    # before the table scrolls; desktop keeps the body size.
+                    "& th, & td": {
+                        "border": "none",
+                        "font_size": "var(--font-size-2)",
+                        "font_variant_numeric": "tabular-nums",
+                        "padding": "0.5em 0.625em",
+                        "text_align": "left",
+                        "@media screen and (min-width: 768px)": {
+                            "font_size": "inherit",
+                            "padding": "0.75em 1em",
+                        },
+                    },
+                    "& th": {"font_weight": "600"},
+                    "& thead th": {"border_bottom": TABLE_HAIRLINE},
+                    # A scrolled table keeps each row's label beside its values,
+                    # on the ground so the passing columns slide under it. Where
+                    # scroll timelines run, identity.css lays the ground only
+                    # once the table has scrolled.
+                    "& :is(th, td):first-child": {
+                        "position": "sticky",
+                        "left": "0",
+                        "background_color": "var(--color-background)",
+                    },
+                    # Phones keep a value on one line and scroll the table
+                    # instead; desktop tables fit, wrapping as before.
+                    "@media screen and (max-width: 767.98px)": {
+                        "& td": {"white_space": "nowrap"},
+                    },
+                    "& blockquote": {
+                        "border_left": f"1px solid {rx.color('gray', 8)}",
+                        "padding": "0.25em 0 0.25em 1.25em",
+                        "margin": "1.5em 0",
+                    },
+                    "& blockquote p": {
+                        "color": "var(--gray-11)",
+                        "font_style": "italic",
+                    },
+                    "& blockquote > :first-child": {
+                        "margin_top": "0",
+                    },
+                    "& blockquote > :last-child": {
+                        "margin_bottom": "0",
                     },
                 },
-                "& th": {"font_weight": "600"},
-                "& thead th": {"border_bottom": TABLE_HAIRLINE},
-                # A scrolled table keeps each row's label beside its values,
-                # on the ground so the passing columns slide under it. Where
-                # scroll timelines run, identity.css lays the ground only
-                # once the table has scrolled.
-                "& :is(th, td):first-child": {
-                    "position": "sticky",
-                    "left": "0",
-                    "background_color": "var(--color-background)",
-                },
-                # Phones keep a value on one line and scroll the table
-                # instead; desktop tables fit, wrapping as before.
-                "@media screen and (max-width: 767.98px)": {
-                    "& td": {"white_space": "nowrap"},
-                },
-                "& blockquote": {
-                    "border_left": f"1px solid {rx.color('gray', 8)}",
-                    "padding": "0.25em 0 0.25em 1.25em",
-                    "margin": "1.5em 0",
-                },
-                "& blockquote p": {
-                    "color": "var(--gray-11)",
-                    "font_style": "italic",
-                },
-                "& blockquote > :first-child": {
-                    "margin_top": "0",
-                },
-                "& blockquote > :last-child": {
-                    "margin_bottom": "0",
-                },
-            },
+            ),
+            _post_end(meta, posts, series),
         ),
-        _post_end(meta, posts, series),
         spacing="4",
         width="100%",
     )
