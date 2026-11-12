@@ -120,6 +120,7 @@ def test_post_table_cells_are_compact_on_phones_with_tabular_figures():
 
 
 def test_publication_text_keeps_a_measure():
-    """Each publication's summary and contribution are capped, not column-wide."""
+    """The introduction and each summary and contribution are capped."""
     jsx = str(publications_page())
-    assert jsx.count(f'["maxWidth"] : "{SUMMARY_MEASURE}"') == 2 * len(PUBLICATIONS)
+    capped = jsx.count(f'["maxWidth"] : "{SUMMARY_MEASURE}"')
+    assert capped == 1 + 2 * len(PUBLICATIONS)
