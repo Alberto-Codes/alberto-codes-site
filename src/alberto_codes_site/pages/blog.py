@@ -40,6 +40,7 @@ from alberto_codes_site.layout import (
     READING_COLUMN,
     READING_FONT_SIZE,
     READING_WIDTH,
+    SUMMARY_MEASURE,
 )
 from alberto_codes_site.series import Series, build_series, series_of
 from alberto_codes_site.social import (
@@ -167,11 +168,6 @@ def _type_mark(post_type: str, size: str = "1") -> rx.Component:
     """Render the Diataxis type as a small-cap mark, not as a coloured badge."""
     return meta_label(post_type, mark=True, size=size)
 
-
-# The widest an index summary may run. Summaries are shown whole, so the
-# measure is the full 65ch; in the 14px sans, whose "0" is wider than its
-# average letter, that sets about 80 characters to a line.
-INDEX_SUMMARY_MEASURE = "65ch"
 
 # The leader is drawn this wide and clipped by its title, so it runs from the
 # title's last word to the date whatever the line length; its negative margin
@@ -306,7 +302,7 @@ def _index_style() -> dict:
     """Return the style of a list of index entries (``_index_entry``).
 
     Desktop: the title with its leader, then the date, on one line; under it
-    the summary's first sentence at no more than ``INDEX_SUMMARY_MEASURE``,
+    the summary's first sentence at no more than ``SUMMARY_MEASURE``,
     then the marks. The leader starts after the title's last word and never
     leaves its last two, and is clipped at the title's edge, so it always reaches the
     date and keeps at least ``LEADER_MIN_LENGTH``. On hover or keyboard focus it
@@ -396,7 +392,7 @@ def _index_style() -> dict:
         },
         "& .index-summary": {
             "margin": "0",
-            "max_width": INDEX_SUMMARY_MEASURE,
+            "max_width": SUMMARY_MEASURE,
             "font_size": "var(--font-size-2)",
             "line_height": "var(--line-height-2)",
             "color": rx.color("gray", 11),
