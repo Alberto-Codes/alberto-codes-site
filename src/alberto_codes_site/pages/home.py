@@ -1,4 +1,4 @@
-"""Home page with hero, latest writing, current projects and areas of expertise."""
+"""Home page with an introduction, featured project, latest writing and more projects."""
 
 from datetime import date
 
@@ -170,8 +170,8 @@ def _building_card(
     result = rx.vstack(
         rx.heading(
             project["title"],
-            as_="h3",
-            size="3",
+            as_="h2" if figure is not None else "h3",
+            size="5" if figure is not None else "3",
             weight="medium",
         ),
         rx.text(
@@ -216,7 +216,7 @@ def _building_card(
 
 
 def home_page() -> rx.Component:
-    """Render the home page: hero, latest writing, projects and expertise."""
+    """Render the introduction, featured receipt, writing, other projects and expertise."""
     years = years_at_wells_fargo()
     return rx.container(
         rx.vstack(
@@ -316,7 +316,7 @@ def home_page() -> rx.Component:
                 ),
                 spacing="5",
                 # Two by two on phones, so the badges take two rows rather than
-                # four and "Latest writing" stays near the top (issue #84).
+                # four (issue #84).
                 display=["grid", "grid", "flex", "flex", "flex"],
                 grid_template_columns="repeat(2, auto)",
                 row_gap="var(--space-3)",
@@ -329,6 +329,8 @@ def home_page() -> rx.Component:
                 spacing="4",
             ),
             rx.box(height="var(--space-2)"),
+            _building_card(TYPEVET, figure=_receipt_comparison()),
+            rx.box(height="1em"),
             rx.vstack(
                 _section_heading("Latest writing", "All posts \u2192", "/blog"),
                 _latest_writing(),
@@ -339,10 +341,7 @@ def home_page() -> rx.Component:
             ),
             rx.box(height="1em"),
             rx.vstack(
-                _section_heading(
-                    "What I'm building", "View all projects \u2192", "/projects"
-                ),
-                _building_card(TYPEVET, figure=_receipt_comparison()),
+                _section_heading("More projects", "View all projects \u2192", "/projects"),
                 rx.grid(
                     *[_building_card(project) for project in BUILDING],
                     columns=rx.breakpoints(initial="1", sm="2"),
