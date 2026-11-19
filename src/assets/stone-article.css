@@ -1,0 +1,99 @@
+/* The typevet receipt article uses the Stone treatment from the local theme trial. */
+@font-face {
+  font-family: "Figtree";
+  src: url("/fonts/figtree.woff2") format("woff2");
+  font-weight: 300 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Montserrat";
+  src: url("/fonts/montserrat.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+main:has(.stone-article) {
+  --article-paper: #f9f8fa;
+  --article-ink: #25252a;
+  --article-muted: #5b5862;
+  --article-line: #d0ccd5;
+  --article-tint: #e9e6ed;
+  background: var(--article-paper);
+}
+.dark main:has(.stone-article) {
+  --article-paper: #25252a;
+  --article-ink: #f5f2f8;
+  --article-muted: #c3bccb;
+  --article-line: #56535e;
+  --article-tint: #36343e;
+}
+.stone-article {
+  --default-font-family: "Figtree", system-ui, sans-serif;
+  --heading-font-family: "Montserrat", system-ui, sans-serif;
+  color: var(--article-ink);
+  font-family: var(--default-font-family);
+}
+.stone-article :is(h1, h2, h3) {
+  font-family: var(--heading-font-family);
+  font-weight: 600;
+  letter-spacing: -.03em;
+}
+.stone-article h1.rt-Heading {
+  font-size: clamp(2rem, 4.3vw, 3rem);
+  line-height: 1.18;
+  text-wrap: balance;
+}
+.stone-article .post-summary {
+  color: var(--article-muted);
+  font-size: 1.1rem;
+  font-style: normal;
+  line-height: 1.55;
+}
+.stone-article .post-meta { font-variant-numeric: tabular-nums; }
+.stone-article figure { margin: 1.5rem 0; }
+.stone-article figure .figure-scroll { margin-bottom: 0; }
+.stone-article figure figcaption {
+  margin: .65rem auto;
+  max-width: 40rem;
+  font-size: .95rem;
+  line-height: 1.5;
+  color: var(--article-muted);
+}
+.stone-article table { font-variant-numeric: tabular-nums; }
+.stone-article table :is(th,td) { border-color: var(--article-line); }
+.stone-article table thead th { background: var(--article-tint); }
+
+.stone-article .receipt-comparison { container-type: inline-size; }
+.stone-article .receipt-stacked { display: none; }
+
+/* The original SVG needs 770px of column width to keep its labels legible. */
+@container (width < 770px) {
+  .receipt-comparison > .figure-scroll { display: none; }
+  .stone-article .receipt-stacked {
+    display: block;
+    max-width: 32.5rem;
+    margin-inline: auto;
+    padding: 1rem;
+    border: 1px solid var(--article-line);
+    border-radius: var(--radius-3);
+    background: var(--article-paper);
+  }
+  .receipt-stacked dl { margin: 0; }
+  .receipt-stacked dt, .receipt-stacked small {
+    color: var(--article-muted);
+    font-size: .875rem;
+    line-height: 1.45;
+  }
+  .receipt-stacked dd {
+    margin: .2rem 0 .75rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .receipt-stacked dd:not(:last-child) {
+    border-bottom: 1px solid var(--article-line);
+    padding-bottom: .75rem;
+  }
+  .receipt-stacked img { display: block; width: 100%; height: auto; }
+  .receipt-stacked small { display: block; font-weight: 400; }
+}

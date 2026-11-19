@@ -2,6 +2,7 @@
 title: I ran Nemotron Parse on a 4090. Then I checked the numbers.
 date: 2026-10-26
 type: explanation
+series: Testing a receipt reader
 summary: All 48 measured requests completed on my RTX 4090. One receipt's 79,500 came back as 79,300. A small CORD experiment shows what completion, text overlap and numeric recall each leave out.
 tags:
   - ai

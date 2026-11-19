@@ -2,6 +2,7 @@
 title: I gave urgent receipts priority. The bulk import paid for it.
 date: 2026-10-28
 type: explanation
+series: Testing a receipt reader
 summary: Giving urgent receipts priority and reserved slots recovered most five-second deadlines. The bulk import completed less work and took longer to drain.
 tags:
   - ai

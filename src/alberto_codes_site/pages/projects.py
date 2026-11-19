@@ -4,6 +4,7 @@ import reflex as rx
 
 from alberto_codes_site.components.button_link import button_link
 from alberto_codes_site.components.meta_label import meta_list
+from alberto_codes_site.headings import SCROLL_MARGIN, fragment_link
 from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
 
 # This site is a static build with no runtime fetch, so the figures below
@@ -55,10 +56,9 @@ from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
 PROJECTS = [
     {
         "title": "saucier",
-        "description": (
-            "Reads two printings of one cookbook and returns a catalogue of "
-            "sauces, every claim traceable to the line it came from. 151 "
-            "preparations in the 1909 witness, 57 that state a parent, 94 "
+        "description": "Traces sauces in two printings of one cookbook back to their source lines.",
+        "details": (
+            "151 preparations in the 1909 witness, 57 that state a parent, 94 "
             "that state no base at all — the measured bar anything cleverer "
             "has to beat. Deterministic extraction behind four layers with "
             "no runtime dependencies, so a model can be added later without "
@@ -78,9 +78,9 @@ PROJECTS = [
     },
     {
         "title": "vramfit",
-        "description": (
-            "Fits large open models onto one GPU by measuring which layers "
-            "survive being crushed. Scans per-layer quantization damage, "
+        "description": "Fits large open models on one GPU by measuring which layers can shrink.",
+        "details": (
+            "Scans per-layer quantization damage, "
             "solves a mixed-precision recipe against a hard VRAM budget, "
             "then packs it. Three published packs, each measured against "
             "its baseline with the losing numbers printed: Nemotron Super "
@@ -104,9 +104,10 @@ PROJECTS = [
     {
         "title": "typevet",
         "description": (
-            "Asks an open model typed questions about text and images: yes "
-            "or no, pick one label, or pick a rubric level. Each answer is "
-            "read as a probability from the model's next-token distribution, "
+            "Asks open models to answer yes or no, choose a label, or score text and images."
+        ),
+        "details": (
+            "Each answer is read as a probability from the model's next-token distribution, "
             "never parsed from written text. Runs Gemma 4 31B on one 24 GiB "
             "card with llama.cpp, and the same code on vLLM. With a receipt "
             "photo attached it caught 6 of 6 swapped totals it had passed as "
@@ -119,9 +120,9 @@ PROJECTS = [
     },
     {
         "title": "judgevet",
-        "description": (
-            "Typed Python client, CLI and MCP server for TypeSafe's Jev, a "
-            "hosted model that answers yes-or-no, pick-one and rubric "
+        "description": "Gets scored answers from TypeSafe’s Jev through Python, a CLI or MCP.",
+        "details": (
+            "The typed client queries a hosted model for yes-or-no, pick-one and rubric "
             "questions with a probability for each answer. The client behind "
             "the Jev calibration study on public scam and bank-support "
             "messages. 19 releases. MIT."
@@ -133,9 +134,9 @@ PROJECTS = [
     },
     {
         "title": "gepa-adk",
-        "description": (
-            "Evolves AI agent instructions automatically using genetic "
-            "algorithms. Async-first engine built on Google ADK with "
+        "description": "Evolves AI agent instructions automatically using genetic algorithms.",
+        "details": (
+            "Async-first engine built on Google ADK with "
             "hexagonal architecture and protocol-based interfaces. "
             "22 releases, ~4,900 downloads. Apache-2.0."
         ),
@@ -146,9 +147,9 @@ PROJECTS = [
     },
     {
         "title": "adk-secure-sessions",
-        "description": (
-            "The compliance gateway for Google ADK \u2014 encrypted session "
-            "storage in 5 minutes. Drop-in replacement that encrypts state "
+        "description": "Encrypts saved conversations and session state for Google ADK agents.",
+        "details": (
+            "Encrypted session storage in 5 minutes. Drop-in replacement that encrypts state "
             "and conversation history at rest using Fernet, closing the "
             "encryption gap for PHI, PII, and financial data. "
             "4 dependencies. Apache-2.0."
@@ -159,8 +160,8 @@ PROJECTS = [
     },
     {
         "title": "docvet",
-        "description": (
-            "Python docstring quality vetting that catches what linters miss. "
+        "description": "Checks Python docstrings for gaps and flags stale documentation.",
+        "details": (
             "32 rules across presence, enrichment, freshness, griffe, and "
             "mkdocs coverage \u2014 including git-based staleness detection via "
             "diff and blame. Production/Stable, ~3,300 downloads. MIT."
@@ -298,7 +299,7 @@ def _project_links(
             )
         )
     if links:
-        return [rx.hstack(*links, spacing="4")]
+        return [rx.hstack(*links, spacing="4", wrap="wrap")]
     return []
 
 
@@ -307,7 +308,7 @@ def project_card(project: dict) -> rx.Component:
 
     Args:
         project: Dict with "title", "description", "tags", and optional
-            "link"/"docs"/"github"/"model".
+            "details", "link", "docs", "github" and "model".
 
     Returns:
         A card component displaying the project.
@@ -319,8 +320,28 @@ def project_card(project: dict) -> rx.Component:
         )
         ```
     """
-    title_el = rx.heading(project["title"], as_="h2", size="4", weight="bold")
-    card = rx.card(
+    title_el = rx.heading(project["title"], as_="h3", size="4", weight="bold")
+    details = []
+    if project.get("details"):
+        details.append(
+            rx.el.details(
+                rx.el.summary(
+                    "Technical details",
+                    cursor="pointer",
+                    aria_label=f"Technical details for {project['title']}",
+                ),
+                rx.text(
+                    project["details"],
+                    size="2",
+                    line_height="1.7",
+                    color=rx.color("gray", 11),
+                    margin_top="var(--space-2)",
+                ),
+                font_size="var(--font-size-2)",
+                width="100%",
+            )
+        )
+    return rx.card(
         rx.vstack(
             title_el,
             rx.text(
@@ -329,41 +350,80 @@ def project_card(project: dict) -> rx.Component:
                 color=rx.color("gray", 11),
                 line_height="1.7",
             ),
-            meta_list(project["tags"]),
-            *(
-                _project_links(
-                    project.get("link", ""),
-                    project.get("docs", ""),
-                    project.get("github", ""),
-                    project.get("model", ""),
-                )
+            *_project_links(
+                project.get("link", ""),
+                project.get("docs", ""),
+                project.get("github", ""),
+                project.get("model", ""),
             ),
+            meta_list(project["tags"]),
+            *details,
             spacing="3",
         ),
         width="100%",
     )
-    return card
 
 
 def projects_page() -> rx.Component:
-    """Render the projects page with a card grid."""
+    """Render the projects directory with links to both collections."""
+    groups = (
+        ("open-source", "Open source", [p for p in PROJECTS if p.get("github")]),
+        ("enterprise", "Enterprise work", [p for p in PROJECTS if not p.get("github")]),
+    )
     return rx.container(
         rx.vstack(
             rx.box(height="4em"),
             rx.heading("Projects", as_="h1", size="8", weight="bold"),
             rx.separator(size="4", color_scheme="gray"),
-            rx.text(
-                "Key technical work and initiatives.",
-                size="3",
-                color=rx.color("gray", 11),
+            rx.el.nav(
+                *[
+                    fragment_link(
+                        label,
+                        href=f"#{anchor}",
+                        # The router handles the hash and scroll; move the tab
+                        # starting point to the heading for same-tab activation.
+                        custom_attrs={
+                            "onClick": rx.Var(
+                                "(event) => {"
+                                " if (event.button !== 0 || event.ctrlKey || event.metaKey"
+                                " || event.shiftKey || event.altKey) return;"
+                                " document.getElementById(event.currentTarget.hash.slice(1))"
+                                "?.focus({preventScroll: true}); }"
+                            )
+                        },
+                        color=rx.color("accent", 11),
+                        text_decoration="underline",
+                        text_underline_offset="0.2em",
+                    )
+                    for anchor, label, _ in groups
+                ],
+                aria_label="Project sections",
+                display="flex",
+                flex_wrap="wrap",
+                gap="var(--space-4)",
             ),
-            rx.box(height="1em"),
-            rx.grid(
-                *[project_card(p) for p in PROJECTS],
-                columns=rx.breakpoints(initial="1", md="2"),
-                spacing="4",
-                width="100%",
-            ),
+            *[
+                rx.vstack(
+                    rx.heading(
+                        label,
+                        as_="h2",
+                        id=anchor,
+                        tab_index=-1,
+                        scroll_margin_top=SCROLL_MARGIN,
+                        size="6",
+                    ),
+                    rx.grid(
+                        *[project_card(project) for project in projects],
+                        columns=rx.breakpoints(initial="1", md="2"),
+                        spacing="4",
+                        width="100%",
+                    ),
+                    spacing="4",
+                    padding_top="var(--space-5)",
+                    width="100%",
+                )
+                for anchor, label, projects in groups
+            ],
             rx.box(height="1em"),
             rx.card(
                 rx.hstack(

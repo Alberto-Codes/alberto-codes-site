@@ -133,7 +133,7 @@ def _mobile_menu(current: str | None = None) -> rx.Component:
                 aria_label="Open menu",
                 variant="ghost",
                 size="2",
-                display=["flex", "flex", "none", "none", "none"],
+                display=rx.breakpoints(initial="flex", md="none"),
             ),
         ),
         rx.drawer.portal(
@@ -230,7 +230,7 @@ def navbar(current: str | None = None) -> rx.Component:
                     rx.color_mode.button(size="1", aria_label=THEME_TOGGLE_LABEL),
                     spacing="5",
                     align="center",
-                    display=["none", "none", "flex", "flex", "flex"],
+                    display=rx.breakpoints(initial="none", md="flex"),
                 ),
                 _mobile_menu(current),
                 width="100%",

@@ -129,7 +129,7 @@ app = rx.App(
         rx.el.link(rel="apple-touch-icon", href="/apple-touch-icon.png"),
         rx.el.link(rel="manifest", href="/site.webmanifest"),
     ],
-    stylesheets=["/identity.css", "/a11y.css"],
+    stylesheets=["/identity.css", "/a11y.css", "/stone-article.css"],
 )
 
 # Rebuilt on every import so `reflex run` and `reflex export` both ship a

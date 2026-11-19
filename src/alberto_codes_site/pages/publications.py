@@ -9,6 +9,9 @@ from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y, SUMMARY_MEASU
 PUBLICATIONS = [
     {
         "title": "gemma-4-31B-it-fit24gib-GGUF",
+        "model_name": "Gemma 4 31B",
+        "tested_memory": "24 GiB",
+        "measured_result": "Loaded 86,016 tokens of text context in one server slot.",
         "kind": "Quantized model",
         "date": "2026-08-29",
         "summary": (
@@ -69,6 +72,9 @@ PUBLICATIONS = [
     },
     {
         "title": "NVIDIA-Nemotron-3.5-Lightning-30B-A3B-fit16gib-GGUF",
+        "model_name": "Nemotron 3.5 Lightning 30B",
+        "tested_memory": "16 GiB cap",
+        "measured_result": "Served 16k context with all 53 layers on the GPU.",
         "kind": "Quantized model",
         "date": "2026-08-22",
         "summary": (
@@ -119,6 +125,9 @@ PUBLICATIONS = [
     },
     {
         "title": "Llama-3_3-Nemotron-Super-49B-v1_5-fit24gib-GGUF",
+        "model_name": "Nemotron Super 49B",
+        "tested_memory": "24 GiB",
+        "measured_result": "Tied the same-size community build on five capability benchmarks.",
         "kind": "Quantized model",
         "date": "2026-08-11",
         "summary": (
@@ -192,7 +201,7 @@ def _attribution_row(label: str, value: rx.Component | str) -> rx.Component:
             width="7em",
             flex_shrink="0",
         ),
-        rx.box(value, flex="1"),
+        rx.box(value, flex="1", min_width="0", overflow_wrap="anywhere"),
         spacing="2",
         align="start",
         width="100%",
@@ -262,7 +271,13 @@ def publication_card(publication: dict) -> rx.Component:
                 spacing="2",
                 align="center",
             ),
-            rx.heading(publication["title"], as_="h2", size="4", weight="bold"),
+            rx.heading(
+                publication["title"],
+                as_="h3",
+                size="4",
+                weight="bold",
+                overflow_wrap="anywhere",
+            ),
             rx.text(
                 publication["summary"],
                 size="2",
@@ -321,13 +336,78 @@ def publication_card(publication: dict) -> rx.Component:
     )
 
 
+def _model_comparison() -> rx.Component:
+    """Compare the published packs and link directly to their downloadable files."""
+    rows = []
+    for pack in PUBLICATIONS:
+        if pack["kind"] != "Quantized model":
+            continue
+        model_url = next(
+            url for label, _, url in pack["links"] if label == "Hugging Face"
+        )
+        rows.append(
+            rx.el.tr(
+                rx.el.th(
+                    rx.link(
+                        pack["model_name"],
+                        href=f"{model_url}/tree/main",
+                        is_external=True,
+                        underline="always",
+                        aria_label=f"{pack['model_name']} model files on Hugging Face",
+                    ),
+                    scope="row",
+                    width="43%",
+                ),
+                rx.el.td(
+                    rx.text(pack["tested_memory"], weight="medium", size="3"),
+                    rx.text(
+                        pack["measured_result"], size="2", color=rx.color("gray", 11)
+                    ),
+                ),
+            )
+        )
+    return rx.el.table(
+        rx.el.thead(
+            rx.el.tr(
+                rx.el.th("Model files", scope="col"),
+                rx.el.th("RTX 4090 test", scope="col"),
+            )
+        ),
+        rx.el.tbody(*rows),
+        aria_label="Model files, tested GPU memory and measured results",
+        style={
+            "width": "100%",
+            "table_layout": "fixed",
+            "border_collapse": "collapse",
+            "text_align": "left",
+            "& th, & td": {
+                "padding": "var(--space-3) var(--space-2)",
+                "border_bottom": f"1px solid {rx.color('gray', 6)}",
+                "vertical_align": "top",
+            },
+            "& th": {"font_weight": "500"},
+            "& th:first-child": {"width": "43%", "padding_left": "0"},
+            "& thead": {
+                "font_size": "var(--font-size-2)",
+                "color": rx.color("gray", 11),
+            },
+        },
+    )
+
+
 def publications_page() -> rx.Component:
     """Render the publications page listing published artifacts."""
     return rx.container(
         rx.vstack(
-            rx.box(height="4em"),
             rx.heading("Publications", as_="h1", size="8", weight="bold"),
             rx.separator(size="4", color_scheme="gray"),
+            _model_comparison(),
+            rx.heading(
+                "Attribution and evidence",
+                as_="h2",
+                size="5",
+                margin_top="var(--space-4)",
+            ),
             rx.text(
                 "Artifacts I have published, with what I contributed, what "
                 "they derive from, and the evidence behind them. Every entry "
@@ -338,7 +418,6 @@ def publications_page() -> rx.Component:
                 line_height="1.7",
                 max_width=SUMMARY_MEASURE,
             ),
-            rx.box(height="1em"),
             rx.vstack(
                 *[publication_card(p) for p in PUBLICATIONS],
                 spacing="4",

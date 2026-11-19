@@ -2,7 +2,6 @@
 
 import reflex as rx
 
-from alberto_codes_site.components.meta_label import meta_label
 from alberto_codes_site.layout import PAGE_COLUMN, PAGE_PADDING_Y
 from alberto_codes_site.tenure import years_at_wells_fargo
 
@@ -32,9 +31,9 @@ ROLES = [
         "period": "Jun 2022 - Jul 2025",
         "location": "Phoenix, Arizona",
         "bullets": [
+            "Architected scalable OCR pipeline processing 500K+ documents using Gemini",
             "The team's go-to engineer for GenAI and agentic AI frameworks, "
             "including Google ADK and Pydantic-AI",
-            "Architected scalable OCR pipeline processing 500K+ documents using Gemini",
             "Built reusable data pipelines for document ingestion, OCR, and validation",
             "Designed modular, scalable architecture reused across multiple teams",
             "Implemented git-based dev workflow with peer reviews and release standards",
@@ -87,7 +86,7 @@ def timeline_item(role: dict) -> rx.Component:
         role: Dict with keys "title", "company", "period", "location", and "bullets".
 
     Returns:
-        An hstack with timeline indicator and role card.
+        A timeline entry with one visible outcome and expandable role details.
 
     Examples:
         ```python
@@ -102,68 +101,39 @@ def timeline_item(role: dict) -> rx.Component:
         )
         ```
     """
-    return rx.hstack(
-        rx.vstack(
-            rx.box(
-                width="12px",
-                height="12px",
-                border_radius="50%",
-                background_color=rx.color("gray", 9),
-                flex_shrink="0",
-            ),
-            rx.box(
-                width="2px",
-                flex="1",
-                background_color=rx.color("gray", 5),
-            ),
-            align="center",
-            height="100%",
+    outcome, *other_work = role["bullets"]
+    return rx.vstack(
+        rx.text(
+            f"{role['period']} · {role['company']}",
+            size="2",
+            color=rx.color("gray", 11),
         ),
-        rx.card(
-            rx.vstack(
-                rx.hstack(
-                    rx.heading(role["title"], as_="h2", size="4", weight="bold"),
-                    rx.spacer(),
-                    meta_label(role["period"]),
-                    width="100%",
-                    align="center",
-                    flex_direction=["column", "column", "row", "row", "row"],
-                    gap="2",
-                ),
-                rx.text(role["company"], size="2", color=rx.color("gray", 11)),
-                *(
-                    [
-                        rx.text(
-                            role["location"],
-                            size="1",
-                            color=rx.color("gray", 11),
-                        )
-                    ]
-                    if role["location"]
-                    else []
-                ),
-                rx.vstack(
-                    *[
-                        rx.hstack(
-                            rx.text(
-                                "\u2022",
-                                color=rx.color("gray", 9),
-                                flex_shrink="0",
-                            ),
-                            rx.text(bullet, size="2", color=rx.color("gray", 11)),
-                            align="start",
-                        )
-                        for bullet in role["bullets"]
-                    ],
-                    spacing="1",
-                ),
-                spacing="2",
+        rx.heading(role["title"], as_="h2", size="4"),
+        rx.text(outcome, size="3"),
+        rx.el.details(
+            rx.el.summary(
+                "Role details",
+                aria_label=f"Role details for {role['title']}",
+                color=rx.color("accent", 11),
+                cursor="pointer",
+                font_weight="500",
             ),
-            width="100%",
+            rx.text(role["location"], size="2", margin_top="var(--space-2)")
+            if role["location"]
+            else "",
+            rx.el.ul(
+                *[rx.el.li(bullet) for bullet in other_work],
+                padding_inline_start="1.25em",
+                list_style_type="disc",
+            ),
+            color=rx.color("gray", 11),
+            font_size="var(--font-size-2)",
+            line_height="1.6",
         ),
-        align="start",
-        spacing="4",
         width="100%",
+        spacing="2",
+        padding_y="var(--space-4)",
+        border_top=f"1px solid {rx.color('gray', 6)}",
     )
 
 
@@ -171,22 +141,19 @@ def experience_page() -> rx.Component:
     """Render the experience page with career timeline."""
     return rx.container(
         rx.vstack(
-            rx.box(height="4em"),
             rx.heading("Experience", as_="h1", size="8", weight="bold"),
             rx.separator(size="4", color_scheme="gray"),
             rx.text(
-                "From banking operations to enterprise AI \u2014 a "
-                f"{years_at_wells_fargo()}-year career built at Wells Fargo.",
+                "From banking operations to enterprise AI, including "
+                f"{years_at_wells_fargo()} years at Wells Fargo.",
                 size="3",
                 color=rx.color("gray", 11),
             ),
-            rx.box(height="1em"),
             rx.vstack(
                 *[timeline_item(role) for role in ROLES],
-                spacing="4",
+                spacing="0",
                 width="100%",
             ),
-            rx.box(height="2em"),
             rx.card(
                 rx.vstack(
                     rx.heading("Education", as_="h2", size="4", weight="bold"),

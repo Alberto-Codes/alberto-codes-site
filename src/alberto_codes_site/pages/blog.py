@@ -9,14 +9,20 @@ hidden until the first build on or after its date; deploys rebuild.
 
 import math
 import re
+from collections import Counter
 from datetime import date
 from pathlib import Path
 from urllib.parse import urlparse
 
 import reflex as rx
+from reflex.components.el.element import Element
 from reflex.vars import Var
 
 from alberto_codes_site.components.meta_label import meta_label
+from alberto_codes_site.components.receipt_viewer import (
+    RECEIPT_POST_SLUG,
+    receipt_post_segments,
+)
 from alberto_codes_site.dates import post_updated, time_el
 from alberto_codes_site.figures import (
     WIDE_FIGURE_CLASS,
@@ -254,7 +260,11 @@ def _marks(*items: rx.Component) -> list[rx.Component]:
 
 
 def _index_entry(
-    meta: dict, series_label: str | None = None, level: str = "h3"
+    meta: dict,
+    series_label: str | None = None,
+    level: str = "h3",
+    *,
+    searchable: bool = False,
 ) -> rx.Component:
     """Render one row of the blog index, set like a book's index entry.
 
@@ -269,6 +279,7 @@ def _index_entry(
         meta: The post's frontmatter.
         series_label: "Part 2 of 7 · Saucier" for a series part, else None.
         level: The heading level of the title, below its group's heading.
+        searchable: Include metadata used by the archive filters.
 
     Returns:
         The ``li`` for the post.
@@ -282,6 +293,16 @@ def _index_entry(
     # two words and at least LEADER_MIN_LENGTH of leader.
     words = meta.get("title", "Untitled").split(" ")
     head, last = " ".join(words[:-2]), " ".join(words[-2:])
+    attrs = {}
+    if searchable:
+        tags = meta.get("tags", [])
+        keywords = tags if isinstance(tags, str) else " ".join(tags)
+        attrs = {
+            "data-kind": meta.get("type", "post"),
+            "data-search": " ".join(
+                (meta.get("title", ""), meta.get("summary", ""), keywords)
+            ),
+        }
     return rx.el.li(
         rx.el.div(
             rx.heading(
@@ -311,6 +332,7 @@ def _index_entry(
             class_name="index-marks",
         ),
         class_name="index-entry",
+        custom_attrs=attrs,
     )
 
 
@@ -690,6 +712,37 @@ def _figure(markup: str) -> rx.Component:
     )
 
 
+def _receipt_comparison_figure(markup: str) -> rx.Component:
+    """Keep the receipt, the claim and both verdicts readable in a narrow column."""
+    return rx.el.figure(
+        _figure(markup),
+        rx.el.div(
+            rx.el.dl(
+                rx.el.dt("Photographed receipt"),
+                rx.el.dd(
+                    rx.el.img(
+                        src="/typevet-receipt-total.jpg",
+                        alt="The printed receipt total is 664,329.",
+                        width=520,
+                        height=142,
+                        loading="lazy",
+                    ),
+                ),
+                rx.el.dt("Claimed total"),
+                rx.el.dd("646,329"),
+                rx.el.dt("Without the photo"),
+                rx.el.dd("Matches", rx.el.small("99.96% confidence · Wrong")),
+                rx.el.dt("With the photo"),
+                rx.el.dd("Does not match", rx.el.small("99.999% confidence · Right")),
+            ),
+            rx.el.small("Receipt from CORD v2, validation row 59 (CC BY 4.0)."),
+            class_name="receipt-stacked",
+        ),
+        rx.el.figcaption("The claim says 646,329. The photographed total is 664,329."),
+        class_name="receipt-comparison",
+    )
+
+
 def _series_box(meta: dict, series: Series) -> rx.Component:
     """Render the compact series box under a series post's header (#51).
 
@@ -769,7 +822,9 @@ TOC_MIN_SECTIONS = 4
 TocEntry = tuple[int, str, str]
 
 
-def _post_body(body: str) -> tuple[list[rx.Component], list[TocEntry]]:
+def _post_body(
+    body: str, *, receipt_viewer: bool = False
+) -> tuple[list[rx.Component], list[TocEntry]]:
     """Render a post body, inlining theme-aware figures between markdown runs.
 
     A figure carrying the shared token block (ADR-0005) is inlined so the
@@ -780,9 +835,17 @@ def _post_body(body: str) -> tuple[list[rx.Component], list[TocEntry]]:
     slugger = Slugger()
     components: list[rx.Component] = []
     outline: list[TocEntry] = []
-    for kind, content in split_figures(body):
+    segments = receipt_post_segments(body) if receipt_viewer else split_figures(body)
+    for kind, content in segments:
+        if isinstance(content, rx.Component):
+            components.append(content)
+            continue
         if kind == "figure":
-            components.append(_figure(content))
+            components.append(
+                _receipt_comparison_figure(content)
+                if 'id="fig-typevet-receipt-swap"' in content
+                else _figure(content)
+            )
             continue
         ids = heading_ids(content, slugger)
         outline.extend(
@@ -1334,7 +1397,13 @@ def _render_post(
     Returns:
         The post's header, table of contents, body and end section.
     """
-    body_components, outline = _post_body(body)
+    body_components, outline = _post_body(
+        body, receipt_viewer=meta.get("slug") == RECEIPT_POST_SLUG
+    )
+    stone_article = (
+        meta.get("slug")
+        == "2026-09-29-gemma-was-sure-the-total-matched-it-had-not-seen-the-receipt"
+    )
     toc = _table_of_contents(outline)
     posts = posts if posts is not None else [(meta, body)]
     series = series_of(meta, build_series(posts))
@@ -1388,7 +1457,7 @@ def _render_post(
             spacing="2",
             align="center",
             wrap="wrap",
-            class_name="post-dateline",
+            class_name="post-dateline post-meta" if stone_article else "post-dateline",
         ),
         # The summary sets at the body's own size, never below it.
         rx.text(
@@ -1513,6 +1582,7 @@ def _render_post(
             ),
             _post_end(meta, posts, series),
         ),
+        class_name="stone-article" if stone_article else "",
         spacing="4",
         width="100%",
     )
@@ -1603,9 +1673,7 @@ DIATAXIS_DESCRIPTIONS = {
 def _type_legend() -> rx.Component:
     """Render the post types as one muted line: each mark, then what it means.
 
-    The marks stay inert text (issue #79) and the meanings are always
-    visible rather than in a hover tooltip, which touch and keyboard readers
-    could not reach (issue #49). It is still a definition list, set inline.
+    The marks and their definitions sit in an inline definition list.
 
     Returns:
         A ``<dl>`` with one ``<dt>``/``<dd>`` pair per Diataxis type.
@@ -1666,7 +1734,10 @@ def _year_groups(
                 year, as_="h2", size="5", weight="bold", class_name="index-year"
             ),
             rx.el.ol(
-                *[_index_entry(m, _series_label(m, all_series)) for m in metas],
+                *[
+                    _index_entry(m, _series_label(m, all_series), searchable=True)
+                    for m in metas
+                ],
                 style=_index_style(),
             ),
             aria_label=f"Posts from {year}",
@@ -1682,6 +1753,106 @@ def _year_groups(
         )
         for year, metas in years.items()
     ]
+
+
+class _PostArchive(Element):
+    """Progressively enhance the published archive with local search and filters."""
+
+    tag = "post-archive"
+
+
+def _archive(posts: list[tuple[dict, str]], all_series: list[Series]) -> rx.Component:
+    """Render fully linked posts plus controls for filtering their published metadata."""
+    counts = Counter(meta.get("type", "post") for meta, _ in posts)
+    names = {
+        "explanation": "Explanations",
+        "how-to": "How-tos",
+        "reference": "References",
+        "tutorial": "Tutorials",
+    }
+    choices = [("", f"All {len(posts)}")] + [
+        (kind, f"{names.get(kind, kind.title())} {count}")
+        for kind, count in sorted(counts.items())
+    ]
+    return _PostArchive.create(
+        rx.script(src="/blog-archive.js", type="module"),
+        rx.el.div(
+            rx.input(
+                type="search",
+                placeholder="Search posts",
+                aria_label="Search posts by title, topic, or summary",
+                width="100%",
+            ),
+            rx.flex(
+                *[
+                    rx.el.button(
+                        label,
+                        type="button",
+                        custom_attrs={"data-filter": kind, "aria-pressed": not kind},
+                    )
+                    for kind, label in choices
+                ],
+                role="group",
+                aria_label="Filter posts by type",
+                wrap="wrap",
+                gap="var(--space-2)",
+                margin_top="var(--space-3)",
+            ),
+            class_name="archive-controls",
+        ),
+        rx.flex(
+            rx.el.details(rx.el.summary("Post types"), _type_legend()),
+            *(
+                [
+                    rx.el.details(
+                        rx.el.summary(f"Browse series ({len(all_series)})"),
+                        _series_index(all_series),
+                    )
+                ]
+                if all_series
+                else []
+            ),
+            wrap="wrap",
+            gap="var(--space-4)",
+            style={
+                "& details[open]": {"width": "100%"},
+                "& summary": {"cursor": "pointer"},
+            },
+            font_size="var(--font-size-2)",
+        ),
+        rx.el.p(role="status", class_name="archive-status"),
+        rx.el.button(
+            "Clear search",
+            type="button",
+            hidden=True,
+            custom_attrs={"data-clear-search": ""},
+            justify_self="start",
+        ),
+        *_year_groups(posts, all_series),
+        style={
+            "display": "grid",
+            "gap": "var(--space-4)",
+            "width": "100%",
+            "& .index-entry[hidden], & section:not(:has(.index-entry:not([hidden])))": {
+                "display": "none"
+            },
+            "&:not(:defined) .archive-controls": {"display": "none"},
+            "& [data-filter], & [data-clear-search]": {
+                "cursor": "pointer",
+                "padding": "var(--space-1) var(--space-3)",
+                "border": f"1px solid {rx.color('slate', 7)}",
+                "border_radius": "var(--radius-3)",
+                "font_size": "var(--font-size-2)",
+            },
+            '& [aria-pressed="true"]': {
+                "background": rx.color("slate", 12),
+                "color": rx.color("slate", 1),
+            },
+            "& details[open] summary": {"margin_bottom": "var(--space-2)"},
+            "& .archive-status": {"margin": "0", "font_size": "var(--font-size-2)"},
+            "& .archive-status:empty": {"margin_bottom": "calc(-1 * var(--space-4))"},
+        },
+    )
 
 
 def blog_page(today: date | None = None) -> rx.Component:
@@ -1749,20 +1920,12 @@ def blog_page(today: date | None = None) -> rx.Component:
                 justify="between",
                 width="100%",
             ),
-            # The introduction, legend and series sit close together, so the
-            # index itself starts as high as it can.
-            rx.vstack(
-                rx.text(
-                    "Open source AI tooling, with the evidence.",
-                    size="3",
-                    color=rx.color("gray", 11),
-                ),
-                _type_legend(),
-                *([_series_index(all_series)] if all_series else []),
-                spacing="1",
-                width="100%",
+            rx.text(
+                "Open source AI tooling, with the evidence.",
+                size="3",
+                color=rx.color("gray", 11),
             ),
-            *_year_groups(posts, all_series),
+            _archive(posts, all_series),
             spacing="2",
             **PAGE_COLUMN,
         ),

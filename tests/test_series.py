@@ -49,6 +49,7 @@ EXPECTED_SIZES = {
     "Encrypted ADK sessions": 2,
     "AI pipeline plumbing": 2,
     "Measuring model confidence": 3,
+    "Testing a receipt reader": 3,
 }
 
 TODAY = date(2026, 10, 1)
@@ -94,7 +95,7 @@ def test_frontmatter_series_field_parses():
 def test_real_series_membership():
     """Each series has the parts decided for #51; the rest are standalone."""
     assert {s.title: len(s) for s in SERIES} == EXPECTED_SIZES
-    assert len(STANDALONE) == 7
+    assert len(STANDALONE) == 4
 
 
 def test_series_slugs_come_from_the_title():

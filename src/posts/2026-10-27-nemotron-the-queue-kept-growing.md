@@ -2,6 +2,7 @@
 title: I sent my 4090 six receipts a second. The queue kept growing.
 date: 2026-10-27
 type: explanation
+series: Testing a receipt reader
 summary: Five incoming receipts a second kept the queue short. Six filled it during a five-minute run. The lower rate still timed out on one troublesome receipt.
 tags:
   - ai

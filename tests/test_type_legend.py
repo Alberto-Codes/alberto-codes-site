@@ -1,8 +1,7 @@
 """The /blog index says what each Diataxis post type means (issue #49).
 
-The meanings sit beside the marks in a definition list, always visible,
-rather than in a hover tooltip that touch and keyboard readers cannot reach.
-The list is set as one muted line.
+Readers can open the Post types disclosure to see labels and meanings in a
+definition list using a keyboard, pointer or touch.
 """
 
 from datetime import date

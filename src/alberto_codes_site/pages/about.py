@@ -10,10 +10,8 @@ def about_page() -> rx.Component:
     """Render the about page with a headshot and professional summary."""
     return rx.container(
         rx.vstack(
-            rx.box(height="4em"),
             rx.heading("About Me", as_="h1", size="8", weight="bold"),
             rx.separator(size="4", color_scheme="gray"),
-            rx.box(height="1em"),
             rx.hstack(
                 rx.image(
                     src="/headshot.jpg",
@@ -27,14 +25,14 @@ def about_page() -> rx.Component:
                     display=rx.breakpoints(initial="none", md="block"),
                 ),
                 rx.vstack(
+                    rx.heading(
+                        "From banking operations to engineering", as_="h2", size="5"
+                    ),
                     rx.text(
                         "I'm Alberto Nieto, a Generative AI Principal Engineer at "
                         f"Wells Fargo with {years_at_wells_fargo()} years at the "
-                        "company. My career "
-                        "journey started in customer service and banking operations, "
-                        "and through continuous learning and a passion for technology, "
-                        "I've grown into a principal-level engineering role leading "
-                        "enterprise AI initiatives.",
+                        "company. I started in customer service and banking operations "
+                        "and now lead enterprise AI initiatives.",
                         size="3",
                         color=rx.color("gray", 11),
                         line_height="1.8",
@@ -50,6 +48,13 @@ def about_page() -> rx.Component:
                         color=rx.color("gray", 11),
                         line_height="1.8",
                     ),
+                    rx.link("See my career timeline →", href="/experience", size="2"),
+                    rx.heading(
+                        "The open-source tools I build",
+                        as_="h2",
+                        size="5",
+                        margin_top="var(--space-4)",
+                    ),
                     rx.text(
                         "Outside of my enterprise work, I build and publish open "
                         "source Python tools \u2014 including docvet for docstring "
@@ -64,7 +69,8 @@ def about_page() -> rx.Component:
                         color=rx.color("gray", 11),
                         line_height="1.8",
                     ),
-                    spacing="4",
+                    rx.link("Explore my projects →", href="/projects", size="2"),
+                    spacing="3",
                 ),
                 spacing="6",
                 align="start",
